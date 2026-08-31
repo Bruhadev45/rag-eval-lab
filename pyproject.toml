@@ -1,0 +1,26 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "rageval-lab"
+version = "1.0.0"
+description = "Reproducible retrieval benchmark: hybrid RRF fusion helps legal RAG, a generic cross-encoder reranker hurts it."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [{ name = "Kandimalla Bruhadev", email = "devbruha@gmail.com" }]
+dependencies = ["matplotlib>=3.8"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.6"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/rageval"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"

@@ -1,0 +1,2375 @@
+{
+  "config": {
+    "name": "dense_minilm",
+    "description": "Dense neural retrieval over the 28k-vector Chroma store (all-MiniLM-L6-v2, 384d)",
+    "hybrid_search": false,
+    "use_reranker": false,
+    "vector_store": "chroma",
+    "llm": "none"
+  },
+  "timestamp": "2026-07-07T15:22:36.590517+00:00",
+  "total_queries": 120,
+  "total_elapsed_seconds": 3.055,
+  "aggregate": {
+    "recall_at_5": 0.4417,
+    "precision_at_5": 0.925,
+    "mrr": 0.925,
+    "ndcg_at_5": 0.5661,
+    "groundedness_rate": 1.0,
+    "hallucination_proxy_rate": 0.0,
+    "avg_response_time": 0.0254
+  },
+  "confidence_distribution": {
+    "medium": 120
+  },
+  "category_metrics": {
+    "company_formation": {
+      "count": 20,
+      "recall_at_5": 0.65,
+      "precision_at_5": 0.95,
+      "mrr": 0.95,
+      "ndcg_at_5": 0.5536,
+      "groundedness_rate": 1.0,
+      "hallucination_proxy_rate": 0.0,
+      "avg_response_time": 0.0427
+    },
+    "founder_agreements": {
+      "count": 20,
+      "recall_at_5": 0.05,
+      "precision_at_5": 0.9,
+      "mrr": 0.9,
+      "ndcg_at_5": 0.4092,
+      "groundedness_rate": 1.0,
+      "hallucination_proxy_rate": 0.0,
+      "avg_response_time": 0.0285
+    },
+    "compliance": {
+      "count": 20,
+      "recall_at_5": 0.575,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5902,
+      "groundedness_rate": 1.0,
+      "hallucination_proxy_rate": 0.0,
+      "avg_response_time": 0.0221
+    },
+    "contracts": {
+      "count": 20,
+      "recall_at_5": 0.325,
+      "precision_at_5": 0.9,
+      "mrr": 0.9,
+      "ndcg_at_5": 0.5299,
+      "groundedness_rate": 1.0,
+      "hallucination_proxy_rate": 0.0,
+      "avg_response_time": 0.0212
+    },
+    "tax_law": {
+      "count": 20,
+      "recall_at_5": 0.5,
+      "precision_at_5": 0.8,
+      "mrr": 0.8,
+      "ndcg_at_5": 0.4444,
+      "groundedness_rate": 1.0,
+      "hallucination_proxy_rate": 0.0,
+      "avg_response_time": 0.0194
+    },
+    "employment_law": {
+      "count": 20,
+      "recall_at_5": 0.55,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.8693,
+      "groundedness_rate": 1.0,
+      "hallucination_proxy_rate": 0.0,
+      "avg_response_time": 0.0183
+    }
+  },
+  "corpus": {
+    "source": "uninitialized",
+    "total_documents": 0,
+    "by_doc_type": {},
+    "loaded_files_count": 0
+  },
+  "per_query": [
+    {
+      "query_id": "CF-001",
+      "category": "company_formation",
+      "query": "What is Section 7 of the Companies Act, 2013?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6241,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.201,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CF-002",
+      "category": "company_formation",
+      "query": "What are the requirements for incorporating a private limited company in India?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6125,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.056,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CF-003",
+      "category": "company_formation",
+      "query": "What is the minimum number of directors required for a private limited company?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6243,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.056,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CF-004",
+      "category": "company_formation",
+      "query": "What is the difference between authorized and paid-up capital?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.503,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.056,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CF-005",
+      "category": "company_formation",
+      "query": "How to convert a partnership into a private limited company?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5802,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.019,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CF-006",
+      "category": "company_formation",
+      "query": "What is the role of the Registrar of Companies?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5764,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.057,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CF-007",
+      "category": "company_formation",
+      "query": "What are the contents of Memorandum of Association?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.624,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.056,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CF-008",
+      "category": "company_formation",
+      "query": "What is Section 12 regarding registered office?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.627,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.059,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CF-009",
+      "category": "company_formation",
+      "query": "What are the different types of companies under Companies Act?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5515,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.022,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CF-010",
+      "category": "company_formation",
+      "query": "What is the process for name reservation on MCA portal?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5619,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.048,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CF-011",
+      "category": "company_formation",
+      "query": "What is SPICe+ form for company registration?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 0.0,
+      "mrr": 0.0,
+      "ndcg_at_5": 0.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.02,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CF-012",
+      "category": "company_formation",
+      "query": "What are the documents needed for DSC application?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4579,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.025,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CF-013",
+      "category": "company_formation",
+      "query": "What is Section 149 about appointment of directors?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6767,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.019,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CF-014",
+      "category": "company_formation",
+      "query": "What is the minimum and maximum number of members in a private company?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5505,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.016,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CF-015",
+      "category": "company_formation",
+      "query": "How does lifting of corporate veil work in Indian law?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5997,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.022,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CF-016",
+      "category": "company_formation",
+      "query": "What are the advantages of LLP over Private Limited?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5672,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.041,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CF-017",
+      "category": "company_formation",
+      "query": "What is Section 2(68) definition of private company?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6018,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.019,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CF-018",
+      "category": "company_formation",
+      "query": "What are the penalties for non-filing of annual returns?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5399,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.021,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CF-019",
+      "category": "company_formation",
+      "query": "What is the process for one person company registration?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5438,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.021,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CF-020",
+      "category": "company_formation",
+      "query": "What are the duties of directors under Section 166?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6496,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.02,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-001",
+      "category": "founder_agreements",
+      "query": "What is equity vesting and how does it work?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5186,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.023,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-002",
+      "category": "founder_agreements",
+      "query": "What clauses should be in a founder agreement?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4911,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.02,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-003",
+      "category": "founder_agreements",
+      "query": "What is a non-compete clause in a founder agreement?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 0.0,
+      "mrr": 0.0,
+      "ndcg_at_5": 0.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.024,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-004",
+      "category": "founder_agreements",
+      "query": "What is the typical vesting schedule for startups?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.3745,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.025,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-005",
+      "category": "founder_agreements",
+      "query": "What is a cliff period in vesting?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.3478,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.022,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-006",
+      "category": "founder_agreements",
+      "query": "How should founders split equity?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4352,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.067,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-007",
+      "category": "founder_agreements",
+      "query": "What is a shotgun clause in founder agreements?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5196,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.017,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-008",
+      "category": "founder_agreements",
+      "query": "What happens when a co-founder leaves the company?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4408,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.019,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-009",
+      "category": "founder_agreements",
+      "query": "What is good leaver vs bad leaver?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.3364,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.023,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-010",
+      "category": "founder_agreements",
+      "query": "What is an IP assignment clause?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5394,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.031,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-011",
+      "category": "founder_agreements",
+      "query": "How does dispute resolution work in founder agreements?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5302,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.026,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-012",
+      "category": "founder_agreements",
+      "query": "What is accelerated vesting?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.3757,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.021,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-013",
+      "category": "founder_agreements",
+      "query": "What is drag-along and tag-along rights?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.3773,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.029,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-014",
+      "category": "founder_agreements",
+      "query": "What is an anti-dilution clause?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4735,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.024,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-015",
+      "category": "founder_agreements",
+      "query": "How is ESOP different from founder equity?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.3957,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.055,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-016",
+      "category": "founder_agreements",
+      "query": "What is reverse vesting for founders?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4511,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.02,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-017",
+      "category": "founder_agreements",
+      "query": "What are voting rights in a shareholders agreement?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 0.0,
+      "mrr": 0.0,
+      "ndcg_at_5": 0.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.019,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-018",
+      "category": "founder_agreements",
+      "query": "What is a right of first refusal clause?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5001,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.026,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-019",
+      "category": "founder_agreements",
+      "query": "What are the implications of Section 27 on non-compete?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4834,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.022,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-020",
+      "category": "founder_agreements",
+      "query": "What is a sweat equity arrangement?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.594,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.057,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CO-001",
+      "category": "compliance",
+      "query": "What are the annual compliance requirements for a private limited company?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5532,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.022,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CO-002",
+      "category": "compliance",
+      "query": "What are the ROC filing requirements?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5516,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.023,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CO-003",
+      "category": "compliance",
+      "query": "When is the first board meeting required after incorporation?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5811,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.023,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CO-004",
+      "category": "compliance",
+      "query": "What is the penalty for not holding AGM?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4708,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.026,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CO-005",
+      "category": "compliance",
+      "query": "What are the PF registration requirements?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.028,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CO-006",
+      "category": "compliance",
+      "query": "When does ESI registration become mandatory?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.9804,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.025,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CO-007",
+      "category": "compliance",
+      "query": "What is Form MGT-7 and when is it due?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4638,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.025,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CO-008",
+      "category": "compliance",
+      "query": "What are the statutory audit requirements?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.638,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.021,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CO-009",
+      "category": "compliance",
+      "query": "What is the penalty for not maintaining statutory registers?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6596,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.019,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CO-010",
+      "category": "compliance",
+      "query": "What are the disclosure requirements for related party transactions?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5808,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.022,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CO-011",
+      "category": "compliance",
+      "query": "What is MSME compliance for startups?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4224,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.022,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CO-012",
+      "category": "compliance",
+      "query": "What is startup recognition under DPIIT?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.3173,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.022,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CO-013",
+      "category": "compliance",
+      "query": "What are the professional tax requirements?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5928,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.025,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CO-014",
+      "category": "compliance",
+      "query": "What is Section 92 about annual return filing?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6178,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.019,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CO-015",
+      "category": "compliance",
+      "query": "What are the compliance requirements for foreign directors?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5886,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.019,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CO-016",
+      "category": "compliance",
+      "query": "What is the compliance calendar for Q1?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4897,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.02,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CO-017",
+      "category": "compliance",
+      "query": "When is Form AOC-4 due?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4855,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.018,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CO-018",
+      "category": "compliance",
+      "query": "What are the KYC requirements for directors?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.546,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.018,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CO-019",
+      "category": "compliance",
+      "query": "What is Section 128 about books of accounts?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6336,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.024,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CO-020",
+      "category": "compliance",
+      "query": "What are the penalties under Section 447 for fraud?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6306,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.022,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CT-001",
+      "category": "contracts",
+      "query": "What makes a contract valid under Indian Contract Act?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6098,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.024,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CT-002",
+      "category": "contracts",
+      "query": "What is Section 27 of the Indian Contract Act about restraint of trade?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6451,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.02,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CT-003",
+      "category": "contracts",
+      "query": "What are the essential elements of an NDA?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5623,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.02,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CT-004",
+      "category": "contracts",
+      "query": "What is the legal validity of electronic signatures in India?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6877,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.021,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CT-005",
+      "category": "contracts",
+      "query": "What are the stamp duty requirements for contracts?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5855,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.025,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CT-006",
+      "category": "contracts",
+      "query": "What is the limitation period for contract disputes?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6466,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.026,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CT-007",
+      "category": "contracts",
+      "query": "What is specific performance under Indian law?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6485,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.027,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CT-008",
+      "category": "contracts",
+      "query": "What is the doctrine of frustration of contract?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5261,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.022,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CT-009",
+      "category": "contracts",
+      "query": "What are force majeure clauses?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.435,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.023,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CT-010",
+      "category": "contracts",
+      "query": "What is the arbitration process in India?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.7276,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.023,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CT-011",
+      "category": "contracts",
+      "query": "What are liquidated damages vs penalties?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5535,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.019,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CT-012",
+      "category": "contracts",
+      "query": "What is a service level agreement?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5361,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.019,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CT-013",
+      "category": "contracts",
+      "query": "What is the legal enforceability of MOU?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 0.0,
+      "mrr": 0.0,
+      "ndcg_at_5": 0.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.019,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CT-014",
+      "category": "contracts",
+      "query": "What are indemnity and guarantee provisions?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6415,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.023,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CT-015",
+      "category": "contracts",
+      "query": "What is a confidentiality clause and how enforceable is it?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5452,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.02,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CT-016",
+      "category": "contracts",
+      "query": "What is consideration under contract law?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5946,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.019,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CT-017",
+      "category": "contracts",
+      "query": "What are the remedies for breach of contract?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5097,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.019,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CT-018",
+      "category": "contracts",
+      "query": "What is a governing law clause?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5625,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.02,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CT-019",
+      "category": "contracts",
+      "query": "What are the requirements for contract termination?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 0.0,
+      "mrr": 0.0,
+      "ndcg_at_5": 0.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.017,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "CT-020",
+      "category": "contracts",
+      "query": "What is a limitation of liability clause?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5807,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.018,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "TX-001",
+      "category": "tax_law",
+      "query": "What is Section 80-IAC startup tax exemption?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5743,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.02,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "TX-002",
+      "category": "tax_law",
+      "query": "What are the GST registration requirements?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5565,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.016,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "TX-003",
+      "category": "tax_law",
+      "query": "What is Section 56(2)(viib) about angel tax?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5473,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.018,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "TX-004",
+      "category": "tax_law",
+      "query": "What are the TDS requirements for salary?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5704,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.018,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "TX-005",
+      "category": "tax_law",
+      "query": "What is the GST rate for software services?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 0.0,
+      "mrr": 0.0,
+      "ndcg_at_5": 0.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.018,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "TX-006",
+      "category": "tax_law",
+      "query": "What is input tax credit under GST?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5656,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.017,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "TX-007",
+      "category": "tax_law",
+      "query": "What are the advance tax payment deadlines?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6831,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.019,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "TX-008",
+      "category": "tax_law",
+      "query": "What is Section 115BAB for new manufacturing companies?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5294,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.018,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "TX-009",
+      "category": "tax_law",
+      "query": "What are the transfer pricing requirements?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5486,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.021,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "TX-010",
+      "category": "tax_law",
+      "query": "What is the composition scheme under GST?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5463,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.017,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "TX-011",
+      "category": "tax_law",
+      "query": "What are GST return filing deadlines?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5206,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.02,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "TX-012",
+      "category": "tax_law",
+      "query": "What is e-invoicing under GST?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 0.0,
+      "mrr": 0.0,
+      "ndcg_at_5": 0.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.017,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "TX-013",
+      "category": "tax_law",
+      "query": "What are the penalties for GST non-compliance?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5578,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.018,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "TX-014",
+      "category": "tax_law",
+      "query": "What is the startup India tax exemption scheme?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 0.0,
+      "mrr": 0.0,
+      "ndcg_at_5": 0.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.02,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "TX-015",
+      "category": "tax_law",
+      "query": "What are the tax implications of ESOP for employees?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4333,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.017,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "TX-016",
+      "category": "tax_law",
+      "query": "What is Section 194 about TDS on professional fees?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5824,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.048,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "TX-017",
+      "category": "tax_law",
+      "query": "What is the patent box regime in India?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6112,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.018,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "TX-018",
+      "category": "tax_law",
+      "query": "What are the tax benefits for R&D expenditure?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5442,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.02,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "TX-019",
+      "category": "tax_law",
+      "query": "What is reverse charge mechanism in GST?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5168,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.014,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "TX-020",
+      "category": "tax_law",
+      "query": "What are the digital tax provisions for tech startups?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 0.0,
+      "mrr": 0.0,
+      "ndcg_at_5": 0.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.014,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "EL-001",
+      "category": "employment_law",
+      "query": "What are the minimum wage requirements in India?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.019,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "EL-002",
+      "category": "employment_law",
+      "query": "What is the notice period requirement for termination?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5612,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.021,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "EL-003",
+      "category": "employment_law",
+      "query": "What are the PF contribution rates?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.9631,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.023,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "EL-004",
+      "category": "employment_law",
+      "query": "What are the maternity leave provisions?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.02,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "EL-005",
+      "category": "employment_law",
+      "query": "What is the Sexual Harassment of Women at Workplace Act?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.019,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "EL-006",
+      "category": "employment_law",
+      "query": "What are the working hours restrictions under labor law?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.016,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "EL-007",
+      "category": "employment_law",
+      "query": "When does the Shops and Establishments Act apply?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.52,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.016,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "EL-008",
+      "category": "employment_law",
+      "query": "What is the gratuity calculation formula?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.017,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "EL-009",
+      "category": "employment_law",
+      "query": "What are the conditions for lay-off and retrenchment?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5636,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.016,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "EL-010",
+      "category": "employment_law",
+      "query": "What is the applicability of Equal Remuneration Act?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.019,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "EL-011",
+      "category": "employment_law",
+      "query": "What are the employee insurance requirements?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.018,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "EL-012",
+      "category": "employment_law",
+      "query": "What is Section 25F about retrenchment compensation?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6077,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.018,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "EL-013",
+      "category": "employment_law",
+      "query": "What are the overtime payment requirements?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.019,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "EL-014",
+      "category": "employment_law",
+      "query": "What is the Industrial Employment Standing Orders Act?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.02,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "EL-015",
+      "category": "employment_law",
+      "query": "What are the leave policies required by law?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.019,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "EL-016",
+      "category": "employment_law",
+      "query": "What are the requirements for employment contracts?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5679,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.016,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "EL-017",
+      "category": "employment_law",
+      "query": "What are the compliance requirements under contract labor act?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.015,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "EL-018",
+      "category": "employment_law",
+      "query": "What is the process for industrial dispute resolution?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6033,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.018,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "EL-019",
+      "category": "employment_law",
+      "query": "What are the penalties for non-compliance with labor laws?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.02,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "EL-020",
+      "category": "employment_law",
+      "query": "What are the key provisions of the new labor codes?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.018,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": []
+    }
+  ]
+}

@@ -1,0 +1,3022 @@
+{
+  "config": {
+    "name": "hybrid_bm25",
+    "description": "BM25 + lexical fused via weighted Reciprocal Rank Fusion",
+    "hybrid_search": true,
+    "use_reranker": false,
+    "vector_store": "lexical",
+    "llm": "none"
+  },
+  "timestamp": "2026-07-07T15:17:28.209149+00:00",
+  "total_queries": 120,
+  "total_elapsed_seconds": 8.962,
+  "aggregate": {
+    "recall_at_5": 0.8417,
+    "precision_at_5": 0.7233,
+    "mrr": 0.9531,
+    "ndcg_at_5": 0.6846,
+    "groundedness_rate": 1.0,
+    "hallucination_proxy_rate": 0.0,
+    "avg_response_time": 0.0746
+  },
+  "confidence_distribution": {
+    "low": 42,
+    "medium": 30,
+    "high": 48
+  },
+  "category_metrics": {
+    "company_formation": {
+      "count": 20,
+      "recall_at_5": 0.85,
+      "precision_at_5": 0.7225,
+      "mrr": 0.96,
+      "ndcg_at_5": 0.6445,
+      "groundedness_rate": 1.0,
+      "hallucination_proxy_rate": 0.0,
+      "avg_response_time": 0.0833
+    },
+    "founder_agreements": {
+      "count": 20,
+      "recall_at_5": 0.95,
+      "precision_at_5": 0.95,
+      "mrr": 0.975,
+      "ndcg_at_5": 0.923,
+      "groundedness_rate": 1.0,
+      "hallucination_proxy_rate": 0.0,
+      "avg_response_time": 0.0675
+    },
+    "compliance": {
+      "count": 20,
+      "recall_at_5": 0.825,
+      "precision_at_5": 0.68,
+      "mrr": 0.975,
+      "ndcg_at_5": 0.6377,
+      "groundedness_rate": 1.0,
+      "hallucination_proxy_rate": 0.0,
+      "avg_response_time": 0.0784
+    },
+    "contracts": {
+      "count": 20,
+      "recall_at_5": 0.925,
+      "precision_at_5": 0.7925,
+      "mrr": 0.9667,
+      "ndcg_at_5": 0.7213,
+      "groundedness_rate": 1.0,
+      "hallucination_proxy_rate": 0.0,
+      "avg_response_time": 0.0707
+    },
+    "tax_law": {
+      "count": 20,
+      "recall_at_5": 0.7,
+      "precision_at_5": 0.4133,
+      "mrr": 0.8667,
+      "ndcg_at_5": 0.4454,
+      "groundedness_rate": 1.0,
+      "hallucination_proxy_rate": 0.0,
+      "avg_response_time": 0.075
+    },
+    "employment_law": {
+      "count": 20,
+      "recall_at_5": 0.8,
+      "precision_at_5": 0.7817,
+      "mrr": 0.975,
+      "ndcg_at_5": 0.7356,
+      "groundedness_rate": 1.0,
+      "hallucination_proxy_rate": 0.0,
+      "avg_response_time": 0.073
+    }
+  },
+  "corpus": {
+    "source": "local",
+    "total_documents": 47867,
+    "by_doc_type": {
+      "case": 76,
+      "clause": 65,
+      "compliance": 41,
+      "faq": 84,
+      "news": 55,
+      "statute": 47546
+    },
+    "loaded_files_count": 21
+  },
+  "per_query": [
+    {
+      "query_id": "CF-001",
+      "category": "company_formation",
+      "query": "What is Section 7 of the Companies Act, 2013?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.8099,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.099,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Companies Act, 2013",
+        "The Companies Act, 2013"
+      ]
+    },
+    {
+      "query_id": "CF-002",
+      "category": "company_formation",
+      "query": "What are the requirements for incorporating a private limited company in India?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6063,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.07,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Companies Act, 2013 - Section 2(68), LLP Act, 2008, Companies Act, 2013 - Section 2(62)",
+        "The Companies Act, 2013",
+        "The Hind Cycles Limited and Sen-Raleigh Limited (Nationalisation) Act, 1980",
+        "The Limited Liability Partnership Act, 2008",
+        "The Tyre Corporation of India Limited (Disinvestment of Ownership) Act, 2007"
+      ]
+    },
+    {
+      "query_id": "CF-003",
+      "category": "company_formation",
+      "query": "What is the minimum number of directors required for a private limited company?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.6,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4913,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.08,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Companies Act, 2013",
+        "Companies Act, 2013 - Section 2(68), LLP Act, 2008, Companies Act, 2013 - Section 2(62)",
+        "Companies Act, 2013 - Section 7, Companies (Incorporation) Rules, 2014, MCA SPICe+ Guidelines",
+        "The Companies Act, 2013"
+      ]
+    },
+    {
+      "query_id": "CF-004",
+      "category": "company_formation",
+      "query": "What is the difference between authorized and paid-up capital?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.75,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.06,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": [
+        "The ASSAM AGRICULTURAL INCOME TAX ACT, 1939",
+        "The Assam Amusements and Betting Tax (Amendment) Act, 2009",
+        "The Companies Act, 2013",
+        "The Income-tax Act, 1961",
+        "The Life Insurance Corporation Act, 1956"
+      ]
+    },
+    {
+      "query_id": "CF-005",
+      "category": "company_formation",
+      "query": "How to convert a partnership into a private limited company?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.25,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4331,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 4,
+      "elapsed_seconds": 0.076,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Companies Act, 2013 - Section 2(68), LLP Act, 2008, Companies Act, 2013 - Section 2(62)",
+        "The Companies Act, 2013",
+        "The Income-tax Act, 1961",
+        "The Limited Liability Partnership Act, 2008"
+      ]
+    },
+    {
+      "query_id": "CF-006",
+      "category": "company_formation",
+      "query": "What is the role of the Registrar of Companies?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.8921,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.037,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Companies Act, 2013",
+        "The Chit Funds Act, 1982",
+        "The Companies Act, 2013"
+      ]
+    },
+    {
+      "query_id": "CF-007",
+      "category": "company_formation",
+      "query": "What are the contents of Memorandum of Association?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.8077,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.033,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Companies Act, 2013",
+        "The Andhra Pradesh Societies Registration Act, 2001.",
+        "The Companies Act, 2013",
+        "The Public Sector Iron and Steel Companies (Restructuring) and Miscellaneous Provisions Act, 1978",
+        "The Registration Act, 1908"
+      ]
+    },
+    {
+      "query_id": "CF-008",
+      "category": "company_formation",
+      "query": "What is Section 12 regarding registered office?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.8678,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.091,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Companies Act, 2013",
+        "The Chartered Accountants Act, 1949",
+        "The Forward Contracts (Regulation) Act, 1952",
+        "The Trade Unions Act, 1926",
+        "The regiatrstion act, 1908"
+      ]
+    },
+    {
+      "query_id": "CF-009",
+      "category": "company_formation",
+      "query": "What are the different types of companies under Companies Act?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 0.4,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5397,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.098,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": [
+        "The Companies (Profits) Surtax Act, 1964",
+        "The Companies Act, 2013",
+        "The Credit Information Companies (Regulation) Act, 2005.",
+        "The Hind Cycles Limited and Sen-Raleigh Limited (Nationalisation) Act, 1980",
+        "The Jute Companies (Nationalisation) Act, 1980"
+      ]
+    },
+    {
+      "query_id": "CF-010",
+      "category": "company_formation",
+      "query": "What is the process for name reservation on MCA portal?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 0.2,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.3392,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.092,
+      "retrieved_doc_types": [
+        "news",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "MCA",
+        "Regulatory",
+        "The Insolvency and Bankruptcy Code, 2016."
+      ]
+    },
+    {
+      "query_id": "CF-011",
+      "category": "company_formation",
+      "query": "What is SPICe+ form for company registration?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.2,
+      "mrr": 0.2,
+      "ndcg_at_5": 0.0516,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.056,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Companies Act, 2013 - Section 7, Companies (Incorporation) Rules, 2014, MCA SPICe+ Guidelines",
+        "The Andhra Pradesh Animal Feed (Regulation of Manufacture, Quality Control, Sale and Distribution) Act, 2020.",
+        "The Companies Act, 2013",
+        "The Customs Tariff Act, 1975",
+        "The Spices Board Act, 1986"
+      ]
+    },
+    {
+      "query_id": "CF-012",
+      "category": "company_formation",
+      "query": "What are the documents needed for DSC application?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.9034,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.265,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Companies Act, 2013 - Section 7, Companies (Incorporation) Rules, 2014, MCA SPICe+ Guidelines",
+        "NI Act Section 138(b)(c), Supreme Court in Damodar S. Prabhu case on compounding",
+        "The Dr. Abdul Haq Urdu University Act, 2016",
+        "The Information Technology Act, 2000",
+        "The Motor Vehicle Act, 1939"
+      ]
+    },
+    {
+      "query_id": "CF-013",
+      "category": "company_formation",
+      "query": "What is Section 149 about appointment of directors?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.4,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4856,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.076,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Companies Act, 2013",
+        "SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015",
+        "The Banking Regulation Act, 1949",
+        "The Companies Act, 2013"
+      ]
+    },
+    {
+      "query_id": "CF-014",
+      "category": "company_formation",
+      "query": "What is the minimum and maximum number of members in a private company?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.7426,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.065,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Companies Act, 2013",
+        "The Andhra Pradesh Private Universities (Establishment and Regulation) Act, 2016.",
+        "The Companies Act, 2013"
+      ]
+    },
+    {
+      "query_id": "CF-015",
+      "category": "company_formation",
+      "query": "How does lifting of corporate veil work in Indian law?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.8311,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.1,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": [
+        "The Building and Other Construction Workers (Regulation of Employment and Conditions of Service) Act, 1996",
+        "The Copyright Act, 1957",
+        "The Factories Act, 1948",
+        "The Indian Stamp Act, 1899",
+        "The factories act, 1948"
+      ]
+    },
+    {
+      "query_id": "CF-016",
+      "category": "company_formation",
+      "query": "What are the advantages of LLP over Private Limited?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.9719,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.082,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Companies Act, 2013 - Section 2(68), LLP Act, 2008, Companies Act, 2013 - Section 2(62)",
+        "Limited Liability Partnership Act, 2008"
+      ]
+    },
+    {
+      "query_id": "CF-017",
+      "category": "company_formation",
+      "query": "What is Section 2(68) definition of private company?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.6,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5844,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.092,
+      "retrieved_doc_types": [
+        "clause",
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Companies Act, 2013",
+        "Companies Act, 2013 - Section 2(68), LLP Act, 2008, Companies Act, 2013 - Section 2(62)",
+        "The Companies Act, 2013",
+        "The Income-tax Act, 1961"
+      ]
+    },
+    {
+      "query_id": "CF-018",
+      "category": "company_formation",
+      "query": "What are the penalties for non-filing of annual returns?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.2,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.3392,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.055,
+      "retrieved_doc_types": [
+        "compliance",
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "CGST Act, 2017 - Section 37, 39, 44, GST Return Rules, CGST Rule 61",
+        "Income Tax",
+        "PF/ESI",
+        "The Multi-State Co-operative Societies Act, 2002"
+      ]
+    },
+    {
+      "query_id": "CF-019",
+      "category": "company_formation",
+      "query": "What is the process for one person company registration?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 0.6,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5692,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.074,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": [
+        "The Andhra Pradesh Animal Feed (Regulation of Manufacture, Quality Control, Sale and Distribution) Act, 2020.",
+        "The Banking Regulation Act, 1949",
+        "The Companies Act, 2013",
+        "The Insolvency and Bankruptcy Code, 2016.",
+        "The Insurance Act, 1938"
+      ]
+    },
+    {
+      "query_id": "CF-020",
+      "category": "company_formation",
+      "query": "What are the duties of directors under Section 166?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.8731,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.065,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Companies Act, 2013",
+        "The Banking Regulation Act, 1949",
+        "The Companies Act, 2013",
+        "The Insurance Act, 1938",
+        "The Reserve Bank of India Act, 1934"
+      ]
+    },
+    {
+      "query_id": "FA-001",
+      "category": "founder_agreements",
+      "query": "What is equity vesting and how does it work?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.042,
+      "retrieved_doc_types": [
+        "faq"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-002",
+      "category": "founder_agreements",
+      "query": "What clauses should be in a founder agreement?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.049,
+      "retrieved_doc_types": [
+        "clause",
+        "faq"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-003",
+      "category": "founder_agreements",
+      "query": "What is a non-compete clause in a founder agreement?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.9685,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.219,
+      "retrieved_doc_types": [
+        "clause",
+        "faq"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-004",
+      "category": "founder_agreements",
+      "query": "What is the typical vesting schedule for startups?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.049,
+      "retrieved_doc_types": [
+        "clause",
+        "faq"
+      ],
+      "retrieved_acts": [
+        "Companies Act, 2013"
+      ]
+    },
+    {
+      "query_id": "FA-005",
+      "category": "founder_agreements",
+      "query": "What is a cliff period in vesting?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.048,
+      "retrieved_doc_types": [
+        "clause",
+        "faq"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-006",
+      "category": "founder_agreements",
+      "query": "How should founders split equity?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.042,
+      "retrieved_doc_types": [
+        "clause",
+        "faq"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-007",
+      "category": "founder_agreements",
+      "query": "What is a shotgun clause in founder agreements?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.9929,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.05,
+      "retrieved_doc_types": [
+        "clause",
+        "faq"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-008",
+      "category": "founder_agreements",
+      "query": "What happens when a co-founder leaves the company?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.05,
+      "retrieved_doc_types": [
+        "clause",
+        "faq"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-009",
+      "category": "founder_agreements",
+      "query": "What is good leaver vs bad leaver?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.9795,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.046,
+      "retrieved_doc_types": [
+        "clause",
+        "faq"
+      ],
+      "retrieved_acts": [
+        "Indian Contract Act, 1872"
+      ]
+    },
+    {
+      "query_id": "FA-010",
+      "category": "founder_agreements",
+      "query": "What is an IP assignment clause?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.9742,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.062,
+      "retrieved_doc_types": [
+        "clause",
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Indian Contract Act, 1872 - Section 27, Shops and Establishments Act (State-specific), Industrial Employment (Standing Orders) Act, 1946",
+        "The Indian Stamp Act, 1899"
+      ]
+    },
+    {
+      "query_id": "FA-011",
+      "category": "founder_agreements",
+      "query": "How does dispute resolution work in founder agreements?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.9411,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.07,
+      "retrieved_doc_types": [
+        "clause",
+        "faq"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-012",
+      "category": "founder_agreements",
+      "query": "What is accelerated vesting?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.025,
+      "retrieved_doc_types": [
+        "clause",
+        "faq"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-013",
+      "category": "founder_agreements",
+      "query": "What is drag-along and tag-along rights?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.9866,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.054,
+      "retrieved_doc_types": [
+        "clause",
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "The Protection of Human Rights Act, 1993"
+      ]
+    },
+    {
+      "query_id": "FA-014",
+      "category": "founder_agreements",
+      "query": "What is an anti-dilution clause?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.9703,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.044,
+      "retrieved_doc_types": [
+        "clause",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "The Anti-Hijacking Act, 2016.",
+        "The Water (Prevention and Control of Pollution) Act, 1974"
+      ]
+    },
+    {
+      "query_id": "FA-015",
+      "category": "founder_agreements",
+      "query": "How is ESOP different from founder equity?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.9192,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.081,
+      "retrieved_doc_types": [
+        "clause",
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Companies Act, 2013",
+        "The Companies Act, 2013",
+        "The Income-tax Act, 1961"
+      ]
+    },
+    {
+      "query_id": "FA-016",
+      "category": "founder_agreements",
+      "query": "What is reverse vesting for founders?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.031,
+      "retrieved_doc_types": [
+        "clause",
+        "faq"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-017",
+      "category": "founder_agreements",
+      "query": "What are voting rights in a shareholders agreement?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.8,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.8305,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.043,
+      "retrieved_doc_types": [
+        "clause",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "SEBI (Substantial Acquisition of Shares and Takeovers) Regulations, 2011"
+      ]
+    },
+    {
+      "query_id": "FA-018",
+      "category": "founder_agreements",
+      "query": "What is a right of first refusal clause?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.9521,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.057,
+      "retrieved_doc_types": [
+        "clause",
+        "faq"
+      ],
+      "retrieved_acts": []
+    },
+    {
+      "query_id": "FA-019",
+      "category": "founder_agreements",
+      "query": "What are the implications of Section 27 on non-compete?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 0.4,
+      "mrr": 0.5,
+      "ndcg_at_5": 0.3823,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.256,
+      "retrieved_doc_types": [
+        "clause",
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Indian Contract Act, 1872",
+        "Indian Contract Act, 1872 - Section 27, Information Technology Act, 2000, Copyright Act, 1957, Common law principles of breach of confidence",
+        "Indian Contract Act, 1872 - Section 27, Shops and Establishments Act (State-specific), Industrial Employment (Standing Orders) Act, 1946"
+      ]
+    },
+    {
+      "query_id": "FA-020",
+      "category": "founder_agreements",
+      "query": "What is a sweat equity arrangement?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.8,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5628,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.032,
+      "retrieved_doc_types": [
+        "clause",
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Companies Act, 2013",
+        "The Companies Act, 2013",
+        "The Income-tax Act, 1961"
+      ]
+    },
+    {
+      "query_id": "CO-001",
+      "category": "compliance",
+      "query": "What are the annual compliance requirements for a private limited company?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.2,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4406,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.091,
+      "retrieved_doc_types": [
+        "clause",
+        "faq",
+        "news",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Companies Act, 2013 - Section 2(68), LLP Act, 2008, Companies Act, 2013 - Section 2(62)",
+        "MCA",
+        "The Companies Act, 2013",
+        "The Limited Liability Partnership Act, 2008"
+      ]
+    },
+    {
+      "query_id": "CO-002",
+      "category": "compliance",
+      "query": "What are the ROC filing requirements?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 0.4,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4402,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.055,
+      "retrieved_doc_types": [
+        "compliance",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Companies Act, 2013",
+        "ROC",
+        "The Companies Act, 2013"
+      ]
+    },
+    {
+      "query_id": "CO-003",
+      "category": "compliance",
+      "query": "When is the first board meeting required after incorporation?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6201,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.076,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Companies Act, 2013",
+        "The Companies Act, 2013",
+        "The Delhi Sikh Gurdwaras Act, 1971",
+        "The Life Insurance Corporation Act, 1956"
+      ]
+    },
+    {
+      "query_id": "CO-004",
+      "category": "compliance",
+      "query": "What is the penalty for not holding AGM?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.8,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.786,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.062,
+      "retrieved_doc_types": [
+        "compliance",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Board Meetings",
+        "Companies Act, 2013",
+        "The Central Provinces Tenancy Act, 1898"
+      ]
+    },
+    {
+      "query_id": "CO-005",
+      "category": "compliance",
+      "query": "What are the PF registration requirements?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 0.6,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6855,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.044,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": [
+        "The Assam Mobile Theatre (Regulation and Artists' Welfare Fund) Act, 2010",
+        "The Assam Mobile Theatre (Regulation and Artists’ Welfare Fund) Act, 2010 (single Document)",
+        "The Income-tax Act, 1961",
+        "The International Monetary Fund and Bank Act, 1945",
+        "The Seamens Provident Fund Act, 1966"
+      ]
+    },
+    {
+      "query_id": "CO-006",
+      "category": "compliance",
+      "query": "When does ESI registration become mandatory?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.8,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6129,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.108,
+      "retrieved_doc_types": [
+        "case",
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "EPF Act, 1952, ESI Act, 1948, Payment of Gratuity Act, 1972, Payment of Bonus Act, 1965, Shops and Establishments Acts (State)",
+        "RERA, 2016 - Sections 3, 4, 11, 18, RERA Rules (State-specific)",
+        "The Employees State Insurance Act, 1948",
+        "The Insurance Act, 1938"
+      ]
+    },
+    {
+      "query_id": "CO-007",
+      "category": "compliance",
+      "query": "What is Form MGT-7 and when is it due?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 0.8,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6612,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.063,
+      "retrieved_doc_types": [
+        "compliance",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Companies Act, 2013",
+        "ROC",
+        "The ASSAM DEBT CONCILIATION (AMENDMENT) ACT, 1943",
+        "The ASSAM GOODS AND SERVICES TAX (AMENDMENT) ACT, 2019",
+        "The Code of Civil Procedure, 1908"
+      ]
+    },
+    {
+      "query_id": "CO-008",
+      "category": "compliance",
+      "query": "What are the statutory audit requirements?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.6,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6474,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.036,
+      "retrieved_doc_types": [
+        "compliance",
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Board Meetings",
+        "LLP Act, 2008 - Section 7, LLP Rules, 2009, LLP Act, 2008 - Section 34-35",
+        "The Chartered Accountants Act, 1949",
+        "The Cost Accountants Act, 1959",
+        "The Insurance Act, 1938"
+      ]
+    },
+    {
+      "query_id": "CO-009",
+      "category": "compliance",
+      "query": "What is the penalty for not maintaining statutory registers?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.2,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.3819,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.104,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": [
+        "The Cattle-Trespass Act, 1871",
+        "The Factories Act, 1948",
+        "The Income-tax Act, 1961",
+        "The Labour Laws (Simplification of Procedure for Furnishing Returns and Maintaining Registers by certain Establishments) Act, 1988",
+        "The Sarais' Act, 1867"
+      ]
+    },
+    {
+      "query_id": "CO-010",
+      "category": "compliance",
+      "query": "What are the disclosure requirements for related party transactions?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.8,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.7093,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.08,
+      "retrieved_doc_types": [
+        "news",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Companies Act, 2013",
+        "Regulatory",
+        "SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015",
+        "The Companies Act, 2013",
+        "The Life Insurance Corporation Act, 1956"
+      ]
+    },
+    {
+      "query_id": "CO-011",
+      "category": "compliance",
+      "query": "What is MSME compliance for startups?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.9845,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.037,
+      "retrieved_doc_types": [
+        "compliance",
+        "faq",
+        "news",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Central Goods and Services Tax Act, 2017",
+        "Companies Act, 2013 - Section 2(68), LLP Act, 2008, Companies Act, 2013 - Section 2(62)",
+        "EPF Act, 1952, ESI Act, 1948, Payment of Gratuity Act, 1972, Payment of Bonus Act, 1965, Shops and Establishments Acts (State)",
+        "ROC",
+        "Tax"
+      ]
+    },
+    {
+      "query_id": "CO-012",
+      "category": "compliance",
+      "query": "What is startup recognition under DPIIT?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.8,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.7244,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.043,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "FEMA (Transfer or Issue of Security by a Person Resident Outside India) Regulations, 2017",
+        "Income Tax Act, 1961",
+        "Startup India Action Plan, 2016, Income Tax Act Section 80-IAC, DPIIT Recognition Guidelines",
+        "The Scheduled Tribes and Other Traditional Forest Dwellers (Recognition of Forest Rights) Act, 2006"
+      ]
+    },
+    {
+      "query_id": "CO-013",
+      "category": "compliance",
+      "query": "What are the professional tax requirements?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.8,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5952,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.319,
+      "retrieved_doc_types": [
+        "compliance",
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "EPF Act, 1952, ESI Act, 1948, Payment of Gratuity Act, 1972, Payment of Bonus Act, 1965, Shops and Establishments Acts (State)",
+        "PF/ESI",
+        "The Insolvency and Bankruptcy Code, 2016.",
+        "The National Commission for Allied and Healthcare Professions Act, 2021"
+      ]
+    },
+    {
+      "query_id": "CO-014",
+      "category": "compliance",
+      "query": "What is Section 92 about annual return filing?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.4,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5087,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.101,
+      "retrieved_doc_types": [
+        "compliance",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Companies Act, 2013",
+        "Income Tax",
+        "ROC",
+        "The Limited Liability Partnership Act, 2008"
+      ]
+    },
+    {
+      "query_id": "CO-015",
+      "category": "compliance",
+      "query": "What are the compliance requirements for foreign directors?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.4,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4958,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.048,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Companies Act, 2013 - Section 2(68), LLP Act, 2008, Companies Act, 2013 - Section 2(62)",
+        "SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015",
+        "The Companies Act, 2013",
+        "The Merchant Shipping Act, 1958"
+      ]
+    },
+    {
+      "query_id": "CO-016",
+      "category": "compliance",
+      "query": "What is the compliance calendar for Q1?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.7501,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.025,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": [
+        "The Chemical Weapons Convention Act, 2000",
+        "The Factories Act, 1948",
+        "The Mines Act, 1952",
+        "The Motor Transport Workers Act, 1961",
+        "The motor transport workers act, 1961"
+      ]
+    },
+    {
+      "query_id": "CO-017",
+      "category": "compliance",
+      "query": "When is Form AOC-4 due?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 0.8,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.8488,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.071,
+      "retrieved_doc_types": [
+        "compliance",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Companies Act, 2013",
+        "ROC",
+        "The Assam Co-operative Societies  Act, 2007",
+        "The Income-tax Act, 1961",
+        "The Wealth-tax Act, 1957"
+      ]
+    },
+    {
+      "query_id": "CO-018",
+      "category": "compliance",
+      "query": "What are the KYC requirements for directors?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.8,
+      "mrr": 0.5,
+      "ndcg_at_5": 0.6469,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.04,
+      "retrieved_doc_types": [
+        "compliance",
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "FEMA (Transfer or Issue of Security by a Person Resident Outside India) Regulations, 2017",
+        "Payment and Settlement Systems Act, 2007, RBI Payment Aggregator Guidelines, 2020, Data Localization Circular, 2018, PCI-DSS Standards",
+        "ROC",
+        "SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015"
+      ]
+    },
+    {
+      "query_id": "CO-019",
+      "category": "compliance",
+      "query": "What is Section 128 about books of accounts?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.7745,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.085,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Companies Act, 2013",
+        "The Companies Act, 2013",
+        "The Essential Commodities Act, 1955",
+        "The Insurance Act, 1938",
+        "The Levy Sugar Price Equalisation Fund Act, 1976"
+      ]
+    },
+    {
+      "query_id": "CO-020",
+      "category": "compliance",
+      "query": "What are the penalties under Section 447 for fraud?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.4,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4409,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.079,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Companies Act, 2013",
+        "Income Tax Act - Section 270A, 271, 276C, CGST Act - Section 122, 132, Benami Transactions (Prohibition) Act, 1988, Black Money Act, 2015",
+        "The Companies Act, 2013",
+        "The Fugitive Economic Offenders Act, 2018",
+        "The Life Insurance Corporation Act, 1956"
+      ]
+    },
+    {
+      "query_id": "CT-001",
+      "category": "contracts",
+      "query": "What makes a contract valid under Indian Contract Act?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6624,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.107,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Indian Contract Act, 1872",
+        "The Indian Contract Act, 1872"
+      ]
+    },
+    {
+      "query_id": "CT-002",
+      "category": "contracts",
+      "query": "What is Section 27 of the Indian Contract Act about restraint of trade?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.7919,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.121,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Indian Contract Act, 1872",
+        "The Indian Contract Act, 1872",
+        "The Indian Partnership Act, 1932"
+      ]
+    },
+    {
+      "query_id": "CT-003",
+      "category": "contracts",
+      "query": "What are the essential elements of an NDA?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.973,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.06,
+      "retrieved_doc_types": [
+        "clause",
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Indian Contract Act, 1872",
+        "The Customs Tariff Act, 1975"
+      ]
+    },
+    {
+      "query_id": "CT-004",
+      "category": "contracts",
+      "query": "What is the legal validity of electronic signatures in India?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.6,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6129,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.245,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "IT Act, 2000",
+        "Information Technology Act, 2000",
+        "The Bharatiya Sakshya Adhiniyam, 2023",
+        "The Information Technology Act, 2000"
+      ]
+    },
+    {
+      "query_id": "CT-005",
+      "category": "contracts",
+      "query": "What are the stamp duty requirements for contracts?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.25,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4258,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 4,
+      "elapsed_seconds": 0.044,
+      "retrieved_doc_types": [
+        "clause",
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "The Indian Stamp Act, 1899",
+        "The lNDIAN STAMP (ASSAM AMENDMENT) ACT, 2004"
+      ]
+    },
+    {
+      "query_id": "CT-006",
+      "category": "contracts",
+      "query": "What is the limitation period for contract disputes?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.6,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5777,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.051,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Indian Contract Act, 1872",
+        "Industrial Disputes Act, 1947 - Section 2A, 25F, 25G, 25N, Indian Contract Act, 1872, Specific Relief Act, 1963",
+        "Limitation Act, 1963",
+        "The Chit Funds Act, 1982",
+        "The Limitation Act, 1963"
+      ]
+    },
+    {
+      "query_id": "CT-007",
+      "category": "contracts",
+      "query": "What is specific performance under Indian law?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.2,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.3664,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.075,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Indian Contract Act, 1872",
+        "The National Law School and Judicial Academy, Assam Act, 2009",
+        "The Specific Relief Act, 1963"
+      ]
+    },
+    {
+      "query_id": "CT-008",
+      "category": "contracts",
+      "query": "What is the doctrine of frustration of contract?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.8,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.8451,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.031,
+      "retrieved_doc_types": [
+        "case",
+        "clause",
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Indian Contract Act, 1872"
+      ]
+    },
+    {
+      "query_id": "CT-009",
+      "category": "contracts",
+      "query": "What are force majeure clauses?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.8302,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.042,
+      "retrieved_doc_types": [
+        "clause",
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Indian Contract Act, 1872",
+        "The General Clauses Act, 1897"
+      ]
+    },
+    {
+      "query_id": "CT-010",
+      "category": "contracts",
+      "query": "What is the arbitration process in India?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.4,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.497,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.04,
+      "retrieved_doc_types": [
+        "faq",
+        "news",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Arbitration and Conciliation Act, 1996",
+        "CPC Order 37, Limitation Act, 1963, IBC, 2016, SARFAESI Act, 2002, NI Act Section 138",
+        "High Courts",
+        "The Arbitration and Conciliation Act, 1996",
+        "The India International Arbitration Centre Act, 2019"
+      ]
+    },
+    {
+      "query_id": "CT-011",
+      "category": "contracts",
+      "query": "What are liquidated damages vs penalties?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 0.8,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.7568,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.031,
+      "retrieved_doc_types": [
+        "clause",
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Indian Contract Act, 1872",
+        "The Andhra Pradesh Forest Act, 1967",
+        "The Insolvency and Bankruptcy Code, 2016."
+      ]
+    },
+    {
+      "query_id": "CT-012",
+      "category": "contracts",
+      "query": "What is a service level agreement?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.9473,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.039,
+      "retrieved_doc_types": [
+        "clause",
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "The Andhra Pradesh (50 Percent Reservation to women in Works Contracts and Service Contracts given on nomination) Act, 2019."
+      ]
+    },
+    {
+      "query_id": "CT-013",
+      "category": "contracts",
+      "query": "What is the legal enforceability of MOU?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.2,
+      "mrr": 0.3333,
+      "ndcg_at_5": 0.1696,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.084,
+      "retrieved_doc_types": [
+        "clause",
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Indian Contract Act, 1872",
+        "The Andhra Pradesh Energy University Act, 2017.",
+        "The Andhra Pradesh Logistics University Act, 2017.",
+        "The Dr. Abdul Haq Urdu University Act, 2016"
+      ]
+    },
+    {
+      "query_id": "CT-014",
+      "category": "contracts",
+      "query": "What are indemnity and guarantee provisions?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.7364,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.201,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Indian Contract Act, 1872",
+        "Insolvency and Bankruptcy Code, 2016",
+        "The Andhra Pradesh Public Services Delivery Guarantee Act, 2017",
+        "The Andhra Pradesh Relief, Undertakings (Special Provisions) Act, 1971.",
+        "The Indian Contract Act, 1872"
+      ]
+    },
+    {
+      "query_id": "CT-015",
+      "category": "contracts",
+      "query": "What is a confidentiality clause and how enforceable is it?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.038,
+      "retrieved_doc_types": [
+        "clause",
+        "faq"
+      ],
+      "retrieved_acts": [
+        "Indian Contract Act, 1872"
+      ]
+    },
+    {
+      "query_id": "CT-016",
+      "category": "contracts",
+      "query": "What is consideration under contract law?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6256,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.042,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Indian Contract Act, 1872",
+        "The Indian Contract Act, 1872"
+      ]
+    },
+    {
+      "query_id": "CT-017",
+      "category": "contracts",
+      "query": "What are the remedies for breach of contract?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.9819,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.033,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Indian Contract Act, 1872",
+        "Indian Contract Act, 1872 - Section 27, Information Technology Act, 2000, Copyright Act, 1957, Common law principles of breach of confidence",
+        "Industrial Disputes Act, 1947 - Section 2A, 25F, 25G, 25N, Indian Contract Act, 1872, Specific Relief Act, 1963",
+        "The Central Provinces Tenancy Act, 1898"
+      ]
+    },
+    {
+      "query_id": "CT-018",
+      "category": "contracts",
+      "query": "What is a governing law clause?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.9509,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.048,
+      "retrieved_doc_types": [
+        "clause",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "The Insolvency and Bankruptcy Code, 2016."
+      ]
+    },
+    {
+      "query_id": "CT-019",
+      "category": "contracts",
+      "query": "What are the requirements for contract termination?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.974,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.036,
+      "retrieved_doc_types": [
+        "clause",
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Indian Contract Act, 1872",
+        "Industrial Disputes Act, 1947 - Section 25F, 25N, Shops and Establishments Act, Indian Contract Act, 1872"
+      ]
+    },
+    {
+      "query_id": "CT-020",
+      "category": "contracts",
+      "query": "What is a limitation of liability clause?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.7012,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.046,
+      "retrieved_doc_types": [
+        "clause",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "The Assam State Industrial Relief Undertakings (Special Provisions) Act, 1984",
+        "The Inland Vessels Act, 2021",
+        "The Merchant Shipping Act, 1958"
+      ]
+    },
+    {
+      "query_id": "TX-001",
+      "category": "tax_law",
+      "query": "What is Section 80-IAC startup tax exemption?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.9033,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.087,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Income Tax Act, 1961",
+        "Startup India Action Plan, 2016, Income Tax Act Section 80-IAC, DPIIT Recognition Guidelines",
+        "The Income-tax Act, 1961"
+      ]
+    },
+    {
+      "query_id": "TX-002",
+      "category": "tax_law",
+      "query": "What are the GST registration requirements?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.3333,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.3802,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 3,
+      "elapsed_seconds": 0.069,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "CGST Act, 2017 - Section 22, 24, 25, GST Registration Rules, 2017",
+        "Central Goods and Services Tax Act, 2017",
+        "The Andhra Pradesh Goods and Services Tax Act, 2017"
+      ]
+    },
+    {
+      "query_id": "TX-003",
+      "category": "tax_law",
+      "query": "What is Section 56(2)(viib) about angel tax?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.6,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6537,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.103,
+      "retrieved_doc_types": [
+        "faq",
+        "news",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Income Tax Act, 1961",
+        "Startup India Action Plan, 2016, Income Tax Act Section 80-IAC, DPIIT Recognition Guidelines",
+        "Tax",
+        "The Income-tax Act, 1961",
+        "The Wealth-tax Act, 1957"
+      ]
+    },
+    {
+      "query_id": "TX-004",
+      "category": "tax_law",
+      "query": "What are the TDS requirements for salary?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.6,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6247,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.061,
+      "retrieved_doc_types": [
+        "compliance",
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Income Tax Act, 1961",
+        "Income Tax Act, 1961 - Section 192, 80C, 80D, 10, Income Tax Rules - Rule 26B",
+        "TDS",
+        "The Andhra Pradesh Goods and Services Tax Act, 2017"
+      ]
+    },
+    {
+      "query_id": "TX-005",
+      "category": "tax_law",
+      "query": "What is the GST rate for software services?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 0.0,
+      "mrr": 0.0,
+      "ndcg_at_5": 0.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 4,
+      "elapsed_seconds": 0.068,
+      "retrieved_doc_types": [
+        "news",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Central Goods and Services Tax Act, 2017",
+        "Tax",
+        "The Andhra Pradesh Goods and Services Tax Act, 2017"
+      ]
+    },
+    {
+      "query_id": "TX-006",
+      "category": "tax_law",
+      "query": "What is input tax credit under GST?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.3392,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 1,
+      "elapsed_seconds": 0.069,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": [
+        "The Andhra Pradesh Goods and Services Tax Act, 2017"
+      ]
+    },
+    {
+      "query_id": "TX-007",
+      "category": "tax_law",
+      "query": "What are the advance tax payment deadlines?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 0.4,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4802,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.049,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": [
+        "The Andhra Pradesh Goods and Services Tax Act, 2017",
+        "The Central Goods and Services Tax Act, 2017",
+        "The Income-tax Act, 1961",
+        "The Interest-tax Act, 1974",
+        "The Union Territory Goods and Services Tax Act, 2017"
+      ]
+    },
+    {
+      "query_id": "TX-008",
+      "category": "tax_law",
+      "query": "What is Section 115BAB for new manufacturing companies?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.6,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5955,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.226,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Income Tax Act, 1961",
+        "The Banking Companies (Acquisition and Transfer of Undertakings) Act, 1970",
+        "The Essential Commodities Act, 1955",
+        "The Industries (Development and Regulation)  Act, 1951",
+        "The factories act, 1948"
+      ]
+    },
+    {
+      "query_id": "TX-009",
+      "category": "tax_law",
+      "query": "What are the transfer pricing requirements?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 0.2,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4221,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.034,
+      "retrieved_doc_types": [
+        "case",
+        "compliance",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Income Tax",
+        "SEBI (Issue of Capital and Disclosure Requirements) Regulations, 2018",
+        "The Banking Companies (Acquisition and Transfer of Undertakings) Act, 1980",
+        "The Income-tax Act, 1961"
+      ]
+    },
+    {
+      "query_id": "TX-010",
+      "category": "tax_law",
+      "query": "What is the composition scheme under GST?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.2,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.459,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.064,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "CGST Act, 2017 - Section 22, 24, 25, GST Registration Rules, 2017",
+        "Central Goods and Services Tax Act, 2017",
+        "The Andhra Pradesh Goods and Services Tax Act, 2017"
+      ]
+    },
+    {
+      "query_id": "TX-011",
+      "category": "tax_law",
+      "query": "What are GST return filing deadlines?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.3333,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.3689,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 3,
+      "elapsed_seconds": 0.071,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "CGST Act, 2017 - Section 37, 39, 44, GST Return Rules, CGST Rule 61",
+        "Income Tax Act - Section 270A, 271, 276C, CGST Act - Section 122, 132, Benami Transactions (Prohibition) Act, 1988, Black Money Act, 2015",
+        "The Andhra Pradesh Goods and Services Tax Act, 2017"
+      ]
+    },
+    {
+      "query_id": "TX-012",
+      "category": "tax_law",
+      "query": "What is e-invoicing under GST?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 0.0,
+      "mrr": 0.0,
+      "ndcg_at_5": 0.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.052,
+      "retrieved_doc_types": [
+        "news",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Central Goods and Services Tax Act, 2017",
+        "Tax",
+        "The Andhra Pradesh Goods and Services Tax Act, 2017"
+      ]
+    },
+    {
+      "query_id": "TX-013",
+      "category": "tax_law",
+      "query": "What are the penalties for GST non-compliance?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.2,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4089,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.075,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Central Goods and Services Tax Act, 2017",
+        "Income Tax Act - Section 270A, 271, 276C, CGST Act - Section 122, 132, Benami Transactions (Prohibition) Act, 1988, Black Money Act, 2015",
+        "The Andhra Pradesh Goods and Services Tax Act, 2017",
+        "The Central Goods and Services Tax Act, 2017",
+        "The Goods and Services Tax (Compensation to States) Act, 2017"
+      ]
+    },
+    {
+      "query_id": "TX-014",
+      "category": "tax_law",
+      "query": "What is the startup India tax exemption scheme?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.6,
+      "mrr": 0.3333,
+      "ndcg_at_5": 0.3475,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.059,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Income Tax Act, 1961",
+        "Startup India Action Plan, 2016, Income Tax Act Section 80-IAC, DPIIT Recognition Guidelines",
+        "The Code on Social Security, 2020",
+        "The Income-tax Act, 1961"
+      ]
+    },
+    {
+      "query_id": "TX-015",
+      "category": "tax_law",
+      "query": "What are the tax implications of ESOP for employees?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.2,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.421,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.078,
+      "retrieved_doc_types": [
+        "clause",
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Companies Act, 2013",
+        "The Companies Act, 2013",
+        "The Income-tax Act, 1961"
+      ]
+    },
+    {
+      "query_id": "TX-016",
+      "category": "tax_law",
+      "query": "What is Section 194 about TDS on professional fees?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.4,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5103,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.108,
+      "retrieved_doc_types": [
+        "compliance",
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Income Tax Act - Section 194C, 194H, 194I, 194J, Income Tax Rules - Form 26Q, 27Q",
+        "Income Tax Act, 1961",
+        "Income Tax Act, 1961 - Section 192, 80C, 80D, 10, Income Tax Rules - Rule 26B",
+        "TDS",
+        "The Income-tax Act, 1961"
+      ]
+    },
+    {
+      "query_id": "TX-017",
+      "category": "tax_law",
+      "query": "What is the patent box regime in India?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 0.4,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4694,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.046,
+      "retrieved_doc_types": [
+        "case",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "The Patents Act, 1970"
+      ]
+    },
+    {
+      "query_id": "TX-018",
+      "category": "tax_law",
+      "query": "What are the tax benefits for R&D expenditure?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 0.4,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4675,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.037,
+      "retrieved_doc_types": [
+        "case",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "The Andhra Pradesh Aadhaar (Targeted and Delivery of Financial and Other Subsidies, Benefits and Services) Act, 2023.",
+        "The Companies Act, 2013",
+        "The Expenditure-tax Act, 1987",
+        "The Income-tax Act, 1961"
+      ]
+    },
+    {
+      "query_id": "TX-019",
+      "category": "tax_law",
+      "query": "What is reverse charge mechanism in GST?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 0.2,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4127,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.075,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Central Goods and Services Tax Act, 2017",
+        "The Andhra Pradesh Goods and Services Tax Act, 2017",
+        "The Integrated Goods and Services Tax Act, 2017"
+      ]
+    },
+    {
+      "query_id": "TX-020",
+      "category": "tax_law",
+      "query": "What are the digital tax provisions for tech startups?",
+      "recall_at_5": 0.0,
+      "precision_at_5": 0.6,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.6437,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.069,
+      "retrieved_doc_types": [
+        "news",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Income Tax Act, 1961",
+        "Tax",
+        "The Central Goods and Services Tax Act, 2017"
+      ]
+    },
+    {
+      "query_id": "EL-001",
+      "category": "employment_law",
+      "query": "What are the minimum wage requirements in India?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.051,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "LLP Act, 2008 - Section 7, LLP Rules, 2009, LLP Act, 2008 - Section 34-35",
+        "The Code on Wages, 2019",
+        "The Mahatma Gandhi National Rural Employment Guarantee Act, 2005",
+        "The Minimum Wages Act, 1948",
+        "The mimimum wates act, 1948"
+      ]
+    },
+    {
+      "query_id": "EL-002",
+      "category": "employment_law",
+      "query": "What is the notice period requirement for termination?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.8,
+      "mrr": 0.5,
+      "ndcg_at_5": 0.634,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.218,
+      "retrieved_doc_types": [
+        "clause",
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Indian Contract Act, 1872",
+        "Industrial Disputes Act, 1947",
+        "Industrial Disputes Act, 1947 - Section 2A, 25F, 25G, 25N, Indian Contract Act, 1872, Specific Relief Act, 1963",
+        "The Andhra Pradesh Electricity Reform Act, 1998."
+      ]
+    },
+    {
+      "query_id": "EL-003",
+      "category": "employment_law",
+      "query": "What are the PF contribution rates?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.8515,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.048,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": [
+        "The Andhra Pradesh Reorganisation Act, 2014",
+        "The Coal Mines Provident Fund and Miscellaneous Provisions Act, 1948",
+        "The Employees Provident Funds and Miscellaneous Provisions Act, 1952",
+        "The Income-tax Act, 1961",
+        "The Provident Funds Act, 1925"
+      ]
+    },
+    {
+      "query_id": "EL-004",
+      "category": "employment_law",
+      "query": "What are the maternity leave provisions?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.9336,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.051,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Maternity Benefit Act, 1961 (amended 2017), Central Civil Services (Leave) Rules for government employees, Code on Social Security, 2020",
+        "The Beedi and Cigar Workers (Conditions of Employment) Act, 1966",
+        "The MATERNITY BENEFIT (ASSAM AMENDMENT) ACT, 1963",
+        "The Maternity Benefit Act, 1961",
+        "The maternity benefit act, 1961"
+      ]
+    },
+    {
+      "query_id": "EL-005",
+      "category": "employment_law",
+      "query": "What is the Sexual Harassment of Women at Workplace Act?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.3333,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.3824,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 3,
+      "elapsed_seconds": 0.087,
+      "retrieved_doc_types": [
+        "case",
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Sexual Harassment of Women at Workplace (Prevention, Prohibition and Redressal) Act, 2013, POSH Rules, 2013, Vishaka Guidelines",
+        "The Sexual Harassment of Women at Workplace (Prevention, Prohibition and Redressal) Act, 2013"
+      ]
+    },
+    {
+      "query_id": "EL-006",
+      "category": "employment_law",
+      "query": "What are the working hours restrictions under labor law?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.8731,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.057,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "EPF Act, 1952, ESI Act, 1948, Payment of Gratuity Act, 1972, Payment of Bonus Act, 1965, Shops and Establishments Acts (State)",
+        "Industrial Disputes Act, 1947 - Section 2A, 25F, 25G, 25N, Indian Contract Act, 1872, Specific Relief Act, 1963",
+        "Startup India Action Plan, 2016, Income Tax Act Section 80-IAC, DPIIT Recognition Guidelines",
+        "The Child Labour (Prohibition and Regulation) Act 1986",
+        "The Factories Act, 1948"
+      ]
+    },
+    {
+      "query_id": "EL-007",
+      "category": "employment_law",
+      "query": "When does the Shops and Establishments Act apply?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 0.2,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5038,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.083,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Delhi Shops and Establishments Act, 1954",
+        "The ASSAM SHOPS AND ESTABLISHMENTS ACT,1948",
+        "The Andhra Pradesh Shops and Establishments Act, 1988.",
+        "The Assam Shops and Establishments (Amendment) Act, 1979",
+        "The Assam Shops and Establishments Act, 1971"
+      ]
+    },
+    {
+      "query_id": "EL-008",
+      "category": "employment_law",
+      "query": "What is the gratuity calculation formula?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.7269,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.03,
+      "retrieved_doc_types": [
+        "news",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Legislation",
+        "The Andhra Pradesh Electricity Reform Act, 1998.",
+        "The Income-tax Act, 1961",
+        "The Insurance Act, 1938",
+        "The Payment of Gratuity Act, 1972"
+      ]
+    },
+    {
+      "query_id": "EL-009",
+      "category": "employment_law",
+      "query": "What are the conditions for lay-off and retrenchment?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.2,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4387,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.044,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Industrial Disputes Act, 1947",
+        "The Assam Rajiv Gandhi University of Cooperative Management Act, 2010",
+        "The Industrial Disputes Act, 1947",
+        "The Sri Venkateswara Vedic University Act, 2006."
+      ]
+    },
+    {
+      "query_id": "EL-010",
+      "category": "employment_law",
+      "query": "What is the applicability of Equal Remuneration Act?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 0.5,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4687,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 4,
+      "elapsed_seconds": 0.075,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": [
+        "The Andhra Pradesh Watans (Abolition) Act, 1978.",
+        "The Equal Remuneration Act, 1976",
+        "The Income-tax Act, 1961",
+        "The Private Security Agencies (Regulation) Act, 2005"
+      ]
+    },
+    {
+      "query_id": "EL-011",
+      "category": "employment_law",
+      "query": "What are the employee insurance requirements?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.9814,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.035,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": [
+        "The Insurance Act, 1938",
+        "The Life Insurance Corporation Act, 1956",
+        "The Motor Vehicle Act, 1939",
+        "The Motor Vehicles Act, 1988",
+        "The motor vehicles act, 1988"
+      ]
+    },
+    {
+      "query_id": "EL-012",
+      "category": "employment_law",
+      "query": "What is Section 25F about retrenchment compensation?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.8,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.5884,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.225,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Industrial Disputes Act, 1947",
+        "Industrial Disputes Act, 1947 - Section 25F, 25N, Shops and Establishments Act, Indian Contract Act, 1872",
+        "The Bombay Reorganisation Act, 1960",
+        "The Industrial Disputes Act, 1947",
+        "The Working Journalists and other Newspaper Employees (Conditions of Service) and Miscellaneous Provisions Act, 1955"
+      ]
+    },
+    {
+      "query_id": "EL-013",
+      "category": "employment_law",
+      "query": "What are the overtime payment requirements?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 1.0,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.037,
+      "retrieved_doc_types": [
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Delhi Shops and Establishments Act, 1954",
+        "The Andhra Pradesh Shops and Establishments (Amendment) Act, 2018",
+        "The Andhra Pradesh Shops and Establishments Act, 1988.",
+        "The Beedi and Cigar Workers (Conditions of Employment) Act, 1966",
+        "The Payment of Gratuity Act, 1972"
+      ]
+    },
+    {
+      "query_id": "EL-014",
+      "category": "employment_law",
+      "query": "What is the Industrial Employment Standing Orders Act?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.4,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4835,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.083,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Indian Contract Act, 1872 - Section 27, Shops and Establishments Act (State-specific), Industrial Employment (Standing Orders) Act, 1946",
+        "The Andhra Pradesh Industrial Workers (Representation, Participation in Management and Relief) Act, 1998.",
+        "The Beedi and Cigar Workers (Conditions of Employment) Act, 1966",
+        "The Industrial Disputes Act, 1947",
+        "The Industrial Employmnet (Standing Orders) Act, 1946"
+      ]
+    },
+    {
+      "query_id": "EL-015",
+      "category": "employment_law",
+      "query": "What are the leave policies required by law?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.9284,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.056,
+      "retrieved_doc_types": [
+        "news",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Legislative Updates",
+        "The Andhra Pradesh Metropolitan Region and Urban Development Authorities Act, 2016",
+        "The Insurance Act, 1938",
+        "The Tea Act, 1953",
+        "The constitution of india"
+      ]
+    },
+    {
+      "query_id": "EL-016",
+      "category": "employment_law",
+      "query": "What are the requirements for employment contracts?",
+      "recall_at_5": 0.5,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.7493,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.034,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Indian Contract Act, 1872 - Section 27, Shops and Establishments Act (State-specific), Industrial Employment (Standing Orders) Act, 1946",
+        "The Code on Social Security, 2020",
+        "The Employees State Insurance Act, 1948",
+        "The Securities Contracts (Regulation) Act, 1956"
+      ]
+    },
+    {
+      "query_id": "EL-017",
+      "category": "employment_law",
+      "query": "What are the compliance requirements under contract labor act?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.9567,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.082,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "EPF Act, 1952, ESI Act, 1948, Payment of Gratuity Act, 1972, Payment of Bonus Act, 1965, Shops and Establishments Acts (State)",
+        "Indian Contract Act, 1872",
+        "Industrial Disputes Act, 1947 - Section 2A, 25F, 25G, 25N, Indian Contract Act, 1872, Specific Relief Act, 1963",
+        "LLP Act, 2008 - Section 7, LLP Rules, 2009, LLP Act, 2008 - Section 34-35",
+        "The Companies Act, 2013"
+      ]
+    },
+    {
+      "query_id": "EL-018",
+      "category": "employment_law",
+      "query": "What is the process for industrial dispute resolution?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 0.4,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.4765,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "low",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.044,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "Industrial Disputes Act, 1947",
+        "The Insolvency and Bankruptcy Code, 2016.",
+        "The Mediation Act, 2023",
+        "Transfer of Property Act, 1882, State Rent Control Acts, Model Tenancy Act, 2021"
+      ]
+    },
+    {
+      "query_id": "EL-019",
+      "category": "employment_law",
+      "query": "What are the penalties for non-compliance with labor laws?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.9473,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "high",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.055,
+      "retrieved_doc_types": [
+        "faq",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "EPF Act, 1952, ESI Act, 1948, Payment of Gratuity Act, 1972, Payment of Bonus Act, 1965, Shops and Establishments Acts (State)",
+        "Industrial Disputes Act, 1947 - Section 2A, 25F, 25G, 25N, Indian Contract Act, 1872, Specific Relief Act, 1963",
+        "Sexual Harassment of Women at Workplace (Prevention, Prohibition and Redressal) Act, 2013, POSH Rules, 2013, Vishaka Guidelines",
+        "The Factoring Regulation Act, 2011",
+        "The Securitisation and Reconstruction of Financial Assets and Enforcement of Security Interest Act, 2002"
+      ]
+    },
+    {
+      "query_id": "EL-020",
+      "category": "employment_law",
+      "query": "What are the key provisions of the new labor codes?",
+      "recall_at_5": 1.0,
+      "precision_at_5": 1.0,
+      "mrr": 1.0,
+      "ndcg_at_5": 0.7871,
+      "grounded": true,
+      "hallucination_proxy": 0.0,
+      "confidence": "medium",
+      "model_used": "local-lexical",
+      "num_citations": 5,
+      "elapsed_seconds": 0.065,
+      "retrieved_doc_types": [
+        "clause",
+        "faq",
+        "news",
+        "statute"
+      ],
+      "retrieved_acts": [
+        "EPF Act, 1952, ESI Act, 1948, Payment of Gratuity Act, 1972, Payment of Bonus Act, 1965, Shops and Establishments Acts (State)",
+        "Legislation",
+        "Legislative Updates",
+        "The Information Technology Act, 2000"
+      ]
+    }
+  ]
+}

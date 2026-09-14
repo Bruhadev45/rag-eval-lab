@@ -16,11 +16,14 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from .ext204 import build_ext204, draw_ext204_figure, write_ext204_tables
+from .figstyle import BLUE, INK, INK2, MUTED, ORANGE, RED, apply_style, strip_spines
 from .loading import CONFIG_ORDER, LABELS, METRICS, load_runs
 from .stats import PairedComparison, paired_comparison
 
 ROOT = Path(__file__).resolve().parents[2]
 RUNS_DIR = ROOT / "data" / "runs"
+EXT204_RUNS_DIR = ROOT / "data" / "runs-ext204"
 RESULTS_DIR = ROOT / "results"
 FIGURES_DIR = RESULTS_DIR / "figures"
 
@@ -110,44 +113,13 @@ def write_tables(aggregates: dict, comparisons: list[dict]) -> str:
 
 
 def draw_figures(runs, aggregates: dict) -> None:
-    """Draw the three headline figures.
-
-    Palette and mark specs follow a validated data-viz method: categorical
-    slots blue #2a78d6 / orange #eb6834 (adjacent-pair CVD deltaE 24.7, all
-    checks pass on a light surface), diverging poles blue/red for the
-    per-query polarity strip, text in ink tokens rather than series colors,
-    recessive grid, no top/right spines.
-    """
+    """Draw the three headline figures of the 120-query benchmark."""
     import matplotlib
 
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 
-    BLUE = "#2a78d6"    # categorical slot 1: the un-reranked configuration
-    ORANGE = "#eb6834"  # categorical slot 2: the reranked configuration
-    RED = "#e34948"     # diverging negative pole: queries the reranker hurt
-    INK = "#0b0b0b"
-    INK2 = "#52514e"
-    MUTED = "#8a8983"
-    SURFACE = "#ffffff"
-
-    plt.rcParams.update(
-        {
-            "figure.facecolor": SURFACE,
-            "axes.facecolor": SURFACE,
-            "savefig.facecolor": SURFACE,
-            "text.color": INK,
-            "axes.labelcolor": INK2,
-            "xtick.color": INK2,
-            "ytick.color": INK2,
-            "axes.edgecolor": MUTED,
-            "font.size": 10,
-        }
-    )
-
-    def strip_spines(ax):
-        ax.spines[["top", "right"]].set_visible(False)
-        ax.spines[["left", "bottom"]].set_linewidth(0.8)
+    apply_style()
 
     # Figure 1 -- grouped bars: nDCG@5 with and without the cross-encoder.
     pairs = [("hybrid_bm25", "hybrid_bm25_rerank"), ("dense_minilm", "dense_minilm_rerank")]
@@ -240,6 +212,7 @@ def main() -> None:
     runs = load_runs(RUNS_DIR)
     aggregates = build_aggregates(runs)
     comparisons = build_comparisons(runs)
+    ext204 = build_ext204(EXT204_RUNS_DIR, runs)
 
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     FIGURES_DIR.mkdir(parents=True, exist_ok=True)
@@ -252,17 +225,22 @@ def main() -> None:
                 "resamples": 10_000,
                 "aggregates": aggregates,
                 "paired_comparisons": comparisons,
+                "ext204": ext204,
             },
             indent=2,
         )
         + "\n"
     )
-    (RESULTS_DIR / "TABLES.md").write_text(write_tables(aggregates, comparisons))
+    (RESULTS_DIR / "TABLES.md").write_text(
+        write_tables(aggregates, comparisons) + write_ext204_tables(ext204)
+    )
     draw_figures(runs, aggregates)
+    draw_ext204_figure(ext204, comparisons, FIGURES_DIR / "ext204_replication.png")
 
     print("wrote results/results.json")
     print("wrote results/TABLES.md")
     print("wrote results/figures/{reranker_penalty,recall_vs_mrr,per_query_deltas}.png")
+    print("wrote results/figures/ext204_replication.png")
 
 
 if __name__ == "__main__":

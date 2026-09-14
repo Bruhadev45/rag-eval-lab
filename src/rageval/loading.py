@@ -1,15 +1,17 @@
 """Load and validate the committed evaluation runs.
 
 Every analysis in this repository starts from the per-query records in
-``data/runs/*.json``. Aggregates are always recomputed from those records --
-never trusted from the file -- so any inconsistency between the two is caught
-here rather than propagated into a table.
+``data/runs/*.json`` (the 120-query benchmark) and ``data/runs-ext204/*.json``
+(the extended 204-query benchmark). Aggregates are always recomputed from those
+records -- never trusted from the file -- so any inconsistency between the two
+is caught here rather than propagated into a table.
 """
 
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass
+from collections.abc import Collection, Sequence
+from dataclasses import dataclass, replace
 from pathlib import Path
 
 METRICS = ("recall_at_5", "precision_at_5", "mrr", "ndcg_at_5")
@@ -36,10 +38,21 @@ LABELS = {
     "dense_inlegalbert": "Dense InLegalBERT",
 }
 
+# The extended 204-query benchmark (see README, "Does the reranker penalty
+# replicate out of domain?"). Only five of the seven configs were re-run on it,
+# so it gets its own order rather than reusing CONFIG_ORDER.
+EXT204_CONFIG_ORDER = (
+    "baseline_lexical",
+    "hybrid_bm25",
+    "hybrid_bm25_rerank",
+    "dense_minilm",
+    "dense_minilm_rerank",
+)
+
 
 @dataclass(frozen=True)
 class Run:
-    """One evaluation run: a config name and its 120 per-query records."""
+    """One evaluation run: a config name and its per-query records."""
 
     name: str
     description: str
@@ -56,9 +69,35 @@ class Run:
         values = self.metric(metric)
         return sum(values) / len(values)
 
+    @property
+    def query_ids(self) -> tuple[str, ...]:
+        return tuple(row["query_id"] for row in self.per_query)
 
-def load_runs(runs_dir: Path) -> dict[str, Run]:
+    def subset(self, query_ids: Collection[str]) -> Run:
+        """A new Run holding only ``query_ids``, in this run's row order.
+
+        Used to carve the held-out queries out of an extended benchmark that
+        contains the original query set. Returns a new Run; the original is
+        left untouched.
+
+        Raises:
+            ValueError: If any requested query id is absent from this run.
+        """
+        wanted = set(query_ids)
+        rows = tuple(row for row in self.per_query if row["query_id"] in wanted)
+        if len(rows) != len(wanted):
+            missing = sorted(wanted - set(self.query_ids))
+            raise ValueError(f"{self.name}: query ids not present in this run: {missing}")
+        return replace(self, per_query=rows)
+
+
+def load_runs(runs_dir: Path, configs: Sequence[str] = CONFIG_ORDER) -> dict[str, Run]:
     """Load every run, validate it, and align per-query rows across configs.
+
+    Args:
+        runs_dir: Directory holding one ``<config>.json`` per configuration.
+        configs: Which configs to expect, in presentation order. Defaults to
+            the seven runs of the 120-query benchmark.
 
     Raises:
         FileNotFoundError: If an expected run file is missing.
@@ -69,7 +108,7 @@ def load_runs(runs_dir: Path) -> dict[str, Run]:
     runs: dict[str, Run] = {}
     reference_ids: list[str] | None = None
 
-    for name in CONFIG_ORDER:
+    for name in configs:
         path = runs_dir / f"{name}.json"
         if not path.exists():
             raise FileNotFoundError(f"expected run file is missing: {path}")

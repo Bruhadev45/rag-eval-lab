@@ -48,3 +48,51 @@ beat its baseline.
 | Dense MiniLM (full corpus) → Hybrid BM25 + lexical (RRF) | precision_at_5 | -0.1833 | [-0.2376, -0.1297] | 0.0001 | **yes** |
 | Dense MiniLM (full corpus) → Hybrid BM25 + lexical (RRF) | mrr | +0.0197 | [-0.0133, +0.0549] | 0.2690 | no |
 | Dense MiniLM (full corpus) → Hybrid BM25 + lexical (RRF) | ndcg_at_5 | +0.0074 | [-0.0379, +0.0535] | 0.7556 | no |
+
+## Extended benchmark (204 queries)
+
+The 204-query set contains the original 120 plus 84
+auto-generated queries. The auto-generated ones were not verified by
+annotators, so treat them as weaker labels over wider ground.
+
+### Aggregate metrics (204 queries)
+
+| Configuration | Recall@5 | Precision@5 | MRR | nDCG@5 |
+|---|---|---|---|---|
+| Lexical (token coverage) | 0.8971 | 0.8314 | 0.9301 | 0.7706 |
+| Hybrid BM25 + lexical (RRF) | 0.9069 | 0.6538 | 0.9117 | 0.6141 |
+| Hybrid + cross-encoder | 0.8358 | 0.6924 | 0.8640 | 0.5237 |
+| Dense MiniLM (subset index) | 0.4559 | 0.8578 | 0.8578 | 0.5186 |
+| Dense MiniLM + cross-encoder | 0.4559 | 0.5922 | 0.7010 | 0.3767 |
+
+### Paired comparisons on the extended set
+
+`ext204_all` is all 204 queries; `ext204_held_out` is only the
+84 queries absent from the original benchmark.
+
+| Query set | Baseline → Variant | Metric | Δ | 95% CI | p | Significant |
+|---|---|---|---|---|---|---|
+| ext204_all (204) | Lexical (token coverage) → Hybrid BM25 + lexical (RRF) | recall_at_5 | +0.0098 | [-0.0074, +0.0294] | 0.4390 | no |
+| ext204_all (204) | Lexical (token coverage) → Hybrid BM25 + lexical (RRF) | precision_at_5 | -0.1776 | [-0.2203, -0.1357] | 0.0001 | **yes** |
+| ext204_all (204) | Lexical (token coverage) → Hybrid BM25 + lexical (RRF) | mrr | -0.0184 | [-0.0587, +0.0225] | 0.3840 | no |
+| ext204_all (204) | Lexical (token coverage) → Hybrid BM25 + lexical (RRF) | ndcg_at_5 | -0.1565 | [-0.1924, -0.1220] | 0.0001 | **yes** |
+| ext204_all (204) | Hybrid BM25 + lexical (RRF) → Hybrid + cross-encoder | recall_at_5 | -0.0711 | [-0.1127, -0.0294] | 0.0012 | **yes** |
+| ext204_all (204) | Hybrid BM25 + lexical (RRF) → Hybrid + cross-encoder | precision_at_5 | +0.0386 | [-0.0161, +0.0935] | 0.1656 | no |
+| ext204_all (204) | Hybrid BM25 + lexical (RRF) → Hybrid + cross-encoder | mrr | -0.0477 | [-0.0980, +0.0032] | 0.0736 | no |
+| ext204_all (204) | Hybrid BM25 + lexical (RRF) → Hybrid + cross-encoder | ndcg_at_5 | -0.0904 | [-0.1275, -0.0526] | 0.0001 | **yes** |
+| ext204_all (204) | Dense MiniLM (subset index) → Dense MiniLM + cross-encoder | recall_at_5 | +0.0000 | [+0.0000, +0.0000] | 1.0000 | no |
+| ext204_all (204) | Dense MiniLM (subset index) → Dense MiniLM + cross-encoder | precision_at_5 | -0.2657 | [-0.3196, -0.2118] | 0.0001 | **yes** |
+| ext204_all (204) | Dense MiniLM (subset index) → Dense MiniLM + cross-encoder | mrr | -0.1569 | [-0.2059, -0.1078] | 0.0001 | **yes** |
+| ext204_all (204) | Dense MiniLM (subset index) → Dense MiniLM + cross-encoder | ndcg_at_5 | -0.1419 | [-0.1614, -0.1222] | 0.0001 | **yes** |
+| ext204_held_out (84) | Lexical (token coverage) → Hybrid BM25 + lexical (RRF) | recall_at_5 | +0.0000 | [+0.0000, +0.0000] | 1.0000 | no |
+| ext204_held_out (84) | Lexical (token coverage) → Hybrid BM25 + lexical (RRF) | precision_at_5 | -0.2314 | [-0.3026, -0.1615] | 0.0001 | **yes** |
+| ext204_held_out (84) | Lexical (token coverage) → Hybrid BM25 + lexical (RRF) | mrr | -0.1379 | [-0.2069, -0.0718] | 0.0002 | **yes** |
+| ext204_held_out (84) | Lexical (token coverage) → Hybrid BM25 + lexical (RRF) | ndcg_at_5 | -0.2369 | [-0.2904, -0.1814] | 0.0001 | **yes** |
+| ext204_held_out (84) | Hybrid BM25 + lexical (RRF) → Hybrid + cross-encoder | recall_at_5 | -0.1667 | [-0.2500, -0.0952] | 0.0001 | **yes** |
+| ext204_held_out (84) | Hybrid BM25 + lexical (RRF) → Hybrid + cross-encoder | precision_at_5 | +0.0224 | [-0.0760, +0.1187] | 0.6496 | no |
+| ext204_held_out (84) | Hybrid BM25 + lexical (RRF) → Hybrid + cross-encoder | mrr | +0.0115 | [-0.0823, +0.1030] | 0.8190 | no |
+| ext204_held_out (84) | Hybrid BM25 + lexical (RRF) → Hybrid + cross-encoder | ndcg_at_5 | -0.0951 | [-0.1644, -0.0279] | 0.0086 | **yes** |
+| ext204_held_out (84) | Dense MiniLM (subset index) → Dense MiniLM + cross-encoder | recall_at_5 | +0.0000 | [+0.0000, +0.0000] | 1.0000 | no |
+| ext204_held_out (84) | Dense MiniLM (subset index) → Dense MiniLM + cross-encoder | precision_at_5 | -0.2048 | [-0.2881, -0.1286] | 0.0001 | **yes** |
+| ext204_held_out (84) | Dense MiniLM (subset index) → Dense MiniLM + cross-encoder | mrr | -0.1429 | [-0.2143, -0.0714] | 0.0005 | **yes** |
+| ext204_held_out (84) | Dense MiniLM (subset index) → Dense MiniLM + cross-encoder | ndcg_at_5 | -0.1119 | [-0.1459, -0.0791] | 0.0001 | **yes** |

@@ -6,22 +6,36 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   reproduce:
-    name: tests + byte-identical reproduction
+    name: py${{ matrix.python }} — lint, tests + coverage, byte-identical reproduction
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.10", "3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: ${{ matrix.python }}
           cache: pip
 
       - name: Install
         run: pip install -e ".[dev]"
 
-      - name: Test
+      - name: Lint
+        run: ruff check .
+
+      - name: Format
+        run: ruff format --check .
+
+      # pyproject's addopts carry --cov=rageval --cov-fail-under=85.
+      - name: Test + coverage floor
         run: pytest -q
 
       - name: Reproduce results from data

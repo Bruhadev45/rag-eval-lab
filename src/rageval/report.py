@@ -2,9 +2,11 @@
 
 Run as a module::
 
-    python -m rageval.report
+    python -m rageval.report [--root PATH]
 
-Outputs, all overwritten in place so ``git diff`` shows any drift:
+``--root`` defaults to the repository checkout; pointing it elsewhere reads
+``<root>/data`` and writes ``<root>/results``, which is how the end-to-end test
+runs the CLI on a temporary copy. Outputs, all overwritten in place so ``git diff`` shows any drift:
 
 - ``results/results.json``   -- aggregates and paired comparisons, machine-readable
 - ``results/TABLES.md``      -- the same numbers as Markdown tables
@@ -13,6 +15,7 @@ Outputs, all overwritten in place so ``git diff`` shows any drift:
 
 from __future__ import annotations
 
+import argparse
 import json
 from pathlib import Path
 
@@ -22,10 +25,6 @@ from .loading import CONFIG_ORDER, LABELS, METRICS, load_runs
 from .stats import PairedComparison, paired_comparison
 
 ROOT = Path(__file__).resolve().parents[2]
-RUNS_DIR = ROOT / "data" / "runs"
-EXT204_RUNS_DIR = ROOT / "data" / "runs-ext204"
-RESULTS_DIR = ROOT / "results"
-FIGURES_DIR = RESULTS_DIR / "figures"
 
 # The comparisons the repository exists to make. Each is (baseline, variant):
 # positive delta means the variant helped, negative means it hurt.
@@ -112,7 +111,7 @@ def write_tables(aggregates: dict, comparisons: list[dict]) -> str:
     return "\n".join(lines) + "\n"
 
 
-def draw_figures(runs, aggregates: dict) -> None:
+def draw_figures(runs, aggregates: dict, figures_dir: Path) -> None:
     """Draw the three headline figures of the 120-query benchmark."""
     import matplotlib
 
@@ -128,32 +127,51 @@ def draw_figures(runs, aggregates: dict) -> None:
     without = [aggregates[a]["ndcg_at_5"] for a, _ in pairs]
     with_rr = [aggregates[b]["ndcg_at_5"] for _, b in pairs]
     width = 0.34  # slim bars with a visible gap between the pair
-    bars_a = ax.bar([i - width / 2 - 0.01 for i in x], without, width, color=BLUE,
-                    label="Without reranker")
-    bars_b = ax.bar([i + width / 2 + 0.01 for i in x], with_rr, width, color=ORANGE,
-                    label="With MS MARCO cross-encoder")
+    bars_a = ax.bar(
+        [i - width / 2 - 0.01 for i in x], without, width, color=BLUE, label="Without reranker"
+    )
+    bars_b = ax.bar(
+        [i + width / 2 + 0.01 for i in x],
+        with_rr,
+        width,
+        color=ORANGE,
+        label="With MS MARCO cross-encoder",
+    )
     for bar in list(bars_a) + list(bars_b):  # direct value labels, ink not series color
-        ax.annotate(f"{bar.get_height():.3f}",
-                    xy=(bar.get_x() + bar.get_width() / 2, bar.get_height()),
-                    xytext=(0, 4), textcoords="offset points",
-                    ha="center", fontsize=9, color=INK2)
+        ax.annotate(
+            f"{bar.get_height():.3f}",
+            xy=(bar.get_x() + bar.get_width() / 2, bar.get_height()),
+            xytext=(0, 4),
+            textcoords="offset points",
+            ha="center",
+            fontsize=9,
+            color=INK2,
+        )
     for i, (a, b) in enumerate(pairs):
         drop = (aggregates[b]["ndcg_at_5"] - aggregates[a]["ndcg_at_5"]) * 100
-        ax.annotate(f"{drop:+.1f} pts", xy=(i, max(without[i], with_rr[i])),
-                    xytext=(0, 22), textcoords="offset points",
-                    ha="center", fontsize=11, fontweight="bold", color=INK)
+        ax.annotate(
+            f"{drop:+.1f} pts",
+            xy=(i, max(without[i], with_rr[i])),
+            xytext=(0, 22),
+            textcoords="offset points",
+            ha="center",
+            fontsize=11,
+            fontweight="bold",
+            color=INK,
+        )
     ax.set_xticks(list(x))
     ax.set_xticklabels(["Hybrid BM25 + lexical", "Dense MiniLM"])
     ax.set_ylabel("nDCG@5")
     ax.set_ylim(0, 0.85)
-    ax.set_title("A general-purpose cross-encoder reranker hurts legal retrieval",
-                 color=INK, fontsize=12)
+    ax.set_title(
+        "A general-purpose cross-encoder reranker hurts legal retrieval", color=INK, fontsize=12
+    )
     ax.legend(frameon=False, loc="upper right")
     ax.grid(axis="y", alpha=0.25, linewidth=0.5)
     ax.set_axisbelow(True)
     strip_spines(ax)
     fig.tight_layout()
-    fig.savefig(FIGURES_DIR / "reranker_penalty.png")
+    fig.savefig(figures_dir / "reranker_penalty.png")
     plt.close(fig)
 
     # Figure 2 -- scatter: recall vs MRR, one emphasized entity, ink labels.
@@ -161,13 +179,21 @@ def draw_figures(runs, aggregates: dict) -> None:
     for name in CONFIG_ORDER:
         a = aggregates[name]
         highlight = name == "hybrid_bm25"
-        ax.scatter(a["recall_at_5"], a["mrr"],
-                   s=120 if highlight else 64,
-                   color=BLUE if highlight else MUTED,
-                   zorder=3)
-        ax.annotate(LABELS[name], xy=(a["recall_at_5"], a["mrr"]),
-                    xytext=(7, -3), textcoords="offset points",
-                    fontsize=8.5, color=INK if highlight else INK2)
+        ax.scatter(
+            a["recall_at_5"],
+            a["mrr"],
+            s=120 if highlight else 64,
+            color=BLUE if highlight else MUTED,
+            zorder=3,
+        )
+        ax.annotate(
+            LABELS[name],
+            xy=(a["recall_at_5"], a["mrr"]),
+            xytext=(7, -3),
+            textcoords="offset points",
+            fontsize=8.5,
+            color=INK if highlight else INK2,
+        )
     ax.set_xlabel("Recall@5")
     ax.set_ylabel("MRR")
     ax.set_title("Hybrid fusion holds the top-right corner", color=INK, fontsize=12)
@@ -175,7 +201,7 @@ def draw_figures(runs, aggregates: dict) -> None:
     ax.set_axisbelow(True)
     strip_spines(ax)
     fig.tight_layout()
-    fig.savefig(FIGURES_DIR / "recall_vs_mrr.png")
+    fig.savefig(figures_dir / "recall_vs_mrr.png")
     plt.close(fig)
 
     # Figure 3 -- diverging strip: per-query reranker deltas around zero.
@@ -196,7 +222,9 @@ def draw_figures(runs, aggregates: dict) -> None:
     ax.set_title(
         f"Reranker effect per query, hybrid config \u2014 "
         f"hurt {hurt} \u00b7 helped {helped} \u00b7 unchanged {unchanged}",
-        color=INK, fontsize=11, loc="left",
+        color=INK,
+        fontsize=11,
+        loc="left",
     )
     ax.set_xlabel("Query, sorted by delta")
     ax.set_ylabel("\u0394 nDCG@5")
@@ -204,20 +232,41 @@ def draw_figures(runs, aggregates: dict) -> None:
     ax.set_axisbelow(True)
     strip_spines(ax)
     fig.tight_layout()
-    fig.savefig(FIGURES_DIR / "per_query_deltas.png")
+    fig.savefig(figures_dir / "per_query_deltas.png")
     plt.close(fig)
 
 
-def main() -> None:
-    runs = load_runs(RUNS_DIR)
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="python -m rageval.report",
+        description="Recompute every table, figure, and results.json from the run files.",
+    )
+    parser.add_argument(
+        "--root",
+        type=Path,
+        default=ROOT,
+        help="directory holding data/ (read) and results/ (written); default: the repo",
+    )
+    return parser.parse_args(argv)
+
+
+def main(argv: list[str] | None = None) -> None:
+    root = parse_args(argv).root
+    results_dir = root / "results"
+    figures_dir = results_dir / "figures"
+
+    try:
+        runs = load_runs(root / "data" / "runs")
+        ext204 = build_ext204(root / "data" / "runs-ext204", runs)
+    except (FileNotFoundError, ValueError) as exc:
+        raise SystemExit(f"rageval.report: error: {exc}") from exc
     aggregates = build_aggregates(runs)
     comparisons = build_comparisons(runs)
-    ext204 = build_ext204(EXT204_RUNS_DIR, runs)
 
-    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-    FIGURES_DIR.mkdir(parents=True, exist_ok=True)
+    results_dir.mkdir(parents=True, exist_ok=True)
+    figures_dir.mkdir(parents=True, exist_ok=True)
 
-    (RESULTS_DIR / "results.json").write_text(
+    (results_dir / "results.json").write_text(
         json.dumps(
             {
                 "benchmark": "JurisGPT 120-query human-verified benchmark (Fleiss' κ = 0.81)",
@@ -231,11 +280,11 @@ def main() -> None:
         )
         + "\n"
     )
-    (RESULTS_DIR / "TABLES.md").write_text(
+    (results_dir / "TABLES.md").write_text(
         write_tables(aggregates, comparisons) + write_ext204_tables(ext204)
     )
-    draw_figures(runs, aggregates)
-    draw_ext204_figure(ext204, comparisons, FIGURES_DIR / "ext204_replication.png")
+    draw_figures(runs, aggregates, figures_dir)
+    draw_ext204_figure(ext204, comparisons, figures_dir / "ext204_replication.png")
 
     print("wrote results/results.json")
     print("wrote results/TABLES.md")

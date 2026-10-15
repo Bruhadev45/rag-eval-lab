@@ -93,7 +93,7 @@ python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 
 make reproduce   # rewrites results/ from data/runs/ — diff should be empty
-make test        # pins the published findings to the committed data
+make test        # pins the findings to the data; fails under 85% coverage
 ```
 
 `make reproduce` overwrites `results/results.json`, `results/TABLES.md`, and the three figures in place. After a fresh clone the git diff is empty — that's the reproducibility check, and CI enforces it on every push.
@@ -114,6 +114,8 @@ src/rageval/figstyle.py   one palette and axis style for every figure
 src/rageval/report.py     recomputes every table, figure, and results.json
 tests/test_analysis.py    pins the published findings to the data
 tests/test_ext204.py      pins the replication findings to the data
+tests/test_cli.py         runs `python -m rageval.report --root <tmp>` on a
+                          copy of data/ and requires byte-identical output
 ```
 
 Design choices worth naming:

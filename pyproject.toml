@@ -13,13 +13,19 @@ authors = [{ name = "Kandimalla Bruhadev", email = "devbruha@gmail.com" }]
 dependencies = ["matplotlib>=3.8"]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0", "ruff>=0.6"]
+dev = ["pytest>=8.0", "pytest-cov>=7.0", "ruff>=0.6"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/rageval"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# Coverage floor, enforced on every `pytest` run (CI and local alike).
+addopts = "--cov=rageval --cov-report=term-missing --cov-fail-under=85"
+
+[tool.coverage.run]
+# tests/test_cli.py runs the report as a real subprocess; measure it too.
+patch = ["subprocess"]
 
 [tool.ruff]
 line-length = 100

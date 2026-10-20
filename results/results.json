@@ -844,5 +844,213 @@
         "n_queries": 84
       }
     ]
+  },
+  "calibration": {
+    "correctness": "recall_at_5",
+    "nominal_confidence": {
+      "insufficient": 0.125,
+      "low": 0.375,
+      "medium": 0.625,
+      "high": 0.875
+    },
+    "configs": {
+      "baseline_lexical": {
+        "levels": [
+          {
+            "level": "low",
+            "n": 1,
+            "nominal": 0.375,
+            "mean_recall_at_5": 0.0
+          },
+          {
+            "level": "medium",
+            "n": 16,
+            "nominal": 0.625,
+            "mean_recall_at_5": 0.9062
+          },
+          {
+            "level": "high",
+            "n": 103,
+            "nominal": 0.875,
+            "mean_recall_at_5": 0.8204
+          }
+        ],
+        "levels_used": 3,
+        "non_decreasing": false,
+        "ece": 0.0875,
+        "overconfidence": 0.0125,
+        "concordance": 0.4714,
+        "concordance_p": 0.36946,
+        "significant": false
+      },
+      "hybrid_bm25": {
+        "levels": [
+          {
+            "level": "low",
+            "n": 42,
+            "nominal": 0.375,
+            "mean_recall_at_5": 0.8095
+          },
+          {
+            "level": "medium",
+            "n": 30,
+            "nominal": 0.625,
+            "mean_recall_at_5": 0.8333
+          },
+          {
+            "level": "high",
+            "n": 48,
+            "nominal": 0.875,
+            "mean_recall_at_5": 0.875
+          }
+        ],
+        "levels_used": 3,
+        "non_decreasing": true,
+        "ece": 0.2042,
+        "overconfidence": -0.2042,
+        "concordance": 0.5604,
+        "concordance_p": 0.25677,
+        "significant": false
+      },
+      "hybrid_bm25_rerank": {
+        "levels": [
+          {
+            "level": "low",
+            "n": 12,
+            "nominal": 0.375,
+            "mean_recall_at_5": 0.7083
+          },
+          {
+            "level": "medium",
+            "n": 96,
+            "nominal": 0.625,
+            "mean_recall_at_5": 0.8438
+          },
+          {
+            "level": "high",
+            "n": 12,
+            "nominal": 0.875,
+            "mean_recall_at_5": 0.9167
+          }
+        ],
+        "levels_used": 3,
+        "non_decreasing": true,
+        "ece": 0.2125,
+        "overconfidence": -0.2125,
+        "concordance": 0.5607,
+        "concordance_p": 0.12049,
+        "significant": false
+      },
+      "dense_minilm": {
+        "levels": [
+          {
+            "level": "medium",
+            "n": 120,
+            "nominal": 0.625,
+            "mean_recall_at_5": 0.4417
+          }
+        ],
+        "levels_used": 1,
+        "non_decreasing": null,
+        "ece": 0.1833,
+        "overconfidence": 0.1833,
+        "concordance": 0.5,
+        "concordance_p": 1.0,
+        "significant": false
+      },
+      "dense_minilm_rerank": {
+        "levels": [
+          {
+            "level": "low",
+            "n": 3,
+            "nominal": 0.375,
+            "mean_recall_at_5": 0.5
+          },
+          {
+            "level": "medium",
+            "n": 115,
+            "nominal": 0.625,
+            "mean_recall_at_5": 0.4391
+          },
+          {
+            "level": "high",
+            "n": 2,
+            "nominal": 0.875,
+            "mean_recall_at_5": 0.5
+          }
+        ],
+        "levels_used": 3,
+        "non_decreasing": null,
+        "ece": 0.1875,
+        "overconfidence": 0.1812,
+        "concordance": 0.5,
+        "concordance_p": 1.0,
+        "significant": false
+      },
+      "dense_minilm_full": {
+        "levels": [
+          {
+            "level": "insufficient",
+            "n": 64,
+            "nominal": 0.125,
+            "mean_recall_at_5": 0.5625
+          },
+          {
+            "level": "medium",
+            "n": 55,
+            "nominal": 0.625,
+            "mean_recall_at_5": 0.8091
+          },
+          {
+            "level": "high",
+            "n": 1,
+            "nominal": 0.875,
+            "mean_recall_at_5": 1.0
+          }
+        ],
+        "levels_used": 3,
+        "non_decreasing": true,
+        "ece": 0.3187,
+        "overconfidence": -0.3187,
+        "concordance": 0.6548,
+        "concordance_p": 0.0001,
+        "significant": true
+      },
+      "dense_inlegalbert": {
+        "levels": [
+          {
+            "level": "insufficient",
+            "n": 14,
+            "nominal": 0.125,
+            "mean_recall_at_5": 0.7143
+          },
+          {
+            "level": "low",
+            "n": 13,
+            "nominal": 0.375,
+            "mean_recall_at_5": 0.0
+          },
+          {
+            "level": "medium",
+            "n": 26,
+            "nominal": 0.625,
+            "mean_recall_at_5": 0.6731
+          },
+          {
+            "level": "high",
+            "n": 67,
+            "nominal": 0.875,
+            "mean_recall_at_5": 0.4552
+          }
+        ],
+        "levels_used": 4,
+        "non_decreasing": false,
+        "ece": 0.3542,
+        "overconfidence": 0.1958,
+        "concordance": 0.4794,
+        "concordance_p": 0.60034,
+        "significant": false
+      }
+    }
   }
 }

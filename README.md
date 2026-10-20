@@ -84,6 +84,37 @@ And per query on the held-out 84, the reranker **hurt 42 and helped 42** — a d
 
 **Finding 2 does not survive.** Hybrid fusion's MRR win over the lexical baseline (+0.0653, p = 0.0025 on the 120) vanishes on the extended set (−0.0184, p = 0.38) and *reverses* on the held-out 84 (−0.1379, p = 0.0002). One plausible reading: queries auto-generated from document text reward exact token overlap, which is precisely what the lexical retriever optimises — so the query generator may be doing the work, not the retriever. Either way, the honest statement is now narrower than the one in Finding 2: hybrid fusion's ranking gain is **benchmark-bound**, demonstrated on the 120 human-verified queries and not beyond them. The test `test_hybrid_mrr_gain_does_not_replicate` keeps this section from quietly drifting back to the flattering version.
 
+## Is the confidence label worth anything?
+
+Every per-query record also carries the harness's `confidence` label — `insufficient`, `low`, `medium` or `high` — which JurisGPT assigns from retrieval-similarity thresholds before any answer is generated (`_assess_confidence` in its `data/rag_pipeline.py`) and shows to users as a confidence badge. If it worked, it would be a free signal for when to trust retrieval. Measured against recall@5 on the 120 human-verified queries, **mostly it does not.**
+
+![Confidence calibration](results/figures/calibration.png)
+
+A label can fail in two independent ways, so the analysis asks two questions:
+
+- **Calibration** — does the label mean what it says? The label is ordinal, not a probability, so expected calibration error (ECE) reads each level as the centre of one of four equal-width bins: insufficient 0.125, low 0.375, medium 0.625, high 0.875.
+- **Discrimination** — does a higher label at least go with better retrieval? Concordance is the probability that, of two queries where one retrieved more of its expected sources, the label ranks that one higher (0.5 = a coin flip). It needs no probability reading, and a seeded label-shuffling permutation test gives its p-value.
+
+| Configuration | Levels used | Recall never falls as label rises* | ECE | Concordance | p |
+|---|---|---|---|---|---|
+| Lexical (token coverage) | 3 | no | 0.0875 | 0.4714 | 0.3695 |
+| Hybrid BM25 + lexical (RRF) | 3 | yes | 0.2042 | 0.5604 | 0.2568 |
+| Hybrid + cross-encoder | 3 | yes | 0.2125 | 0.5607 | 0.1205 |
+| Dense MiniLM (subset index) | 1 | — | 0.1833 | 0.5000 | 1.0000 |
+| Dense MiniLM + cross-encoder | 3 | — | 0.1875 | 0.5000 | 1.0000 |
+| Dense MiniLM (full corpus) | 3 | yes | 0.3187 | **0.6548** | **0.0001** |
+| Dense InLegalBERT | 4 | no | 0.3542 | 0.4794 | 0.6003 |
+
+\* Over levels holding at least 5 queries, so a single query in a sparse level cannot decide it; — means fewer than two levels qualify.
+
+**Calibrated: no.** Under the bin-centre reading ECE runs from 0.0875 to 0.3542. The shipped hybrid pipeline is *under*-confident by 20 points: the queries it labels `low` still retrieve 0.8095 of their expected sources (n = 42), barely below the 0.8750 of its `high` queries (n = 48).
+
+**Discriminating: one label in seven.** Hybrid's ordering points the right way (0.8095 → 0.8333 → 0.8750), but its concordance of 0.5604 (p = 0.26) is indistinguishable from shuffled labels. Only the full-corpus dense MiniLM label ranks queries better than chance (0.6548, p = 0.0001 — the smallest a 10,000-resample test can report, and small enough to survive a Bonferroni correction for the seven configurations) — and it is also badly calibrated: the queries it marks `insufficient`, the badge that tells a user the corpus cannot answer, still retrieve 0.5625 of their expected sources (n = 64).
+
+**A low ECE is not a useful label.** Lexical has the best ECE (0.0875) only because it says `high` on 103 of 120 queries and delivers 0.8204 recall on them, close to what `high` claims; its concordance is 0.4714 (p = 0.37), no better than chance. Dense MiniLM on the subset index labels all 120 queries `medium`, so it cannot rank anything, and InLegalBERT's `insufficient` queries (0.7143) out-retrieve its `high` ones (0.4552).
+
+So on this benchmark the label is worth little as a probability, and as a ranking only for one dense configuration — not for the hybrid pipeline JurisGPT ships. One plausible reading: the label comes from fixed similarity cut-offs, and a similarity score means different things under different retrievers. Two limits on the claim: this measures the label against *retrieval* only (whether it tracks answer faithfulness is a question this data cannot answer), and the ECE values depend on the bin-centre reading while the concordance results do not. `tests/test_calibration.py` pins every number in the prose above; the table is copied from `results/TABLES.md`, which CI regenerates byte for byte.
+
 ## Reproduce it
 
 ```bash
@@ -96,7 +127,7 @@ make reproduce   # rewrites results/ from data/runs/ — diff should be empty
 make test        # pins the findings to the data; fails under 85% coverage
 ```
 
-`make reproduce` overwrites `results/results.json`, `results/TABLES.md`, and the three figures in place. After a fresh clone the git diff is empty — that's the reproducibility check, and CI enforces it on every push.
+`make reproduce` overwrites `results/results.json`, `results/TABLES.md`, and every figure in place. After a fresh clone the git diff is empty — that's the reproducibility check, and CI enforces it on every push.
 
 ## How the analysis works
 
@@ -110,10 +141,13 @@ src/rageval/stats.py      paired bootstrap CI + sign-flip permutation test,
                           seeded, stdlib-only
 src/rageval/ext204.py     the extended benchmark: all-204 and held-out-84
                           comparisons, and the replication figure
+src/rageval/calibration.py  confidence label vs recall@5: reliability table,
+                          ECE, concordance + permutation test, figure
 src/rageval/figstyle.py   one palette and axis style for every figure
 src/rageval/report.py     recomputes every table, figure, and results.json
 tests/test_analysis.py    pins the published findings to the data
 tests/test_ext204.py      pins the replication findings to the data
+tests/test_calibration.py pins the calibration findings to the data
 tests/test_cli.py         runs `python -m rageval.report --root <tmp>` on a
                           copy of data/ and requires byte-identical output
 ```

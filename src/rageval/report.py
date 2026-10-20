@@ -19,6 +19,7 @@ import argparse
 import json
 from pathlib import Path
 
+from .calibration import build_calibration, draw_calibration_figure, write_calibration_tables
 from .ext204 import build_ext204, draw_ext204_figure, write_ext204_tables
 from .figstyle import BLUE, INK, INK2, MUTED, ORANGE, RED, apply_style, strip_spines
 from .loading import CONFIG_ORDER, LABELS, METRICS, load_runs
@@ -258,6 +259,7 @@ def main(argv: list[str] | None = None) -> None:
     try:
         runs = load_runs(root / "data" / "runs")
         ext204 = build_ext204(root / "data" / "runs-ext204", runs)
+        calibration = build_calibration(runs)
     except (FileNotFoundError, ValueError) as exc:
         raise SystemExit(f"rageval.report: error: {exc}") from exc
     aggregates = build_aggregates(runs)
@@ -275,21 +277,26 @@ def main(argv: list[str] | None = None) -> None:
                 "aggregates": aggregates,
                 "paired_comparisons": comparisons,
                 "ext204": ext204,
+                "calibration": calibration,
             },
             indent=2,
         )
         + "\n"
     )
     (results_dir / "TABLES.md").write_text(
-        write_tables(aggregates, comparisons) + write_ext204_tables(ext204)
+        write_tables(aggregates, comparisons)
+        + write_ext204_tables(ext204)
+        + write_calibration_tables(calibration)
     )
     draw_figures(runs, aggregates, figures_dir)
     draw_ext204_figure(ext204, comparisons, figures_dir / "ext204_replication.png")
+    draw_calibration_figure(calibration, figures_dir / "calibration.png")
 
     print("wrote results/results.json")
     print("wrote results/TABLES.md")
     print("wrote results/figures/{reranker_penalty,recall_vs_mrr,per_query_deltas}.png")
     print("wrote results/figures/ext204_replication.png")
+    print("wrote results/figures/calibration.png")
 
 
 if __name__ == "__main__":

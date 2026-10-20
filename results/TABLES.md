@@ -96,3 +96,36 @@ annotators, so treat them as weaker labels over wider ground.
 | ext204_held_out (84) | Dense MiniLM (subset index) → Dense MiniLM + cross-encoder | precision_at_5 | -0.2048 | [-0.2881, -0.1286] | 0.0001 | **yes** |
 | ext204_held_out (84) | Dense MiniLM (subset index) → Dense MiniLM + cross-encoder | mrr | -0.1429 | [-0.2143, -0.0714] | 0.0005 | **yes** |
 | ext204_held_out (84) | Dense MiniLM (subset index) → Dense MiniLM + cross-encoder | ndcg_at_5 | -0.1119 | [-0.1459, -0.0791] | 0.0001 | **yes** |
+
+## Confidence calibration (120 queries)
+
+Correctness is recall@5. ECE reads each label as the centre of one of
+four equal-width bins (insufficient 0.125, low 0.375, medium 0.625,
+high 0.875). Concordance needs no such reading: the probability the
+label ranks the better-retrieved query of a pair higher (0.5 = chance),
+with a label-shuffling permutation p-value, 10,000 resamples, seed 20260831.
+Non-decreasing ignores levels with fewer than 5 queries.
+
+### Recall@5 by confidence label
+
+| Configuration | insufficient | low | medium | high |
+|---|---|---|---|---|
+| Lexical (token coverage) | — | 0.0000 (n=1) | 0.9062 (n=16) | 0.8204 (n=103) |
+| Hybrid BM25 + lexical (RRF) | — | 0.8095 (n=42) | 0.8333 (n=30) | 0.8750 (n=48) |
+| Hybrid + cross-encoder | — | 0.7083 (n=12) | 0.8438 (n=96) | 0.9167 (n=12) |
+| Dense MiniLM (subset index) | — | — | 0.4417 (n=120) | — |
+| Dense MiniLM + cross-encoder | — | 0.5000 (n=3) | 0.4391 (n=115) | 0.5000 (n=2) |
+| Dense MiniLM (full corpus) | 0.5625 (n=64) | — | 0.8091 (n=55) | 1.0000 (n=1) |
+| Dense InLegalBERT | 0.7143 (n=14) | 0.0000 (n=13) | 0.6731 (n=26) | 0.4552 (n=67) |
+
+### Calibration and discrimination
+
+| Configuration | Levels used | Non-decreasing | ECE | Overconfidence | Concordance | p |
+|---|---|---|---|---|---|---|
+| Lexical (token coverage) | 3 | no | 0.0875 | +0.0125 | 0.4714 | 0.3695 |
+| Hybrid BM25 + lexical (RRF) | 3 | yes | 0.2042 | -0.2042 | 0.5604 | 0.2568 |
+| Hybrid + cross-encoder | 3 | yes | 0.2125 | -0.2125 | 0.5607 | 0.1205 |
+| Dense MiniLM (subset index) | 1 | — | 0.1833 | +0.1833 | 0.5000 | 1.0000 |
+| Dense MiniLM + cross-encoder | 3 | — | 0.1875 | +0.1812 | 0.5000 | 1.0000 |
+| Dense MiniLM (full corpus) | 3 | yes | 0.3187 | -0.3187 | **0.6548** | 0.0001 |
+| Dense InLegalBERT | 4 | no | 0.3542 | +0.1958 | 0.4794 | 0.6003 |

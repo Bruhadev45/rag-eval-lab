@@ -341,7 +341,7 @@ def _provision_groups(raw: dict, sources: Mapping[str, Source]) -> dict[str, str
         if not isinstance(spec["why"], str) or not spec["why"].strip():
             raise ValueError(f"provision group {name}: 'why' is empty")
         for provision in _get(spec, "provisions", list):
-            if provision not in known:
+            if not isinstance(provision, str) or provision not in known:
                 raise ValueError(f"provision group {name}: a provision is not in the fixture")
             if provision in owner:
                 raise ValueError(f"{provision} is in two provision groups")

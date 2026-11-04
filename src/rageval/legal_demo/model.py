@@ -163,18 +163,22 @@ def canonical_sha256(value: object) -> str:
 def ineligibility(source: Source, case: Case) -> tuple[str, ...]:
     """Every eligibility rule ``source`` fails for ``case``; empty means eligible.
 
-    Fails closed without relying on the loader's checks. An empty or
-    ``"unknown"`` tenant or matter on either side is ``unknown-scope``. A
-    source with a matter suits only that exact matter, even when its tenant
-    reads ``public``.
+    Fails closed without relying on the loader's checks. On either side, a
+    tenant, matter, jurisdiction or regime that is not a non-empty, trimmed
+    string other than any casing of ``"unknown"`` counts as unknown: an
+    ``unknown-scope``, ``unknown-jurisdiction`` or ``unknown-regime`` reason,
+    never a match. A source with a matter suits only that exact matter, even
+    when its tenant reads ``public``.
 
     Raises:
         TypeError: A date is not a ``datetime.date`` (a ``datetime`` counts as wrong).
     """
     _require_dates(source, case)
     reasons = []
-    scope = (source.tenant, source.matter, case.tenant, case.matter)
-    if not source.tenant or not case.tenant or UNKNOWN in scope or "" in scope:
+    matters = (source.matter, case.matter)
+    if not (_known(source.tenant) and _known(case.tenant)) or not all(
+        matter is None or _known(matter) for matter in matters
+    ):
         reasons.append("unknown-scope")
     elif source.tenant != PUBLIC and source.tenant != case.tenant:
         reasons.append("other-tenant")
@@ -182,7 +186,7 @@ def ineligibility(source: Source, case: Case) -> tuple[str, ...]:
         reasons.append("other-matter")
     for field, asked in (("jurisdiction", case.jurisdiction), ("regime", case.regime)):
         value = getattr(source, field)
-        if value == UNKNOWN:
+        if not (_known(value) and _known(asked)):
             reasons.append(f"unknown-{field}")
         elif value != asked:
             reasons.append(f"other-{field}")
@@ -196,6 +200,16 @@ def ineligibility(source: Source, case: Case) -> tuple[str, ...]:
     elif end is not None and end <= case.as_of:
         reasons.append("no-longer-in-force")
     return tuple(reasons)
+
+
+def _known(value: object) -> bool:
+    """A usable identifier: a non-empty, trimmed str that is no casing of "unknown"."""
+    return (
+        isinstance(value, str)
+        and value != ""
+        and value == value.strip()
+        and value.lower() != UNKNOWN
+    )
 
 
 def _require_dates(source: Source, case: Case) -> None:

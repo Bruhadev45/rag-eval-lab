@@ -159,6 +159,16 @@ def test_ineligibility_fails_closed(dataset, source_id, overrides, reasons) -> N
         ({"tenant": "unknown"}, {"tenant": "unknown"}, ("unknown-scope",)),
         ({}, {"tenant": ""}, ("unknown-scope",)),
         ({}, {"matter": "unknown"}, ("unknown-scope",)),
+        ({"tenant": "UNKNOWN"}, {"tenant": "UNKNOWN"}, ("unknown-scope",)),
+        ({"tenant": 5}, {"tenant": 5}, ("unknown-scope",)),
+        (
+            {"tenant": "tenant-z", "matter": "matter-z "},
+            {"tenant": "tenant-z", "matter": "matter-z "},
+            ("unknown-scope",),
+        ),
+        ({"regime": ""}, {"regime": ""}, ("unknown-regime",)),
+        ({}, {"jurisdiction": "Unknown"}, ("unknown-jurisdiction",)),
+        ({"jurisdiction": " fic-varnholt"}, {}, ("unknown-jurisdiction",)),
     ],
 )
 def test_ineligibility_fails_closed_without_the_loader(
@@ -258,6 +268,7 @@ TAMPERS = {
     "no-authors": (lambda d: d["cases.json"].update(label_authors={}), "must map ids to non-empty descriptions"),
     "group-name": (lambda d: d["cases.json"]["provision_groups"].update({"Bad Name": {"why": "w", "provisions": []}}), "provision group name is not a slug"),
     "group-why": (lambda d: d["cases.json"]["provision_groups"]["basalt-file-note"].update(why=""), "'why' is empty"),
+    "group-provision-type": (lambda d: d["cases.json"]["provision_groups"]["basalt-file-note"]["provisions"].append(["x"]), "a provision is not in the fixture"),
     "group-unknown-provision": (lambda d: d["cases.json"]["provision_groups"]["basalt-file-note"]["provisions"].append("fic-x#s9"), "a provision is not in the fixture"),
     "split-name": (_set("ld-022", ("split",), "holdout"), "'split' must be one of train, dev, test"),
     "no-queries": (_set("ld-022", ("queries",), []), "'queries' must be a non-empty list of strings"),

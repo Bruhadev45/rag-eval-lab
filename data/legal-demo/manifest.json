@@ -1,0 +1,31 @@
+{
+  "schema": "rageval-legal-demo-manifest",
+  "schema_version": 1,
+  "dataset": "legal-demo",
+  "dataset_version": 1,
+  "frozen_on": "2026-11-04",
+  "fixture": {
+    "sha256": "sha256:5707b3f1e672b98c2b82ea59f5f640ba5b1c528a28299748421e9ff13ec252fb",
+    "upstream": {
+      "repository": "https://github.com/Bruhadev45/minirag",
+      "path": "examples/legal_rag/fixtures/sources.json",
+      "commit": "7d451041e1de9ca8be5520a2a68e89b8df597914",
+      "file_sha256": "9ac8f35f2d085b3077212077985cfc35e733e98708ee0ddd7fa93816a035c9ed"
+    }
+  },
+  "cases": {
+    "sha256": "sha256:b9480d57019a183312d07c129957b3fb1da0b591ec3188cfba6913384493acd6"
+  },
+  "splits": {
+    "train": {"cases": 7, "queries": 11},
+    "dev": {"cases": 11, "queries": 15},
+    "test": {"cases": 11, "queries": 19}
+  },
+  "policy": [
+    "Frozen on 2026-11-04, before any retrieval system or model was run on these cases.",
+    "Tune only on train and dev: retriever weights, candidate depth, context limits and abstention thresholds.",
+    "Score a frozen system configuration on test, and report every test run made. A change after seeing test numbers is a new configuration whose test result is no longer held out.",
+    "Both hashes are over sorted, compact JSON, so reformatting a file keeps them. Changing the content of either file needs a new dataset_version and a new manifest, and results across versions are not comparable.",
+    "The fixture is a byte-identical copy of the upstream file named above. To use a newer fixture, copy it, re-check every case, and re-freeze."
+  ]
+}

@@ -1,0 +1,206 @@
+{
+  "dataset": "legal-demo",
+  "dataset_version": 1,
+  "fictional": true,
+  "fixture_sha256": "sha256:5707b3f1e672b98c2b82ea59f5f640ba5b1c528a28299748421e9ff13ec252fb",
+  "cases_sha256": "sha256:b9480d57019a183312d07c129957b3fb1da0b591ec3188cfba6913384493acd6",
+  "counts": {
+    "train": {
+      "cases": 7,
+      "queries": 11
+    },
+    "dev": {
+      "cases": 11,
+      "queries": 15
+    },
+    "test": {
+      "cases": 11,
+      "queries": 19
+    }
+  },
+  "splits": {
+    "train": [
+      "ld-023.q1",
+      "ld-023.q2",
+      "ld-024.q1",
+      "ld-025.q1",
+      "ld-026.q1",
+      "ld-026.q2",
+      "ld-027.q1",
+      "ld-027.q2",
+      "ld-028.q1",
+      "ld-028.q2",
+      "ld-029.q1"
+    ],
+    "dev": [
+      "ld-012.q1",
+      "ld-012.q2",
+      "ld-013.q1",
+      "ld-014.q1",
+      "ld-015.q1",
+      "ld-016.q1",
+      "ld-017.q1",
+      "ld-017.q2",
+      "ld-018.q1",
+      "ld-019.q1",
+      "ld-020.q1",
+      "ld-020.q2",
+      "ld-021.q1",
+      "ld-022.q1",
+      "ld-022.q2"
+    ],
+    "test": [
+      "ld-001.q1",
+      "ld-001.q2",
+      "ld-002.q1",
+      "ld-002.q2",
+      "ld-003.q1",
+      "ld-004.q1",
+      "ld-004.q2",
+      "ld-005.q1",
+      "ld-006.q1",
+      "ld-006.q2",
+      "ld-007.q1",
+      "ld-007.q2",
+      "ld-008.q1",
+      "ld-008.q2",
+      "ld-009.q1",
+      "ld-009.q2",
+      "ld-010.q1",
+      "ld-011.q1",
+      "ld-011.q2"
+    ]
+  },
+  "leakage_groups": [
+    {
+      "split": "test",
+      "cases": [
+        "ld-001",
+        "ld-002",
+        "ld-003",
+        "ld-004",
+        "ld-005",
+        "ld-006",
+        "ld-007",
+        "ld-008",
+        "ld-009",
+        "ld-010"
+      ],
+      "issues": [
+        "quillmouth-inspection-interval",
+        "quillmouth-small-vessel-exemption",
+        "varnholt-inspection-interval"
+      ],
+      "provision_groups": [
+        "quillmouth-inspection-rules",
+        "varnholt-inspection-interval"
+      ]
+    },
+    {
+      "split": "test",
+      "cases": [
+        "ld-011"
+      ],
+      "issues": [
+        "inspector-qualification"
+      ],
+      "provision_groups": []
+    },
+    {
+      "split": "dev",
+      "cases": [
+        "ld-012",
+        "ld-013",
+        "ld-014",
+        "ld-015",
+        "ld-016"
+      ],
+      "issues": [
+        "orchid-inspection-schedule",
+        "orchid-schedule-contact"
+      ],
+      "provision_groups": [
+        "orchid-fleet-memo"
+      ]
+    },
+    {
+      "split": "dev",
+      "cases": [
+        "ld-017",
+        "ld-018",
+        "ld-019",
+        "ld-020",
+        "ld-021"
+      ],
+      "issues": [
+        "inspection-record-retention"
+      ],
+      "provision_groups": [
+        "varnholt-inspection-records"
+      ]
+    },
+    {
+      "split": "dev",
+      "cases": [
+        "ld-022"
+      ],
+      "issues": [
+        "inspection-fee"
+      ],
+      "provision_groups": []
+    },
+    {
+      "split": "train",
+      "cases": [
+        "ld-023",
+        "ld-024",
+        "ld-025",
+        "ld-026",
+        "ld-027"
+      ],
+      "issues": [
+        "berthing-penalty"
+      ],
+      "provision_groups": [
+        "varnholt-inspection-penalties"
+      ]
+    },
+    {
+      "split": "train",
+      "cases": [
+        "ld-028"
+      ],
+      "issues": [
+        "basalt-instruction-origin"
+      ],
+      "provision_groups": [
+        "basalt-file-note"
+      ]
+    },
+    {
+      "split": "train",
+      "cases": [
+        "ld-029"
+      ],
+      "issues": [
+        "inspection-certificate"
+      ],
+      "provision_groups": []
+    }
+  ],
+  "families_in_several_splits": {
+    "fic-harbour-safety-act": [
+      "train",
+      "dev",
+      "test"
+    ]
+  },
+  "closest_cross_split_queries": {
+    "query_ids": [
+      "ld-006.q1",
+      "ld-029.q1"
+    ],
+    "content_word_jaccard": 0.4444,
+    "limit": 0.5
+  }
+}

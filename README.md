@@ -150,6 +150,8 @@ tests/test_ext204.py      pins the replication findings to the data
 tests/test_calibration.py pins the calibration findings to the data
 tests/test_cli.py         runs `python -m rageval.report --root <tmp>` on a
                           copy of data/ and requires byte-identical output
+src/rageval/legal_demo/   the separate fictional legal-demo set: label
+                          checks, frozen splits, results/legal-demo/ report
 ```
 
 Design choices worth naming:
@@ -165,6 +167,35 @@ Design choices worth naming:
 - Relevance is binary. Graded labels would sharpen nDCG.
 - The 84 held-out queries are auto-generated from the corpus, not human-verified. They widen the document types under test, not the labelling standard — which is why they are reported separately rather than pooled into the headline.
 - One corpus, one language pair (English-language Indian statutes). The reranker result is a warning about *unmeasured transfer*, not a claim that rerankers are bad.
+
+## Legal demo: frozen evaluation splits (fictional)
+
+A second, separate evaluation set lives in `data/legal-demo/`. It holds 29
+labelled cases (45 queries) over six **fictional** legal-like sources from
+[minirag](https://github.com/Bruhadev45/minirag)'s legal example. The cases are
+answerable, unanswerable, wrong-regime, outdated and conflicting-source
+questions, each with verbatim evidence quotes and the traps a correct system
+must not use. They are frozen into train/dev/test before any system has run on
+them, and kept apart from the historical results above.
+
+```bash
+python -m rageval.legal_demo   # checks every label, writes results/legal-demo/
+```
+
+The command fails if any of these break:
+
+- A quote does not occur exactly once in its section.
+- An evidence passage is ineligible for its requester, jurisdiction or date, or a trap is eligible.
+- Related cases (shared issue, any version of the same provision, conflicting sources) cross a split.
+- A file differs from the hash `manifest.json` pinned.
+
+The labels were written by an AI coding assistant and have not been reviewed
+by a person or a legal expert. The set tests software behaviour, not legal
+accuracy, and no results have been measured on it yet. See
+[`data/legal-demo/DATA_CARD.md`](data/legal-demo/DATA_CARD.md) for the method,
+the eligibility rule and the limitations, and
+[`results/legal-demo/SPLITS.md`](results/legal-demo/SPLITS.md) for the frozen
+splits.
 
 ## License
 

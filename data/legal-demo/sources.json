@@ -1,0 +1,147 @@
+{
+  "schema": "minirag-legal-fixture",
+  "schema_version": 1,
+  "fictional": true,
+  "notice": "Every source below is original fictional legal-like text written for minirag tests. It is not law and not legal advice. Its places, public bodies and companies are invented. See examples/legal_rag/DATA_CARD.md.",
+  "sources": [
+    {
+      "source_id": "fic-harbour-safety-act@v1",
+      "family_id": "fic-harbour-safety-act",
+      "version": 1,
+      "title": "Harbour Safety Act of Varnholt, version 1 (fictional)",
+      "tenant": "public",
+      "matter": null,
+      "jurisdiction": "fic-varnholt",
+      "regime": "maritime-safety",
+      "authority_type": "statute",
+      "effective_from": "2019-01-01",
+      "effective_to": "2023-07-01",
+      "supersedes": null,
+      "license": "MIT",
+      "origin": "original-fictional",
+      "labels": ["superseded-version"],
+      "content_hash": "sha256:1a2ac302696fbd94175ce61b2f3ba407e37d27c114513051e0f31cbd143a9075",
+      "text": "FICTIONAL TEST TEXT. Not law and not legal advice.\nHarbour Safety Act of Varnholt, version 1\n\n1. Inspections\nA vessel longer than 20 metres that berths in a Varnholt harbour must pass a hull inspection at least once every 24 months.\n\n2. Records\nThe harbour master keeps each inspection record for 3 years after the inspection date.\n\n3. Penalties\nBerthing without a valid inspection carries a fine of up to 5,000 credits.\n",
+      "sections": [
+        {"section_id": "s1", "heading": "1. Inspections", "start": 94, "end": 233, "pages": [1, 1]},
+        {"section_id": "s2", "heading": "2. Records", "start": 234, "end": 332, "pages": [1, 1]},
+        {"section_id": "s3", "heading": "3. Penalties", "start": 333, "end": 421, "pages": [2, 2]}
+      ]
+    },
+    {
+      "source_id": "fic-harbour-safety-act@v2",
+      "family_id": "fic-harbour-safety-act",
+      "version": 2,
+      "title": "Harbour Safety Act of Varnholt, version 2 (fictional)",
+      "tenant": "public",
+      "matter": null,
+      "jurisdiction": "fic-varnholt",
+      "regime": "maritime-safety",
+      "authority_type": "statute",
+      "effective_from": "2023-07-01",
+      "effective_to": null,
+      "supersedes": "fic-harbour-safety-act@v1",
+      "license": "MIT",
+      "origin": "original-fictional",
+      "labels": ["current-version"],
+      "content_hash": "sha256:fefe409b358dac800c815d9feebd44b8634a61e27b4e01eceff7eafafac6fa7b",
+      "text": "FICTIONAL TEST TEXT. Not law and not legal advice.\nHarbour Safety Act of Varnholt, version 2\n\n1. Inspections\nA vessel longer than 20 metres that berths in a Varnholt harbour must pass a hull inspection at least once every 12 months.\n\n2. Records\nThe harbour master keeps each inspection record for 5 years after the inspection date.\n\n3. Penalties\nBerthing without a valid inspection carries a fine of up to 8,000 credits.\n",
+      "sections": [
+        {"section_id": "s1", "heading": "1. Inspections", "start": 94, "end": 233, "pages": [1, 1]},
+        {"section_id": "s2", "heading": "2. Records", "start": 234, "end": 332, "pages": [1, 1]},
+        {"section_id": "s3", "heading": "3. Penalties", "start": 333, "end": 421, "pages": [2, 2]}
+      ]
+    },
+    {
+      "source_id": "fic-harbour-inspection-guidance@v1",
+      "family_id": "fic-harbour-inspection-guidance",
+      "version": 1,
+      "title": "Varnholt Harbour Board guidance note on inspection intervals (fictional)",
+      "tenant": "public",
+      "matter": null,
+      "jurisdiction": "fic-varnholt",
+      "regime": "maritime-safety",
+      "authority_type": "guidance",
+      "effective_from": "2023-09-01",
+      "effective_to": null,
+      "supersedes": null,
+      "license": "MIT",
+      "origin": "original-fictional",
+      "labels": ["conflicting-source"],
+      "content_hash": "sha256:2850a11e4dbe7abc61dc75390607176548c1c10be20f5d41b12ca06d94f383dd",
+      "text": "FICTIONAL TEST TEXT. Not law and not legal advice.\nVarnholt Harbour Board guidance note on inspection intervals\n\n1. Small vessels\nThe Harbour Board treats a hull inspection every 18 months as sufficient for vessels between 20 and 30 metres long.\n\n2. Status of this note\nThis note is guidance. It does not say how it relates to the Harbour Safety Act.\n",
+      "sections": [
+        {"section_id": "s1", "heading": "1. Small vessels", "start": 113, "end": 246, "pages": [1, 1]},
+        {"section_id": "s2", "heading": "2. Status of this note", "start": 247, "end": 351, "pages": [1, 1]}
+      ]
+    },
+    {
+      "source_id": "fic-quillmouth-port-code@v1",
+      "family_id": "fic-quillmouth-port-code",
+      "version": 1,
+      "title": "Quillmouth Port Code, version 1 (fictional)",
+      "tenant": "public",
+      "matter": null,
+      "jurisdiction": "fic-quillmouth",
+      "regime": "maritime-safety",
+      "authority_type": "regulation",
+      "effective_from": "2021-03-15",
+      "effective_to": "unknown",
+      "supersedes": null,
+      "license": "MIT",
+      "origin": "original-fictional",
+      "labels": ["other-jurisdiction", "unknown-metadata"],
+      "content_hash": "sha256:d886414a73d7263abae3d741a80f4cdd67028b52e29b55087f543713d0b09497",
+      "text": "FICTIONAL TEST TEXT. Not law and not legal advice.\nQuillmouth Port Code, version 1\n\n1. Hull inspections\nEvery vessel using a Quillmouth port must pass a hull inspection at least once every 6 months.\n\n2. Exemptions\nVessels shorter than 10 metres are exempt from section 1.\n",
+      "sections": [
+        {"section_id": "s1", "heading": "1. Hull inspections", "start": 84, "end": 199, "pages": "unknown"},
+        {"section_id": "s2", "heading": "2. Exemptions", "start": 200, "end": 272, "pages": "unknown"}
+      ]
+    },
+    {
+      "source_id": "fic-orchid-fleet-memo@v1",
+      "family_id": "fic-orchid-fleet-memo",
+      "version": 1,
+      "title": "Orchidwake Shipping internal memo on fleet inspections (fictional)",
+      "tenant": "tenant-orchid",
+      "matter": "matter-orchid-001",
+      "jurisdiction": "fic-varnholt",
+      "regime": "maritime-safety",
+      "authority_type": "internal-memo",
+      "effective_from": "2024-02-10",
+      "effective_to": null,
+      "supersedes": null,
+      "license": "MIT",
+      "origin": "original-fictional",
+      "labels": ["tenant-private"],
+      "content_hash": "sha256:e2040a2e1655b78e00cf1ca5c2bfd173698e62d9b9e4bf1c4f56e1447e68868f",
+      "text": "FICTIONAL TEST TEXT. Not law and not legal advice.\nOrchidwake Shipping internal memo on fleet inspections\n\n1. Schedule\nOrchidwake Shipping books hull inspections for its three Varnholt vessels every 12 months, in March.\n\n2. Contact\nQuestions about this schedule go to the Orchidwake fleet office.\n",
+      "sections": [
+        {"section_id": "s1", "heading": "1. Schedule", "start": 107, "end": 220, "pages": [1, 1]},
+        {"section_id": "s2", "heading": "2. Contact", "start": 221, "end": 297, "pages": [1, 1]}
+      ]
+    },
+    {
+      "source_id": "fic-basalt-file-note@v1",
+      "family_id": "fic-basalt-file-note",
+      "version": 1,
+      "title": "Basaltine Marine undated file note (fictional)",
+      "tenant": "tenant-basalt",
+      "matter": null,
+      "jurisdiction": "unknown",
+      "regime": "unknown",
+      "authority_type": "unknown",
+      "effective_from": "unknown",
+      "effective_to": "unknown",
+      "supersedes": null,
+      "license": "MIT",
+      "origin": "original-fictional",
+      "labels": ["tenant-private", "unknown-metadata"],
+      "content_hash": "sha256:05a200c4459d19226d22aa603a12405108502b2132f4c77251749c94ffecbf88",
+      "text": "FICTIONAL TEST TEXT. Not law and not legal advice.\nBasaltine Marine undated file note\n\n1. Note\nA Basaltine Marine vessel was told to book a hull inspection every 9 months. The note does not say who gave this instruction or which harbour it applies to.\n",
+      "sections": [
+        {"section_id": "s1", "heading": "1. Note", "start": 87, "end": 252, "pages": "unknown"}
+      ]
+    }
+  ]
+}

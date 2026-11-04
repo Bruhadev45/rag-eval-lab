@@ -31,6 +31,7 @@ from collections.abc import Callable, Mapping
 from datetime import date
 from pathlib import Path
 from types import MappingProxyType
+from typing import Any
 
 from .model import (
     CATEGORIES,
@@ -55,14 +56,21 @@ from .model import (
     split_counts,
 )
 
+# Bounds on input size: the near-duplicate screen compares every pair of queries.
+MAX_FILE_BYTES = 1_000_000
+MAX_QUERIES = 2_000
+MAX_PROBLEMS_SHOWN = 50
+
 _SLUG = r"[a-z0-9]+(?:-[a-z0-9]+)*"
-_PATTERNS = {
-    "case_id": re.compile(r"ld-\d{3}"),
+_PATTERNS = {  # ASCII only: [0-9], never \d, which also matches other scripts' digits
+    "case_id": re.compile(r"ld-[0-9]{3}"),
     "slug": re.compile(_SLUG),
+    "section_id": re.compile(r"s[1-9][0-9]*"),
     "tenant": re.compile(rf"public|tenant-{_SLUG}"),
     "matter": re.compile(rf"matter-{_SLUG}"),
     "jurisdiction": re.compile(rf"fic-{_SLUG}"),
-    "date": re.compile(r"\d{4}-\d{2}-\d{2}"),
+    "source_jurisdiction": re.compile(rf"unknown|fic-{_SLUG}"),
+    "date": re.compile(r"[0-9]{4}-[0-9]{2}-[0-9]{2}"),
 }
 _CASES_KEYS = {
     "schema", "schema_version", "dataset_version", "fictional", "notice",
@@ -88,12 +96,14 @@ def load_dataset(root: Path) -> Dataset:
             the manifest pins.
     """
     data_dir = root / DATA_DIR
-    raw_sources, raw_cases, manifest = (
+    (raw_sources, fixture_hash), (raw_cases, cases_hash), (manifest, _) = (
         _read_json(data_dir / name) for name in ("sources.json", "cases.json", "manifest.json")
     )
     problems: list[str] = []
     sources = _parse_sources(raw_sources, problems)
     version, cases, owner = _parse_cases(raw_cases, sources, problems)
+    if sum(len(case.queries) for case in cases) > MAX_QUERIES:
+        problems.append(f"more than {MAX_QUERIES} queries")
     _raise_if(problems)
     groups = leakage_groups(cases, _links(sources, owner))
     _check_splits(cases, groups, problems)
@@ -103,7 +113,7 @@ def load_dataset(root: Path) -> Dataset:
             f"queries {closest[1][0]} and {closest[1][1]} sit in different splits but "
             f"share {closest[0]:.2f} of their content words (limit {MAX_CROSS_SPLIT_JACCARD})"
         )
-    hashes = (canonical_sha256(raw_sources), canonical_sha256(raw_cases))
+    hashes = (fixture_hash, cases_hash)
     _check_manifest(manifest, version, hashes, cases, problems)
     _raise_if(problems)
     return Dataset(
@@ -123,11 +133,15 @@ def load_dataset(root: Path) -> Dataset:
 
 def _raise_if(problems: list[str]) -> None:
     if problems:
-        listed = "\n".join(f"- {problem}" for problem in problems)
-        raise DatasetError(f"{len(problems)} problem(s) in {DATA_DIR}:\n{listed}")
+        shown = [f"- {problem}" for problem in problems[:MAX_PROBLEMS_SHOWN]]
+        if len(problems) > MAX_PROBLEMS_SHOWN:
+            shown.append(f"- and {len(problems) - MAX_PROBLEMS_SHOWN} more")
+        raise DatasetError(f"{len(problems)} problem(s) in {DATA_DIR}:\n" + "\n".join(shown))
 
 
-def _read_json(path: Path) -> object:
+def _read_json(path: Path) -> tuple[object, str]:
+    """The parsed file and its canonical hash. Every failure is a DatasetError."""
+
     def unique_keys(pairs: list[tuple[str, object]]) -> dict[str, object]:
         result: dict[str, object] = {}
         for key, value in pairs:
@@ -136,17 +150,27 @@ def _read_json(path: Path) -> object:
             result[key] = value
         return result
 
+    def no_constant(name: str) -> object:
+        raise DatasetError(f"{path.name}: {name} is not allowed")
+
     try:
-        return json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=unique_keys)
+        if path.stat().st_size > MAX_FILE_BYTES:
+            raise DatasetError(f"{path.name} is larger than {MAX_FILE_BYTES} bytes")
+        text = path.read_text(encoding="utf-8")
+        value = json.loads(text, object_pairs_hook=unique_keys, parse_constant=no_constant)
+        # Hashing encodes to UTF-8, so a lone surrogate escape fails here too.
+        return value, canonical_sha256(value)
     except DatasetError:
         raise
     except FileNotFoundError:
         raise DatasetError(f"missing file: {path}") from None
-    except (UnicodeDecodeError, ValueError, RecursionError) as exc:
+    except OSError as exc:
+        raise DatasetError(f"{path.name}: cannot be read ({type(exc).__name__})") from None
+    except (ValueError, RecursionError) as exc:  # includes UnicodeDecode/EncodeError
         raise DatasetError(f"{path.name}: not valid UTF-8 JSON ({type(exc).__name__})") from None
 
 
-def _get(obj: object, key: str, kind: type | tuple[type, ...]) -> object:
+def _get(obj: object, key: str, kind: type | tuple[type, ...]) -> Any:
     if not isinstance(obj, dict):
         raise TypeError(f"expected an object holding {key!r}")
     if key not in obj:
@@ -171,7 +195,7 @@ def _choice(obj: object, key: str, allowed: tuple[str, ...]) -> str:
     return value
 
 
-def _exact_keys(obj: object, keys: set[str]) -> dict:
+def _exact_keys(obj: object, keys: set[str]) -> dict[str, Any]:
     if not isinstance(obj, dict):
         raise TypeError("expected an object")
     missing, extra = sorted(keys - obj.keys()), sorted(obj.keys() - keys)
@@ -182,13 +206,17 @@ def _exact_keys(obj: object, keys: set[str]) -> dict:
     return obj
 
 
-def _date(obj: object, key: str, *, unknown: bool = False, none: bool = False) -> date | str | None:
-    value = _get(obj, key, (str, type(None)) if none else str)
-    if value is None or (unknown and value == UNKNOWN):
-        return value
+def _date(obj: object, key: str) -> date:
+    value = _get(obj, key, str)
     if not _PATTERNS["date"].fullmatch(value):
         raise ValueError(f"{key!r} is not a YYYY-MM-DD date")
     return date.fromisoformat(value)
+
+
+def _source_date(obj: object, key: str) -> date | str | None:
+    """A fixture date: YYYY-MM-DD, "unknown", or null (no end date)."""
+    value = _get(obj, key, (str, type(None)))
+    return value if value is None or value == UNKNOWN else _date(obj, key)
 
 
 def _parse_sources(raw: object, problems: list[str]) -> dict[str, Source]:
@@ -217,26 +245,45 @@ def _parse_source(record: object) -> Source:
     digest = hashlib.sha256(unicodedata.normalize("NFC", text).encode("utf-8")).hexdigest()
     if _get(record, "content_hash", str) != f"sha256:{digest}":
         raise ValueError("content_hash does not match the text")
+    family = _match(record, "family_id", "slug")
+    source_id = _get(record, "source_id", str)
+    if not re.fullmatch(rf"{re.escape(family)}@v[1-9][0-9]*", source_id):
+        raise ValueError("'source_id' is not <family_id>@v<version>")
+    tenant = _match(record, "tenant", "tenant")
+    matter = _get(record, "matter", (str, type(None)))
+    if matter is not None:
+        matter = _match(record, "matter", "matter")
+        if tenant == PUBLIC:
+            raise ValueError("a public source has no matter")
+    start, end = _source_date(record, "effective_from"), _source_date(record, "effective_to")
+    if start is None:
+        raise ValueError("'effective_from' cannot be null")
+    if isinstance(start, date) and isinstance(end, date) and end <= start:
+        raise ValueError("'effective_to' must be after 'effective_from'")
+    return Source(
+        source_id=source_id,
+        family_id=family,
+        tenant=tenant,
+        matter=matter,
+        jurisdiction=_match(record, "jurisdiction", "source_jurisdiction"),
+        regime=_match(record, "regime", "slug"),
+        effective_from=start,
+        effective_to=end,
+        sections=MappingProxyType(_sections(record, text)),
+    )
+
+
+def _sections(record: object, text: str) -> dict[str, str]:
     sections: dict[str, str] = {}
     for section in _get(record, "sections", list):
         start, end = _get(section, "start", int), _get(section, "end", int)
         if not 0 <= start < end <= len(text):
             raise ValueError("a section span falls outside the text")
-        section_id = _get(section, "section_id", str)
+        section_id = _match(section, "section_id", "section_id")
         if section_id in sections:
             raise ValueError("duplicate section_id")
         sections[section_id] = text[start:end]
-    return Source(
-        source_id=_get(record, "source_id", str),
-        family_id=_get(record, "family_id", str),
-        tenant=_get(record, "tenant", str),
-        matter=_get(record, "matter", (str, type(None))),
-        jurisdiction=_get(record, "jurisdiction", str),
-        regime=_get(record, "regime", str),
-        effective_from=_date(record, "effective_from", unknown=True),
-        effective_to=_date(record, "effective_to", unknown=True, none=True),
-        sections=MappingProxyType(sections),
-    )
+    return sections
 
 
 def _parse_cases(
@@ -258,6 +305,7 @@ def _parse_cases(
         problems.append(f"cases.json: {exc}")
         return 0, (), {}
     cases: list[Case] = []
+    seen_ids: set[str] = set()
     for index, record in enumerate(records):
         where = record.get("id") if isinstance(record, dict) else None
         try:
@@ -266,8 +314,9 @@ def _parse_cases(
             label = where[:20] if isinstance(where, str) else f"#{index}"
             problems.append(f"case {label}: {exc}")
             continue
-        if any(case.id == seen.id for seen in cases):
+        if case.id in seen_ids:
             problems.append(f"case {case.id}: duplicate id")
+        seen_ids.add(case.id)
         problems.extend(_check_case(case, sources, authors, methods))
         cases.append(case)
     if not cases:
@@ -357,8 +406,11 @@ def _check_case(
 
     if case.outcome not in CATEGORY_OUTCOMES[case.category]:
         problem(f"category {case.category} does not allow outcome {case.outcome}")
-    if any(not q or q != q.strip() or len(q) > MAX_QUERY_CHARS for q in case.queries):
-        problem(f"every query must be trimmed, non-empty and at most {MAX_QUERY_CHARS} characters")
+    if any(
+        not q or q != q.strip() or not q.isprintable() or len(q) > MAX_QUERY_CHARS
+        for q in case.queries
+    ):
+        problem(f"every query must be one trimmed printable line of 1-{MAX_QUERY_CHARS} characters")
     if len(set(case.queries)) != len(case.queries):
         problem("a query is listed twice")
     if case.tenant == PUBLIC and case.matter is not None:
@@ -476,8 +528,24 @@ def _check_manifest(
                 "needs a new dataset_version and a new manifest, and results across "
                 "versions are not comparable."
             )
-    if manifest["splits"] != split_counts(cases):
+    if not _same_counts(manifest["splits"], split_counts(cases)):
         problems.append("manifest.json split counts do not match cases.json")
+
+
+def _same_counts(pinned: object, actual: dict[str, dict[str, int]]) -> bool:
+    """Equal and integer-typed: ``True`` or ``7.0`` does not count as a pinned count."""
+    return (
+        isinstance(pinned, dict)
+        and pinned.keys() == actual.keys()
+        and all(
+            isinstance(pinned[split], dict)
+            and pinned[split].keys() == counts.keys()
+            and all(
+                type(pinned[split][k]) is int and pinned[split][k] == v for k, v in counts.items()
+            )
+            for split, counts in actual.items()
+        )
+    )
 
 
 def _is_one(value: object) -> bool:

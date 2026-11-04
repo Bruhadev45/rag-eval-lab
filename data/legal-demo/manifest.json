@@ -14,10 +14,10 @@
     }
   },
   "cases": {
-    "sha256": "sha256:b9480d57019a183312d07c129957b3fb1da0b591ec3188cfba6913384493acd6"
+    "sha256": "sha256:21e7524ec12ee2a71c4bd06912109dd6b10b6396f08958867162ae9ff63499a8"
   },
   "splits": {
-    "train": {"cases": 7, "queries": 11},
+    "train": {"cases": 8, "queries": 12},
     "dev": {"cases": 11, "queries": 15},
     "test": {"cases": 11, "queries": 19}
   },
@@ -26,6 +26,8 @@
     "Tune only on train and dev: retriever weights, candidate depth, context limits and abstention thresholds.",
     "Score a frozen system configuration on test, and report every test run made. A change after seeing test numbers is a new configuration whose test result is no longer held out.",
     "Both hashes are over sorted, compact JSON, so reformatting a file keeps them. Changing the content of either file needs a new dataset_version and a new manifest, and results across versions are not comparable.",
-    "The fixture is a byte-identical copy of the upstream file named above. To use a newer fixture, copy it, re-check every case, and re-freeze."
+    "The fixture is a byte-identical copy of the upstream file named above. To use a newer fixture, copy it, re-check every case, and re-freeze.",
+    "Splits are grouped by provision (one section in every version, with any source that conflicts with it), not by whole source family: the Harbour Safety Act has sections in all three splits. See DATA_CARD.md.",
+    "This manifest sits beside the data, so whoever can edit the files can re-hash them. The hashes catch accidental edits and make deliberate ones visible in review and git history; they are not a signature."
   ]
 }

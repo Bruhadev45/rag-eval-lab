@@ -163,17 +163,17 @@
       "scope": {"tenant": "public", "matter": null}, "jurisdiction": "fic-varnholt", "regime": "maritime-safety", "as_of": "2024-06-01",
       "expected": {
         "outcome": "answer",
-        "answer": "No. The 6-month interval comes from the Quillmouth Port Code, another jurisdiction. In Varnholt, version 2 of the Harbour Safety Act requires a hull inspection at least once every 12 months for vessels longer than 20 metres.",
+        "answer": "No. In Varnholt, version 2 of the Harbour Safety Act requires a hull inspection at least once every 12 months for vessels longer than 20 metres.",
         "evidence": [
           {"source_id": "fic-harbour-safety-act@v2", "section_id": "s1", "quote": "A vessel longer than 20 metres that berths in a Varnholt harbour must pass a hull inspection at least once every 12 months."}
         ]
       },
       "traps": [{"source_id": "fic-quillmouth-port-code@v1", "section_id": "s1"}],
       "label": {"author": "ai-assistant", "method": "fixture-reading"},
-      "note": "The 6-month figure is real text, but from Quillmouth."
+      "note": "The 6-month figure is real text, but from the Quillmouth Port Code: another jurisdiction, and never eligible because its end date is unknown. The answer rests on the Act alone and does not need to say where 6 months comes from."
     },
     {
-      "id": "ld-008", "split": "test", "issue": "quillmouth-inspection-interval", "category": "unanswerable",
+      "id": "ld-008", "split": "test", "issue": "quillmouth-inspection-interval", "category": "unknown-metadata",
       "queries": [
         "How often must a vessel using a Quillmouth port pass a hull inspection?",
         "What is the hull inspection interval at Quillmouth ports?"
@@ -188,7 +188,7 @@
       "note": "The Port Code's end date is unknown, so it cannot be shown to be in force on the as-of date and eligibility fails closed. Varnholt's Act is another jurisdiction."
     },
     {
-      "id": "ld-009", "split": "test", "issue": "quillmouth-small-vessel-exemption", "category": "unanswerable",
+      "id": "ld-009", "split": "test", "issue": "quillmouth-small-vessel-exemption", "category": "unknown-metadata",
       "queries": [
         "Are vessels shorter than 10 metres exempt from hull inspections in Quillmouth?",
         "Do boats under 10 m need hull inspections at Quillmouth ports?"
@@ -472,6 +472,17 @@
       "traps": [],
       "label": {"author": "ai-assistant", "method": "fixture-reading"},
       "note": "No source mentions a certificate."
+    },
+    {
+      "id": "ld-030", "split": "train", "issue": "basalt-inspection-interval", "category": "unknown-metadata",
+      "queries": [
+        "How often was a Basaltine Marine vessel told to book a hull inspection?"
+      ],
+      "scope": {"tenant": "tenant-basalt", "matter": null}, "jurisdiction": "fic-varnholt", "regime": "maritime-safety", "as_of": "2024-06-01",
+      "expected": {"outcome": "abstain", "answer": null, "evidence": []},
+      "traps": [{"source_id": "fic-basalt-file-note@v1", "section_id": "s1"}],
+      "label": {"author": "ai-assistant", "method": "fixture-reading"},
+      "note": "The note's text says every 9 months, but its jurisdiction, regime and dates are unknown, so it fails closed even for its own tenant."
     }
   ]
 }

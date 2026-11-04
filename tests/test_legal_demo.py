@@ -9,16 +9,27 @@ targeted check can fail.
 
 from __future__ import annotations
 
+import hashlib
 import json
+import re
 import shutil
 import subprocess
 import sys
-from datetime import date
+from dataclasses import replace
+from datetime import date, datetime
 from pathlib import Path
 
 import pytest
 
-from rageval.legal_demo import SPLITS, DatasetError, canonical_sha256, ineligibility, load_dataset
+from rageval.legal_demo import (
+    CATEGORIES,
+    SPLITS,
+    DatasetError,
+    canonical_sha256,
+    ineligibility,
+    load_dataset,
+    validate,
+)
 from rageval.legal_demo.model import Case, closest_cross_split, leakage_groups
 from rageval.legal_demo.report import main
 
@@ -72,15 +83,15 @@ def _by_id(docs: dict, case_id: str) -> dict:
 # --- the committed set ------------------------------------------------------
 
 
-def test_committed_set_is_frozen_with_29_cases_and_45_queries(dataset) -> None:
+def test_committed_set_is_frozen_with_30_cases_and_46_queries(dataset) -> None:
     assert dataset.version == 1
     counts = {s: (sum(c.split == s for c in dataset.cases), sum(len(c.queries) for c in dataset.cases if c.split == s)) for s in SPLITS}  # fmt: skip
-    assert counts == {"train": (7, 11), "dev": (11, 15), "test": (11, 19)}
+    assert counts == {"train": (8, 12), "dev": (11, 15), "test": (11, 19)}
 
 
-def test_every_category_is_present_and_test_holds_all_five(dataset) -> None:
+def test_every_category_is_present_and_test_holds_all_six(dataset) -> None:
     by_split = {s: {c.category for c in dataset.cases if c.split == s} for s in SPLITS}
-    assert len(by_split["test"]) == 5
+    assert by_split["test"] == set(CATEGORIES)
     # The fixture has one conflict, so conflicting-source cases fit in one split only.
     assert "conflicting-source" not in by_split["dev"] | by_split["train"]
 
@@ -94,6 +105,12 @@ def test_every_trap_is_ineligible_and_every_evidence_eligible(dataset) -> None:
     for case in dataset.cases:
         assert all(not ineligibility(dataset.sources[r.source_id], case) for r in case.evidence)
         assert all(ineligibility(dataset.sources[r.source_id], case) for r in case.traps)
+
+
+def test_fixture_is_a_byte_identical_copy_of_the_pinned_upstream_file() -> None:
+    upstream = json.loads((DATA / "manifest.json").read_text())["fixture"]["upstream"]
+    digest = hashlib.sha256((DATA / "sources.json").read_bytes()).hexdigest()
+    assert digest == upstream["file_sha256"]
 
 
 def test_closest_cross_split_queries_stay_under_the_limit(dataset) -> None:
@@ -132,6 +149,33 @@ def test_closest_cross_split_queries_stay_under_the_limit(dataset) -> None:
 )
 def test_ineligibility_fails_closed(dataset, source_id, overrides, reasons) -> None:
     assert ineligibility(dataset.sources[source_id], _case(**overrides)) == reasons
+
+
+@pytest.mark.parametrize(
+    ("source_change", "case_change", "reasons"),
+    [
+        ({"matter": "matter-z"}, {}, ("other-matter",)),  # public source with a matter
+        ({"matter": "matter-z"}, {"tenant": "tenant-z", "matter": "matter-z"}, ()),
+        ({"tenant": "unknown"}, {"tenant": "unknown"}, ("unknown-scope",)),
+        ({}, {"tenant": ""}, ("unknown-scope",)),
+        ({}, {"matter": "unknown"}, ("unknown-scope",)),
+    ],
+)
+def test_ineligibility_fails_closed_without_the_loader(
+    dataset, source_change, case_change, reasons
+) -> None:
+    source = replace(dataset.sources["fic-harbour-safety-act@v2"], **source_change)
+    assert ineligibility(source, _case(**case_change)) == reasons
+
+
+@pytest.mark.parametrize(
+    ("source_change", "case_change"),
+    [({}, {"as_of": datetime(2024, 6, 1)}), ({"effective_to": "2025-01-01"}, {})],
+)
+def test_ineligibility_rejects_wrongly_typed_dates(dataset, source_change, case_change) -> None:
+    source = replace(dataset.sources["fic-harbour-safety-act@v2"], **source_change)
+    with pytest.raises(TypeError, match="datetime.date"):
+        ineligibility(source, _case(**case_change))
 
 
 def test_leakage_groups_join_transitively_and_sort() -> None:
@@ -179,7 +223,17 @@ TAMPERS = {
     "answer-text": (_set("ld-017", ("expected", "answer"), None), "'answer' must be null"),
     "author": (_set("ld-022", ("label", "author"), "someone"), "author or method is not declared"),
     "note": (_set("ld-022", ("note",), " "), "'note' is empty"),
-    "query-space": (_set("ld-022", ("queries",), [" padded"]), "every query must be trimmed"),
+    "query-space": (_set("ld-022", ("queries",), [" padded"]), "one trimmed printable line"),
+    "query-newline": (_set("ld-022", ("queries",), ["two\nlines"]), "one trimmed printable line"),
+    "unicode-digits": (_set("ld-022", ("id",), "ld-\u0660\u0662\u0662"), "'id' is not a valid case_id"),
+    "unknown-metadata-trap": (_set("ld-009", ("traps",), []), "category unknown-metadata needs a trap that fails unknown-scope"),
+    "exact-limit": (lambda d: (_set("ld-029", ("queries",), ["alpha beta gamma"])(d), _set("ld-022", ("queries",), ["alpha beta delta"])(d)), "share 0.50 of their content words"),
+    "public-source-matter": (lambda d: d["sources.json"]["sources"][0].update(matter="matter-x"), "a public source has no matter"),
+    "source-tenant": (lambda d: d["sources.json"]["sources"][0].update(tenant="Public"), "'tenant' is not a valid tenant"),
+    "source-id": (lambda d: d["sources.json"]["sources"][0].update(source_id="fic-other@v1"), "is not <family_id>@v<version>"),
+    "inverted-interval": (lambda d: d["sources.json"]["sources"][0].update(effective_to="2018-01-01"), "'effective_to' must be after"),
+    "null-start": (lambda d: d["sources.json"]["sources"][0].update(effective_from=None), "'effective_from' cannot be null"),
+    "section-id": (lambda d: d["sources.json"]["sources"][5]["sections"][0].update(section_id="S1"), "not a valid section_id"),
     "query-twice": (_set("ld-022", ("queries",), ["same", "same"]), "a query is listed twice"),
     "unknown-regime": (_set("ld-022", ("regime",), "unknown"), "regime cannot be unknown"),
     "near-duplicate": (_set("ld-029", ("queries",), ["How often must a 40-metre vessel that berths in a Varnholt harbour pass a hull inspection?"]), "content words"),
@@ -230,18 +284,49 @@ def test_unrefrozen_edit_is_not_the_frozen_version(tmp_path) -> None:
         load_dataset(root)
 
 
-def test_manifest_counts_must_match(tmp_path) -> None:
+@pytest.mark.parametrize("count", [18, 19.0, "19"])
+def test_manifest_counts_must_match_exactly(tmp_path, count) -> None:
     def edit(docs):
-        docs["manifest.json"]["splits"]["test"]["queries"] = 18
+        docs["manifest.json"]["splits"]["test"]["queries"] = count
 
     with pytest.raises(DatasetError, match="split counts do not match"):
         load_dataset(_variant(tmp_path, edit, refreeze=False))
 
 
 @pytest.mark.parametrize(
+    ("limit", "value", "message"),
+    [
+        ("MAX_FILE_BYTES", 10, "larger than 10 bytes"),
+        ("MAX_QUERIES", 10, "more than 10 queries"),
+    ],
+)
+def test_input_size_limits(tmp_path, monkeypatch, limit, value, message) -> None:
+    monkeypatch.setattr(validate, limit, value)
+    with pytest.raises(DatasetError, match=message):
+        load_dataset(_variant(tmp_path))
+
+
+def test_long_problem_lists_are_cut_short(tmp_path, monkeypatch) -> None:
+    monkeypatch.setattr(validate, "MAX_PROBLEMS_SHOWN", 1)
+    with pytest.raises(DatasetError) as error:
+        load_dataset(_variant(tmp_path, TAMPERS["outcome"][0]))
+    assert re.search(r"\n- and [0-9]+ more$", str(error.value))
+
+
+def test_unreadable_file_is_a_dataset_error(tmp_path) -> None:
+    root = _variant(tmp_path)
+    (root / "data" / "legal-demo" / "cases.json").unlink()
+    (root / "data" / "legal-demo" / "cases.json").mkdir()
+    with pytest.raises(DatasetError, match="cases.json: cannot be read"):
+        load_dataset(root)
+
+
+@pytest.mark.parametrize(
     ("text", "message"),
     [
         ('{"a": 1, "a": 2}', "duplicate key 'a'"),
+        ('{"a": NaN}', "NaN is not allowed"),
+        ('{"a": "\\ud800"}', "not valid UTF-8 JSON (UnicodeEncodeError)"),
         ("{not json", "not valid UTF-8 JSON"),
         ("[" * 100_000, "not valid UTF-8 JSON"),
     ],
@@ -249,7 +334,7 @@ def test_manifest_counts_must_match(tmp_path) -> None:
 def test_unreadable_json_is_a_dataset_error(tmp_path, text, message) -> None:
     root = _variant(tmp_path)
     (root / "data" / "legal-demo" / "cases.json").write_text(text)
-    with pytest.raises(DatasetError, match=message):
+    with pytest.raises(DatasetError, match=re.escape(message)):
         load_dataset(root)
 
 
@@ -280,10 +365,19 @@ def test_cli_rewrites_the_committed_report_byte_for_byte(tmp_path) -> None:
         check=False,
     )
     assert proc.returncode == 0, proc.stderr
-    assert "cases (queries) train 7 (11), dev 11 (15), test 11 (19)" in proc.stdout
+    assert "cases (queries) train 8 (12), dev 11 (15), test 11 (19)" in proc.stdout
     for name in ("splits.json", "SPLITS.md"):
         written = (tmp_path / "results" / "legal-demo" / name).read_bytes()
         assert written == (REPO / "results" / "legal-demo" / name).read_bytes()
+
+
+def test_cli_reports_an_unwritable_output_cleanly(tmp_path) -> None:
+    shutil.copytree(DATA, tmp_path / "data" / "legal-demo")
+    (tmp_path / "results").write_text("a file where the results directory should be")
+    with pytest.raises(
+        SystemExit, match="rageval.legal_demo: error: cannot write results/legal-demo"
+    ):
+        main(["--root", str(tmp_path)])
 
 
 def test_cli_error_exits_cleanly_without_writing(tmp_path) -> None:

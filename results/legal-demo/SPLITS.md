@@ -6,26 +6,27 @@ overwritten. No system has been scored on these splits yet.
 
 - Dataset version: 1
 - Fixture: `sha256:5707b3f1e672b98c2b82ea59f5f640ba5b1c528a28299748421e9ff13ec252fb`
-- Cases: `sha256:b9480d57019a183312d07c129957b3fb1da0b591ec3188cfba6913384493acd6`
+- Cases: `sha256:21e7524ec12ee2a71c4bd06912109dd6b10b6396f08958867162ae9ff63499a8`
 
 ## Cases (queries) per split
 
 | Category | train | dev | test | all |
 |---|---|---|---|---|
 | answerable | 1 (2) | 3 (5) | 2 (4) | 6 (11) |
-| unanswerable | 3 (5) | 3 (4) | 3 (6) | 9 (15) |
+| unanswerable | 3 (5) | 3 (4) | 1 (2) | 7 (11) |
+| unknown-metadata | 1 (1) | - | 2 (4) | 3 (5) |
 | wrong-regime | 1 (2) | 1 (2) | 1 (2) | 3 (6) |
 | outdated | 2 (2) | 4 (4) | 3 (4) | 9 (10) |
 | conflicting-source | - | - | 2 (3) | 2 (3) |
-| **all** | 7 (11) | 11 (15) | 11 (19) | 29 (45) |
+| **all** | 8 (12) | 11 (15) | 11 (19) | 30 (46) |
 
 | Expected outcome | train | dev | test | all |
 |---|---|---|---|---|
 | answer | 2 (3) | 5 (7) | 4 (7) | 11 (17) |
 | clarify | - | - | 1 (2) | 1 (2) |
 | report-conflict | - | - | 2 (3) | 2 (3) |
-| abstain | 5 (8) | 6 (8) | 4 (7) | 15 (23) |
-| **all** | 7 (11) | 11 (15) | 11 (19) | 29 (45) |
+| abstain | 6 (9) | 6 (8) | 4 (7) | 16 (24) |
+| **all** | 8 (12) | 11 (15) | 11 (19) | 30 (46) |
 
 ## Leakage groups
 
@@ -39,7 +40,7 @@ Cases that share an issue or a provision group stay in one split.
 | dev | ld-017, ld-018, ld-019, ld-020, ld-021 | inspection-record-retention | varnholt-inspection-records |
 | dev | ld-022 | inspection-fee | - |
 | train | ld-023, ld-024, ld-025, ld-026, ld-027 | berthing-penalty | varnholt-inspection-penalties |
-| train | ld-028 | basalt-instruction-origin | basalt-file-note |
+| train | ld-028, ld-030 | basalt-inspection-interval, basalt-instruction-origin | basalt-file-note |
 | train | ld-029 | inspection-certificate | - |
 
 ## Residual overlap
@@ -58,8 +59,8 @@ Cases that share an issue or a provision group stay in one split.
 | ld-005 | test | conflicting-source | report-conflict | public | 2024-06-01 | Does the Harbour Board's 18-month guidance override the Harbour Safety Act for a 25 m vessel? |
 | ld-006 | test | answerable | clarify | public | 2024-06-01 | How often does a vessel berthing in Varnholt need a hull inspection? |
 | ld-007 | test | wrong-regime | answer | public | 2024-06-01 | Does the 6-month hull inspection rule apply to vessels berthing in Varnholt? |
-| ld-008 | test | unanswerable | abstain | public | 2024-06-01 | How often must a vessel using a Quillmouth port pass a hull inspection? |
-| ld-009 | test | unanswerable | abstain | public | 2024-06-01 | Are vessels shorter than 10 metres exempt from hull inspections in Quillmouth? |
+| ld-008 | test | unknown-metadata | abstain | public | 2024-06-01 | How often must a vessel using a Quillmouth port pass a hull inspection? |
+| ld-009 | test | unknown-metadata | abstain | public | 2024-06-01 | Are vessels shorter than 10 metres exempt from hull inspections in Quillmouth? |
 | ld-010 | test | outdated | abstain | public | 2020-06-01 | In June 2020, how often did a vessel using a Quillmouth port need a hull inspection? |
 | ld-011 | test | unanswerable | abstain | public | 2024-06-01 | Who is allowed to carry out hull inspections in Varnholt? |
 | ld-012 | dev | answerable | answer | tenant-orchid / matter-orchid-001 | 2024-06-01 | What hull inspection schedule does Orchidwake Shipping use for its Varnholt vessels? |
@@ -80,3 +81,4 @@ Cases that share an issue or a provision group stay in one split.
 | ld-027 | train | unanswerable | abstain | public | 2024-06-01 | Can a fine for berthing in Varnholt without a valid inspection be appealed? |
 | ld-028 | train | unanswerable | abstain | tenant-basalt | 2024-06-01 | Who told Basaltine Marine to book a hull inspection every 9 months? |
 | ld-029 | train | unanswerable | abstain | public | 2024-06-01 | Must a vessel carry its hull inspection certificate on board in Varnholt? |
+| ld-030 | train | unknown-metadata | abstain | tenant-basalt | 2024-06-01 | How often was a Basaltine Marine vessel told to book a hull inspection? |

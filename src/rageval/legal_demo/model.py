@@ -21,13 +21,20 @@ import json
 import re
 from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, datetime
 from itertools import combinations
 from pathlib import Path
 
 DATA_DIR = Path("data") / "legal-demo"
 SPLITS = ("train", "dev", "test")
-CATEGORIES = ("answerable", "unanswerable", "wrong-regime", "outdated", "conflicting-source")
+CATEGORIES = (
+    "answerable",
+    "unanswerable",
+    "unknown-metadata",
+    "wrong-regime",
+    "outdated",
+    "conflicting-source",
+)
 OUTCOMES = ("answer", "clarify", "report-conflict", "abstain")
 UNKNOWN = "unknown"
 PUBLIC = "public"
@@ -36,12 +43,21 @@ PUBLIC = "public"
 CATEGORY_OUTCOMES = {
     "answerable": ("answer", "clarify"),
     "unanswerable": ("abstain",),
+    "unknown-metadata": ("abstain",),
     "wrong-regime": ("answer", "abstain"),
     "outdated": ("answer", "abstain"),
     "conflicting-source": ("report-conflict",),
 }
 # A category about a trap needs at least one trap failing one of these rules.
+# unknown-metadata: a source's text would answer, but a fact eligibility needs
+# about it is unknown, so the rule fails closed and the case expects abstention.
 CATEGORY_TRAP_REASONS = {
+    "unknown-metadata": (
+        "unknown-scope",
+        "unknown-jurisdiction",
+        "unknown-regime",
+        "unknown-in-force",
+    ),
     "wrong-regime": ("other-jurisdiction", "other-regime"),
     "outdated": ("not-yet-in-force", "no-longer-in-force"),
 }
@@ -145,13 +161,25 @@ def canonical_sha256(value: object) -> str:
 
 
 def ineligibility(source: Source, case: Case) -> tuple[str, ...]:
-    """Every eligibility rule ``source`` fails for ``case``; empty means eligible."""
+    """Every eligibility rule ``source`` fails for ``case``; empty means eligible.
+
+    Fails closed without relying on the loader's checks. An empty or
+    ``"unknown"`` tenant or matter on either side is ``unknown-scope``. A
+    source with a matter suits only that exact matter, even when its tenant
+    reads ``public``.
+
+    Raises:
+        TypeError: A date is not a ``datetime.date`` (a ``datetime`` counts as wrong).
+    """
+    _require_dates(source, case)
     reasons = []
-    if source.tenant != PUBLIC:
-        if source.tenant != case.tenant:
-            reasons.append("other-tenant")
-        elif source.matter is not None and source.matter != case.matter:
-            reasons.append("other-matter")
+    scope = (source.tenant, source.matter, case.tenant, case.matter)
+    if not source.tenant or not case.tenant or UNKNOWN in scope or "" in scope:
+        reasons.append("unknown-scope")
+    elif source.tenant != PUBLIC and source.tenant != case.tenant:
+        reasons.append("other-tenant")
+    elif source.matter is not None and source.matter != case.matter:
+        reasons.append("other-matter")
     for field, asked in (("jurisdiction", case.jurisdiction), ("regime", case.regime)):
         value = getattr(source, field)
         if value == UNKNOWN:
@@ -168,6 +196,19 @@ def ineligibility(source: Source, case: Case) -> tuple[str, ...]:
     elif end is not None and end <= case.as_of:
         reasons.append("no-longer-in-force")
     return tuple(reasons)
+
+
+def _require_dates(source: Source, case: Case) -> None:
+    def is_day(value: object) -> bool:
+        return isinstance(value, date) and not isinstance(value, datetime)
+
+    start, end = source.effective_from, source.effective_to
+    if not (
+        is_day(case.as_of)
+        and (is_day(start) or start == UNKNOWN)
+        and (end is None or end == UNKNOWN or is_day(end))
+    ):
+        raise TypeError("eligibility dates must be datetime.date values or 'unknown'")
 
 
 def leakage_groups(

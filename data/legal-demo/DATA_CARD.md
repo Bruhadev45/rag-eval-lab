@@ -1,12 +1,13 @@
 # Data card: legal-demo evaluation set (fictional)
 
-29 labelled cases (45 queries) over six fictional legal-like sources, frozen
+30 labelled cases (46 queries) over six fictional legal-like sources, frozen
 into train, dev and test splits **before any retrieval system or model was run
 on them**. They exist to test software paths that a legal RAG system must get
 right: version dates, conflicting sources, jurisdiction, tenant and matter
-isolation, unknown metadata and abstention. **The sources are not law, the
-labels are not legal advice, and nothing scored on this set measures legal
-accuracy.** This set is separate from the historical 120/204-query benchmark
+isolation, unknown metadata and abstention. The categories are answerable,
+unanswerable, unknown-metadata, wrong-regime, outdated and
+conflicting-source. **The sources are not law, the labels are not legal
+advice, and nothing scored on this set measures legal accuracy.** This set is separate from the historical 120/204-query benchmark
 in `data/runs*/`, and nothing here changes those results.
 
 ## Files
@@ -52,12 +53,22 @@ the label.
 | --- | --- | --- |
 | `answerable` | `answer`, `clarify` | Evidence is eligible. |
 | `unanswerable` | `abstain` | No evidence. |
+| `unknown-metadata` | `abstain` | A trap's text would answer, but its scope, place, regime or in-force dates are unknown. |
 | `wrong-regime` | `answer`, `abstain` | A trap is from another jurisdiction or regime. |
 | `outdated` | `answer`, `abstain` | A trap is not yet, or no longer, in force on the as-of date. |
 | `conflicting-source` | `report-conflict` | Evidence from at least two source families. |
 
 `clarify` means the answer depends on a fact the question leaves out. The
 expected response states that dependency instead of giving one number.
+
+`unknown-metadata` cases are kept apart from `unanswerable` ones on purpose.
+Their abstention comes from the fail-closed rule, not from missing text. A
+system that answers them from the ineligible text has broken the rule, and
+that is not the same failure as inventing an answer.
+
+Key results on query ids (`ld-012.q1`), not on query text. The same text
+appears under different requesters with different expected outcomes, for
+example in ld-012 and ld-013, and in ld-014 and ld-015.
 
 ## The eligibility rule the labels assume
 
@@ -78,6 +89,10 @@ different rule, these labels need a new dataset version.
 
 ## How the splits are kept apart
 
+- Grouping is by **provision**, not by whole source family. This is weaker
+  than family-level grouping. The fixture's six records cannot fill three
+  splits under family-level grouping, because the wrong-regime cases tie the
+  Varnholt Act to the Quillmouth code; see Limitations.
 - A **provision group** names the sections that answer one question, in every
   version. For example, the Act's inspection interval in v1 and v2 belongs with
   the guidance note that conflicts with it. Every section of the fixture is in
@@ -95,7 +110,7 @@ different rule, these labels need a new dataset version.
 
 | Split | Cases (queries) | Leakage groups |
 | --- | --- | --- |
-| train | 7 (11) | penalties; Basaltine file note; inspection certificate |
+| train | 8 (12) | penalties; Basaltine file note; inspection certificate |
 | dev | 11 (15) | Orchidwake memo; record keeping; inspection fee |
 | test | 11 (19) | inspection interval (Varnholt and Quillmouth); inspector qualification |
 
@@ -111,16 +126,26 @@ From `manifest.json`:
 
 ## Limitations
 
-- **Tiny and fictional.** 29 cases cannot support a quality claim, a
+- **Tiny and fictional.** 30 cases cannot support a quality claim, a
   significance test or a leaderboard. The set exercises code paths.
 - **Unreviewed AI-written labels.** See above.
 - **Uneven coverage.** The fixture has one conflict and one ambiguous-length
   question. Both sit in the interval group, so `conflicting-source` and
-  `clarify` cases appear only in test, and dev cannot tune for them.
+  `clarify` cases appear only in test, and dev cannot tune for them. Dev has
+  no `unknown-metadata` case either; train has one. Changing that needs a
+  larger fixture and a new dataset version.
 - **Shared family.** The Harbour Safety Act's sections answer different
   questions, so they sit in different splits: interval in test, record keeping
   in dev, penalties in train. A system tuned on dev could still pick up
   Act-specific vocabulary. `results/legal-demo/SPLITS.md` lists this overlap.
+- **Wrong-regime means wrong jurisdiction here.** Every source with a known
+  regime is `maritime-safety`, so no case exercises `other-regime`, although
+  the rule supports it.
+- **The freeze is self-attested.** `manifest.json` sits beside the data, so
+  whoever can edit the files can re-hash them. The hashes catch accidental
+  edits and make deliberate ones visible in review and git history; they are
+  not a signature. "Frozen before any system ran" is a statement in the
+  manifest and in git history, not something the files can prove.
 - **Traps are not exhaustive.** Each case lists the ineligible passages it
   means to test, not every passage on the topic.
 - **The reference answers are short and English-only.** Matching them is a

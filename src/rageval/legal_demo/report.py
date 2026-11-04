@@ -137,9 +137,10 @@ def render_markdown(dataset: Dataset, summary: dict) -> str:
     ]
     for case in dataset.cases:
         requester = case.tenant if case.matter is None else f"{case.tenant} / {case.matter}"
+        query = case.queries[0].replace("|", r"\|")  # a pipe would end the table cell
         lines.append(
             f"| {case.id} | {case.split} | {case.category} | {case.outcome} | "
-            f"{requester} | {case.as_of.isoformat()} | {case.queries[0]} |"
+            f"{requester} | {case.as_of.isoformat()} | {query} |"
         )
     return "\n".join(lines) + "\n"
 
@@ -166,11 +167,19 @@ def main(argv: list[str] | None = None) -> None:
         raise SystemExit(f"rageval.legal_demo: error: {exc}") from exc
     summary = build_summary(dataset)
     out_dir = root / OUT_DIR
-    out_dir.mkdir(parents=True, exist_ok=True)
-    (out_dir / "splits.json").write_text(
-        json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
-    )
-    (out_dir / "SPLITS.md").write_text(render_markdown(dataset, summary), encoding="utf-8")
+    outputs = {
+        "splits.json": json.dumps(summary, indent=2, ensure_ascii=False) + "\n",
+        "SPLITS.md": render_markdown(dataset, summary),
+    }
+    try:
+        out_dir.mkdir(parents=True, exist_ok=True)
+        for name, text in outputs.items():
+            # newline="\n" keeps the bytes identical on Windows too.
+            (out_dir / name).write_text(text, encoding="utf-8", newline="\n")
+    except OSError as exc:
+        raise SystemExit(
+            f"rageval.legal_demo: error: cannot write {OUT_DIR} ({type(exc).__name__})"
+        ) from exc
     counts = ", ".join(
         f"{split} {n['cases']} ({n['queries']})" for split, n in summary["counts"].items()
     )

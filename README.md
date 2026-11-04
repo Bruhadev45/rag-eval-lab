@@ -170,12 +170,12 @@ Design choices worth naming:
 
 ## Legal demo: frozen evaluation splits (fictional)
 
-A second, separate evaluation set lives in `data/legal-demo/`. It holds 29
-labelled cases (45 queries) over six **fictional** legal-like sources from
+A second, separate evaluation set lives in `data/legal-demo/`. It holds 30
+labelled cases (46 queries) over six **fictional** legal-like sources from
 [minirag](https://github.com/Bruhadev45/minirag)'s legal example. The cases are
-answerable, unanswerable, wrong-regime, outdated and conflicting-source
-questions, each with verbatim evidence quotes and the traps a correct system
-must not use. They are frozen into train/dev/test before any system has run on
+answerable, unanswerable, unknown-metadata, wrong-regime, outdated and
+conflicting-source questions, each with verbatim evidence quotes and the traps
+a correct system must not use. They are frozen into train/dev/test before any system has run on
 them, and kept apart from the historical results above.
 
 ```bash
@@ -186,7 +186,7 @@ The command fails if any of these break:
 
 - A quote does not occur exactly once in its section.
 - An evidence passage is ineligible for its requester, jurisdiction or date, or a trap is eligible.
-- Related cases (shared issue, any version of the same provision, conflicting sources) cross a split.
+- Related cases (shared issue, any version of the same provision, conflicting sources) cross a split. Grouping is by provision, not by whole source family, so one fictional Act has sections in all three splits.
 - A file differs from the hash `manifest.json` pinned.
 
 The labels were written by an AI coding assistant and have not been reviewed

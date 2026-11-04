@@ -3,11 +3,11 @@
   "dataset_version": 1,
   "fictional": true,
   "fixture_sha256": "sha256:5707b3f1e672b98c2b82ea59f5f640ba5b1c528a28299748421e9ff13ec252fb",
-  "cases_sha256": "sha256:b9480d57019a183312d07c129957b3fb1da0b591ec3188cfba6913384493acd6",
+  "cases_sha256": "sha256:21e7524ec12ee2a71c4bd06912109dd6b10b6396f08958867162ae9ff63499a8",
   "counts": {
     "train": {
-      "cases": 7,
-      "queries": 11
+      "cases": 8,
+      "queries": 12
     },
     "dev": {
       "cases": 11,
@@ -30,7 +30,8 @@
       "ld-027.q2",
       "ld-028.q1",
       "ld-028.q2",
-      "ld-029.q1"
+      "ld-029.q1",
+      "ld-030.q1"
     ],
     "dev": [
       "ld-012.q1",
@@ -168,9 +169,11 @@
     {
       "split": "train",
       "cases": [
-        "ld-028"
+        "ld-028",
+        "ld-030"
       ],
       "issues": [
+        "basalt-inspection-interval",
         "basalt-instruction-origin"
       ],
       "provision_groups": [

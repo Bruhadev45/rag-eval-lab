@@ -44,7 +44,7 @@ def tokens(text: str) -> list[str]:
 
 def eligible_passages(dataset: Dataset, case: Case) -> dict[str, str]:
     """``{source_id#section_id: text}`` for every section ``case`` may use, sorted by id."""
-    pool = {}
+    pool: dict[str, str] = {}
     for source_id in sorted(dataset.sources):
         source = dataset.sources[source_id]
         if ineligibility(source, case):
@@ -74,7 +74,7 @@ def bm25(passages: Mapping[str, str], query: str, depth: int) -> Ranking:
     df = _document_frequency(docs)
     avg_len = sum(len(words) for words in docs.values()) / n or 1.0
     terms = Counter(word for word in tokens(query) if word in df)
-    scores = {}
+    scores: dict[str, float] = {}
     for pid, words in docs.items():
         tf = Counter(words)
         norm = BM25_K1 * (1 - BM25_B + BM25_B * len(words) / avg_len)
@@ -106,7 +106,7 @@ def tfidf(passages: Mapping[str, str], query: str, depth: int) -> Ranking:
         for word, count in _document_frequency(docs).items()
     }
     q = _unit_vector(tokens(query), idf)
-    scores = {}
+    scores: dict[str, float] = {}
     for pid, words in docs.items():
         vector = _unit_vector(words, idf)
         scores[pid] = sum(weight * vector.get(word, 0.0) for word, weight in q.items())

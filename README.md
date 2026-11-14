@@ -201,6 +201,7 @@ splits.
 ### Live runs and dev tuning
 
 ```bash
+pip install -e ".[live]"            # or ".[dev]", which includes it
 python -m rageval.legal_demo.live   # runs the retrievers on dev, writes results/legal-demo/live/
 ```
 
@@ -215,14 +216,17 @@ scored.
 
 The command runs 55 configurations on dev (system, fusion weight, candidate
 depth, context size) and picks one by a rule declared in the code. Tuning
-refuses the test split. The output records hashes of the harness code, the
-frozen data and each configuration, the ragfuse commit, and that no model was
-run.
+runs only on dev. The output records hashes of every file of
+`rageval.legal_demo`, the frozen data and each configuration, the ragfuse
+commit, and that no model was run. A ragfuse build other than the pinned Git
+commit is recorded as `unknown`, so its output differs from the committed one.
 
 What it shows, honestly: dev has 15 queries, 7 with evidence, and each dev case
 has at most seven eligible sections. 40 of the 55 configurations tie at
 recall 1.0 and MRR 0.9286, so the tie-breaks chose the selected configuration,
-not the data. Both retrievers are lexical, so there is no learned-dense row. See
+not the data. All three fusion weights tie, so dev does not identify a fusion
+weight, and none is claimed. Both retrievers are lexical, so there is no
+learned-dense row. See
 [`results/legal-demo/live/DEV_TUNING.md`](results/legal-demo/live/DEV_TUNING.md).
 
 ## License

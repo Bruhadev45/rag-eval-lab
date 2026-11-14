@@ -9,7 +9,7 @@ file: each run executes :mod:`~rageval.legal_demo.retrievers` on the queries.
   fusion goes through ragfuse's ``fuse(..., eligible=pool)``, which refuses
   any other id, and every returned id is checked again against the pool and
   :func:`~rageval.legal_demo.model.ineligibility` before it is scored.
-- **Dev only.** :func:`tune` refuses the test split, and :func:`evaluate`
+- **Dev only.** :func:`tune` runs only on dev, and :func:`evaluate`
   refuses it unless ``held_out=True`` is passed for a frozen configuration.
   This module never passes it; held-out scoring is a separate step.
 - **Provenance.** Each output records hashes of the harness code, the frozen
@@ -28,13 +28,19 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from collections.abc import Sequence
 from dataclasses import asdict, dataclass
 from importlib import metadata
 from pathlib import Path
-from typing import Final
+from typing import Any, Final
 
-from ragfuse import fuse, ndcg_at_k, recall_at_k, reciprocal_rank
+try:
+    from ragfuse import fuse, ndcg_at_k, recall_at_k, reciprocal_rank
+except ImportError as exc:  # the owner's ragfuse, never the PyPI package of that name
+    raise ImportError(
+        "rageval.legal_demo.live needs the owner's ragfuse: pip install -e '.[live]'"
+    ) from exc
 
 from .model import SPLITS, Case, Dataset, DatasetError, canonical_sha256, ineligibility
 from .report import ROOT
@@ -45,8 +51,8 @@ OUT_DIR: Final = Path("results") / "legal-demo" / "live"
 SYSTEMS: Final = (*RETRIEVERS, "hybrid")
 RRF_K: Final = 60
 MAX_DEPTH: Final = 100
-TUNING_SPLITS: Final = ("train", "dev")
-CODE_FILES: Final = ("live.py", "retrievers.py", "model.py")
+TUNING_SPLITS: Final = ("dev",)
+COMMIT_PATTERN: Final = re.compile(r"[0-9a-f]{40}")
 METRIC_DECIMALS: Final = 4
 MODEL: Final = {
     "kind": "none",
@@ -67,7 +73,7 @@ class RunConfig:
     """
 
     system: str
-    depth: int
+    depth: int  # exact int and float types: the config is hashed, and 1 and 1.0 hash apart
     context_k: int
     bm25_weight: float | None = None
 
@@ -107,9 +113,8 @@ def retrieve(dataset: Dataset, case: Case, query: str, config: RunConfig) -> tup
     lists: dict[str, Ranking] = {
         name: RANKERS[name](pool, query, config.depth) for name in RETRIEVERS
     }
-    if config.system == "hybrid":
-        weight = config.bm25_weight
-        assert weight is not None  # RunConfig guarantees it for hybrid
+    weight = config.bm25_weight
+    if weight is not None:  # RunConfig sets a weight for hybrid and only for hybrid
         trace = fuse(
             lists,
             method="rrf",
@@ -122,16 +127,19 @@ def retrieve(dataset: Dataset, case: Case, query: str, config: RunConfig) -> tup
     else:
         kept = tuple(pid for pid, _ in lists[config.system][: config.context_k])
     for pid in kept:
-        source_id = pid.partition("#")[0]
-        if pid not in pool or ineligibility(dataset.sources[source_id], case):
+        # Section ids are s<N> (the loader checks), so the last "#" splits the label.
+        source = dataset.sources.get(pid.rpartition("#")[0])
+        if pid not in pool or source is None or ineligibility(source, case):
             raise LiveRunError("a retriever returned a passage outside the eligible pool")
     return kept
 
 
-def _query_record(dataset: Dataset, case: Case, qid: str, query: str, config: RunConfig) -> dict:
+def _query_record(
+    dataset: Dataset, case: Case, qid: str, query: str, config: RunConfig
+) -> dict[str, Any]:
     kept = retrieve(dataset, case, query, config)
     relevant = sorted({ref.label for ref in case.evidence})
-    record = {
+    record: dict[str, Any] = {
         "query_id": qid,
         "category": case.category,
         "outcome": case.outcome,
@@ -147,8 +155,14 @@ def _query_record(dataset: Dataset, case: Case, qid: str, query: str, config: Ru
     return record
 
 
-def evaluate(dataset: Dataset, config: RunConfig, split: str, *, held_out: bool = False) -> dict:
-    """Run ``config`` on every query of ``split``; refuses test unless ``held_out``."""
+def evaluate(
+    dataset: Dataset, config: RunConfig, split: str, *, held_out: bool = False
+) -> dict[str, Any]:
+    """Run ``config`` on every query of ``split``; refuses test unless ``held_out``.
+
+    Means are over the per-query values as rounded for output, so every
+    published mean can be recomputed from the published rows.
+    """
     if split not in SPLITS:
         raise LiveRunError(f"split must be one of {SPLITS}")
     if split == "test" and not held_out:
@@ -181,7 +195,7 @@ def evaluate(dataset: Dataset, config: RunConfig, split: str, *, held_out: bool 
     }
 
 
-def _selection_key(item: tuple[int, dict]) -> tuple:
+def _selection_key(item: tuple[int, dict[str, Any]]) -> tuple[float, float, int, int, int]:
     index, run = item
     config = run["config"]
     return (
@@ -193,14 +207,14 @@ def _selection_key(item: tuple[int, dict]) -> tuple:
     )
 
 
-def tune(dataset: Dataset, split: str = "dev", grid: Sequence[RunConfig] = GRID) -> dict:
-    """Evaluate ``grid`` on a tuning split and select one configuration.
+def tune(dataset: Dataset, split: str = "dev", grid: Sequence[RunConfig] = GRID) -> dict[str, Any]:
+    """Evaluate ``grid`` on the dev split and select one configuration.
 
     Rule, declared before any run: highest mean recall at ``context_k``, then
     highest MRR, then the smaller context, then the smaller depth, then grid order.
     """
     if split not in TUNING_SPLITS:
-        raise LiveRunError(f"tuning may use only {TUNING_SPLITS}; test is held out")
+        raise LiveRunError("tuning may use only dev; test is held out")
     if not grid:
         raise LiveRunError("the grid is empty")
     runs = [evaluate(dataset, config, split) for config in grid]
@@ -214,12 +228,16 @@ def tune(dataset: Dataset, split: str = "dev", grid: Sequence[RunConfig] = GRID)
     }
 
 
-def provenance(dataset: Dataset) -> dict:
-    """Hashes of the harness code and frozen data, the ragfuse build, and the model used."""
+def provenance(dataset: Dataset) -> dict[str, Any]:
+    """Hashes of the package's code and frozen data, the ragfuse build, and the model used.
+
+    Every ``.py`` file of ``rageval.legal_demo`` is hashed, with CRLF read as LF,
+    so any code change, docstrings included, changes the committed outputs.
+    """
     here = Path(__file__).resolve().parent
     files = {
-        name: canonical_sha256((here / name).read_bytes().replace(b"\r\n", b"\n").decode("utf-8"))
-        for name in CODE_FILES
+        path.name: canonical_sha256(path.read_bytes().replace(b"\r\n", b"\n").decode("utf-8"))
+        for path in sorted(here.glob("*.py"))
     }
     return {
         "code": {"files": files, "ragfuse": _ragfuse_build()},
@@ -232,19 +250,30 @@ def provenance(dataset: Dataset) -> dict:
     }
 
 
-def _ragfuse_build() -> dict:
-    """ragfuse's version and, for a Git install, its commit; never a local path."""
-    dist = metadata.distribution("ragfuse")
-    commit = "unknown"
+def _ragfuse_build() -> dict[str, str]:
+    """ragfuse's version and, for a Git install, its full commit; never a path or URL.
+
+    Anything else (a local or editable install, missing or malformed metadata)
+    is recorded as ``"unknown"``, which the committed outputs do not match.
+    """
     try:
-        direct = json.loads(dist.read_text("direct_url.json") or "{}")
-        commit = direct.get("vcs_info", {}).get("commit_id", "unknown")
-    except (json.JSONDecodeError, AttributeError):
-        pass
-    return {"version": dist.version, "commit": commit}
+        dist = metadata.distribution("ragfuse")
+    except metadata.PackageNotFoundError:
+        return {"version": "unknown", "commit": "unknown"}
+    version = dist.version
+    try:
+        text = dist.read_text("direct_url.json")
+        direct = json.loads(text) if text else None
+    except (OSError, ValueError):  # ValueError covers bad JSON and bad UTF-8
+        direct = None
+    info = direct.get("vcs_info") if isinstance(direct, dict) else None
+    commit = info.get("commit_id") if isinstance(info, dict) else None
+    if not (isinstance(commit, str) and COMMIT_PATTERN.fullmatch(commit)):
+        commit = "unknown"
+    return {"version": str(version), "commit": commit}
 
 
-def render_markdown(result: dict) -> str:
+def render_markdown(result: dict[str, Any]) -> str:
     """A short, human-readable view of the tuning result."""
     selected = result["tuning"]["selected_run"]
     ragfuse = result["provenance"]["code"]["ragfuse"]
@@ -264,7 +293,8 @@ def render_markdown(result: dict) -> str:
         "no embedding or language model was run, so there is no learned-dense row.",
         "With a few eligible sections per case these numbers check the code, not quality.",
         "",
-        f"- Code: `{result['provenance']['code']['files']['live.py']}` (live.py)",
+        f"- Code: `{canonical_sha256(result['provenance']['code']['files'])}`"
+        + " (hash of the per-file hashes in dev-tuning.json)",
         f"- ragfuse: {ragfuse['version']} at commit `{ragfuse['commit']}`",
         f"- Fixture: `{result['provenance']['data']['fixture_sha256']}`",
         f"- Cases: `{result['provenance']['data']['cases_sha256']}`",

@@ -13,7 +13,14 @@ authors = [{ name = "Kandimalla Bruhadev", email = "devbruha@gmail.com" }]
 dependencies = ["matplotlib>=3.8"]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0", "pytest-cov>=7.0", "ruff>=0.6"]
+# The legal-demo live harness (rageval.legal_demo.live) fuses with the owner's
+# ragfuse, pinned to a commit that has fuse(). Never the unrelated PyPI package
+# named ragfuse. MIT licensed, no runtime dependencies of its own.
+live = ["ragfuse @ git+https://github.com/Bruhadev45/ragfuse@b447cc365f5a4d9f5cbcbb647592ca95582a0bff"]
+dev = ["pytest>=8.0", "pytest-cov>=7.0", "ruff>=0.6", "ragfuse @ git+https://github.com/Bruhadev45/ragfuse@b447cc365f5a4d9f5cbcbb647592ca95582a0bff"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/rageval"]

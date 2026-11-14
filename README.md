@@ -151,7 +151,8 @@ tests/test_calibration.py pins the calibration findings to the data
 tests/test_cli.py         runs `python -m rageval.report --root <tmp>` on a
                           copy of data/ and requires byte-identical output
 src/rageval/legal_demo/   the separate fictional legal-demo set: label
-                          checks, frozen splits, results/legal-demo/ report
+                          checks, frozen splits, results/legal-demo/ report,
+                          live retrieval runs and dev-only tuning (live.py)
 ```
 
 Design choices worth naming:
@@ -191,11 +192,38 @@ The command fails if any of these break:
 
 The labels were written by an AI coding assistant and have not been reviewed
 by a person or a legal expert. The set tests software behaviour, not legal
-accuracy, and no results have been measured on it yet. See
+accuracy. See
 [`data/legal-demo/DATA_CARD.md`](data/legal-demo/DATA_CARD.md) for the method,
 the eligibility rule and the limitations, and
 [`results/legal-demo/SPLITS.md`](results/legal-demo/SPLITS.md) for the frozen
 splits.
+
+### Live runs and dev tuning
+
+```bash
+python -m rageval.legal_demo.live   # runs the retrievers on dev, writes results/legal-demo/live/
+```
+
+Unlike the historical analysis above, this executes retrieval on the frozen
+queries instead of reading result files. For each case it keeps only the
+sections the requester may use, under the same fail-closed rule as the labels,
+and then runs BM25, TF-IDF cosine and their weighted RRF. The fusion is done by
+[ragfuse](https://github.com/Bruhadev45/ragfuse)'s `fuse(..., eligible=...)`,
+Git-pinned in `pyproject.toml`; never install the unrelated PyPI package named
+`ragfuse`. Every returned id is checked against the pool again before it is
+scored.
+
+The command runs 55 configurations on dev (system, fusion weight, candidate
+depth, context size) and picks one by a rule declared in the code. Tuning
+refuses the test split. The output records hashes of the harness code, the
+frozen data and each configuration, the ragfuse commit, and that no model was
+run.
+
+What it shows, honestly: dev has 15 queries, 7 with evidence, and each dev case
+has at most seven eligible sections. 40 of the 55 configurations tie at
+recall 1.0 and MRR 0.9286, so the tie-breaks chose the selected configuration,
+not the data. Both retrievers are lexical, so there is no learned-dense row. See
+[`results/legal-demo/live/DEV_TUNING.md`](results/legal-demo/live/DEV_TUNING.md).
 
 ## License
 

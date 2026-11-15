@@ -1,0 +1,3539 @@
+{
+  "provenance": {
+    "code": {
+      "files": {
+        "__init__.py": "sha256:8a12f8bcddb794727ae3aee8e8f4067884f0ffc255f8ef9f5730a69badb2169e",
+        "__main__.py": "sha256:809f0db5ec719e7ac02b0d8e1c7ff369bc96137e8b7b8430052960a8c6e94a0e",
+        "heldout.py": "sha256:128c035b2abb5d0561c5f3589ab668a8cb0488bdc0be84b155739e1b6eb44e53",
+        "live.py": "sha256:48b1763920a52d14326210eaa04dd0ba58c535f3bd0d590613d63cb85a2684f2",
+        "model.py": "sha256:a2366833a2433275f2cf6d52775660820602bb89345de5932e32d2fa569c3b91",
+        "report.py": "sha256:1482c173bf6413c593c1c4cc72162951f03303ffa5556f4cb4a8dae2465fb1fb",
+        "retrievers.py": "sha256:24f30f148b1fcd2f645996bbd4b90f3fb3952b0d88de2437764b342b5ff286f5",
+        "validate.py": "sha256:1661fb4637458d1104825e03aa88f949263c542e2b288ffb56dbed92e0ef86ec"
+      },
+      "ragfuse": {
+        "version": "0.2.0",
+        "commit": "b447cc365f5a4d9f5cbcbb647592ca95582a0bff"
+      }
+    },
+    "data": {
+      "dataset_version": 1,
+      "fixture_sha256": "sha256:5707b3f1e672b98c2b82ea59f5f640ba5b1c528a28299748421e9ff13ec252fb",
+      "cases_sha256": "sha256:21e7524ec12ee2a71c4bd06912109dd6b10b6396f08958867162ae9ff63499a8"
+    },
+    "model": {
+      "kind": "none",
+      "note": "BM25 and TF-IDF cosine are lexical; no embedding or language model was run."
+    },
+    "references": {
+      "sha256": "sha256:18348fc818da971d45edc8a428fca6427ce7ee5423eba60f6ce9cc8d0193d1fd",
+      "upstream": {
+        "repository": "https://github.com/Bruhadev45/minirag",
+        "path": "examples/legal_rag/fixtures/references.json",
+        "commit": "9c9d5d8c07d3d9f2ef11049d904cd83283474690",
+        "file_sha256": "18348fc818da971d45edc8a428fca6427ce7ee5423eba60f6ce9cc8d0193d1fd"
+      }
+    }
+  },
+  "frozen": {
+    "config": {
+      "system": "bm25",
+      "depth": 3,
+      "context_k": 2,
+      "bm25_weight": null
+    },
+    "config_sha256": "sha256:a38309eefe854f5046713659d44ea5b6d961e9dfb44e605dacae8ee53cc59ae1"
+  },
+  "variants": {
+    "bm25": "BM25, the frozen dev selection",
+    "tfidf": "TF-IDF cosine",
+    "hybrid": "weighted RRF via ragfuse, bm25 weight 0.5",
+    "rerank": "hybrid, reranked by query-word coverage (lexical)",
+    "parent": "BM25 over lines and sentences, sections by best child",
+    "graph": "BM25 seeds plus their explicit reference targets, one hop"
+  },
+  "test_runs": [
+    "2026-11-15 run 1: all six variants, fixed beforehand, each query once.",
+    "After run 1: a graph reach count, the shared rageval.stats bootstrap and wording; no ranking code or setting changed."
+  ],
+  "uncertainty": {
+    "unit": "case (paraphrases of one case are averaged first)",
+    "sign_flip": "exact, two-sided, over every sign pattern of the case differences",
+    "bootstrap": "rageval.stats paired bootstrap, 10000 case resamples, seed 70"
+  },
+  "runs": {
+    "dev": {
+      "bm25": {
+        "queries": 15,
+        "scored": 7,
+        "recall": 1.0,
+        "rr": 0.9286,
+        "ndcg": 0.9473,
+        "recall_by_category": {
+          "answerable": 1.0,
+          "outdated": 1.0
+        },
+        "misses": [],
+        "no_evidence": 8,
+        "no_evidence_retrieved_something": 5,
+        "per_query": [
+          {
+            "case": "ld-012",
+            "query_id": "ld-012.q1",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 7,
+            "relevant": [
+              "fic-orchid-fleet-memo@v1#s1"
+            ],
+            "retrieved": [
+              "fic-orchid-fleet-memo@v1#s1",
+              "fic-orchid-fleet-memo@v1#s2"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-012",
+            "query_id": "ld-012.q2",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 7,
+            "relevant": [
+              "fic-orchid-fleet-memo@v1#s1"
+            ],
+            "retrieved": [
+              "fic-orchid-fleet-memo@v1#s2",
+              "fic-orchid-fleet-memo@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 0.5,
+            "ndcg": 0.6309
+          },
+          {
+            "case": "ld-013",
+            "query_id": "ld-013.q1",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-safety-act@v2#s1"
+            ]
+          },
+          {
+            "case": "ld-014",
+            "query_id": "ld-014.q1",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 7,
+            "relevant": [
+              "fic-orchid-fleet-memo@v1#s2"
+            ],
+            "retrieved": [
+              "fic-orchid-fleet-memo@v1#s2",
+              "fic-orchid-fleet-memo@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-015",
+            "query_id": "ld-015.q1",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          },
+          {
+            "case": "ld-016",
+            "query_id": "ld-016.q1",
+            "category": "outdated",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-safety-act@v2#s1"
+            ]
+          },
+          {
+            "case": "ld-017",
+            "query_id": "ld-017.q1",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s2"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-017",
+            "query_id": "ld-017.q2",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s2"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-018",
+            "query_id": "ld-018.q1",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v1#s2"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v1#s2",
+              "fic-harbour-safety-act@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-019",
+            "query_id": "ld-019.q1",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s2"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-020",
+            "query_id": "ld-020.q1",
+            "category": "wrong-regime",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-020",
+            "query_id": "ld-020.q2",
+            "category": "wrong-regime",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-021",
+            "query_id": "ld-021.q1",
+            "category": "outdated",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-022",
+            "query_id": "ld-022.q1",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          },
+          {
+            "case": "ld-022",
+            "query_id": "ld-022.q2",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          }
+        ]
+      },
+      "tfidf": {
+        "queries": 15,
+        "scored": 7,
+        "recall": 1.0,
+        "rr": 0.9286,
+        "ndcg": 0.9473,
+        "recall_by_category": {
+          "answerable": 1.0,
+          "outdated": 1.0
+        },
+        "misses": [],
+        "no_evidence": 8,
+        "no_evidence_retrieved_something": 5,
+        "per_query": [
+          {
+            "case": "ld-012",
+            "query_id": "ld-012.q1",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 7,
+            "relevant": [
+              "fic-orchid-fleet-memo@v1#s1"
+            ],
+            "retrieved": [
+              "fic-orchid-fleet-memo@v1#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-012",
+            "query_id": "ld-012.q2",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 7,
+            "relevant": [
+              "fic-orchid-fleet-memo@v1#s1"
+            ],
+            "retrieved": [
+              "fic-orchid-fleet-memo@v1#s2",
+              "fic-orchid-fleet-memo@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 0.5,
+            "ndcg": 0.6309
+          },
+          {
+            "case": "ld-013",
+            "query_id": "ld-013.q1",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-safety-act@v2#s1"
+            ]
+          },
+          {
+            "case": "ld-014",
+            "query_id": "ld-014.q1",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 7,
+            "relevant": [
+              "fic-orchid-fleet-memo@v1#s2"
+            ],
+            "retrieved": [
+              "fic-orchid-fleet-memo@v1#s2",
+              "fic-orchid-fleet-memo@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-015",
+            "query_id": "ld-015.q1",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          },
+          {
+            "case": "ld-016",
+            "query_id": "ld-016.q1",
+            "category": "outdated",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-safety-act@v2#s1"
+            ]
+          },
+          {
+            "case": "ld-017",
+            "query_id": "ld-017.q1",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s2"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-017",
+            "query_id": "ld-017.q2",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s2"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-018",
+            "query_id": "ld-018.q1",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v1#s2"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v1#s2",
+              "fic-harbour-safety-act@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-019",
+            "query_id": "ld-019.q1",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s2"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-020",
+            "query_id": "ld-020.q1",
+            "category": "wrong-regime",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-020",
+            "query_id": "ld-020.q2",
+            "category": "wrong-regime",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-021",
+            "query_id": "ld-021.q1",
+            "category": "outdated",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-022",
+            "query_id": "ld-022.q1",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          },
+          {
+            "case": "ld-022",
+            "query_id": "ld-022.q2",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          }
+        ]
+      },
+      "hybrid": {
+        "queries": 15,
+        "scored": 7,
+        "recall": 1.0,
+        "rr": 0.9286,
+        "ndcg": 0.9473,
+        "recall_by_category": {
+          "answerable": 1.0,
+          "outdated": 1.0
+        },
+        "misses": [],
+        "no_evidence": 8,
+        "no_evidence_retrieved_something": 5,
+        "per_query": [
+          {
+            "case": "ld-012",
+            "query_id": "ld-012.q1",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 7,
+            "relevant": [
+              "fic-orchid-fleet-memo@v1#s1"
+            ],
+            "retrieved": [
+              "fic-orchid-fleet-memo@v1#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-012",
+            "query_id": "ld-012.q2",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 7,
+            "relevant": [
+              "fic-orchid-fleet-memo@v1#s1"
+            ],
+            "retrieved": [
+              "fic-orchid-fleet-memo@v1#s2",
+              "fic-orchid-fleet-memo@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 0.5,
+            "ndcg": 0.6309
+          },
+          {
+            "case": "ld-013",
+            "query_id": "ld-013.q1",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-safety-act@v2#s1"
+            ]
+          },
+          {
+            "case": "ld-014",
+            "query_id": "ld-014.q1",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 7,
+            "relevant": [
+              "fic-orchid-fleet-memo@v1#s2"
+            ],
+            "retrieved": [
+              "fic-orchid-fleet-memo@v1#s2",
+              "fic-orchid-fleet-memo@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-015",
+            "query_id": "ld-015.q1",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          },
+          {
+            "case": "ld-016",
+            "query_id": "ld-016.q1",
+            "category": "outdated",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-safety-act@v2#s1"
+            ]
+          },
+          {
+            "case": "ld-017",
+            "query_id": "ld-017.q1",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s2"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-017",
+            "query_id": "ld-017.q2",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s2"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-018",
+            "query_id": "ld-018.q1",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v1#s2"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v1#s2",
+              "fic-harbour-safety-act@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-019",
+            "query_id": "ld-019.q1",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s2"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-020",
+            "query_id": "ld-020.q1",
+            "category": "wrong-regime",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-020",
+            "query_id": "ld-020.q2",
+            "category": "wrong-regime",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-021",
+            "query_id": "ld-021.q1",
+            "category": "outdated",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-022",
+            "query_id": "ld-022.q1",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          },
+          {
+            "case": "ld-022",
+            "query_id": "ld-022.q2",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          }
+        ]
+      },
+      "rerank": {
+        "queries": 15,
+        "scored": 7,
+        "recall": 1.0,
+        "rr": 1.0,
+        "ndcg": 1.0,
+        "recall_by_category": {
+          "answerable": 1.0,
+          "outdated": 1.0
+        },
+        "misses": [],
+        "no_evidence": 8,
+        "no_evidence_retrieved_something": 5,
+        "per_query": [
+          {
+            "case": "ld-012",
+            "query_id": "ld-012.q1",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 7,
+            "relevant": [
+              "fic-orchid-fleet-memo@v1#s1"
+            ],
+            "retrieved": [
+              "fic-orchid-fleet-memo@v1#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-012",
+            "query_id": "ld-012.q2",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 7,
+            "relevant": [
+              "fic-orchid-fleet-memo@v1#s1"
+            ],
+            "retrieved": [
+              "fic-orchid-fleet-memo@v1#s1",
+              "fic-orchid-fleet-memo@v1#s2"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-013",
+            "query_id": "ld-013.q1",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-safety-act@v2#s1"
+            ]
+          },
+          {
+            "case": "ld-014",
+            "query_id": "ld-014.q1",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 7,
+            "relevant": [
+              "fic-orchid-fleet-memo@v1#s2"
+            ],
+            "retrieved": [
+              "fic-orchid-fleet-memo@v1#s2",
+              "fic-orchid-fleet-memo@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-015",
+            "query_id": "ld-015.q1",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          },
+          {
+            "case": "ld-016",
+            "query_id": "ld-016.q1",
+            "category": "outdated",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-safety-act@v2#s1"
+            ]
+          },
+          {
+            "case": "ld-017",
+            "query_id": "ld-017.q1",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s2"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-017",
+            "query_id": "ld-017.q2",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s2"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-018",
+            "query_id": "ld-018.q1",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v1#s2"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v1#s2",
+              "fic-harbour-safety-act@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-019",
+            "query_id": "ld-019.q1",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s2"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-020",
+            "query_id": "ld-020.q1",
+            "category": "wrong-regime",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-020",
+            "query_id": "ld-020.q2",
+            "category": "wrong-regime",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-021",
+            "query_id": "ld-021.q1",
+            "category": "outdated",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-022",
+            "query_id": "ld-022.q1",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          },
+          {
+            "case": "ld-022",
+            "query_id": "ld-022.q2",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          }
+        ]
+      },
+      "parent": {
+        "queries": 15,
+        "scored": 7,
+        "recall": 1.0,
+        "rr": 0.9286,
+        "ndcg": 0.9473,
+        "recall_by_category": {
+          "answerable": 1.0,
+          "outdated": 1.0
+        },
+        "misses": [],
+        "no_evidence": 8,
+        "no_evidence_retrieved_something": 5,
+        "per_query": [
+          {
+            "case": "ld-012",
+            "query_id": "ld-012.q1",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 7,
+            "relevant": [
+              "fic-orchid-fleet-memo@v1#s1"
+            ],
+            "retrieved": [
+              "fic-orchid-fleet-memo@v1#s1",
+              "fic-orchid-fleet-memo@v1#s2"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-012",
+            "query_id": "ld-012.q2",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 7,
+            "relevant": [
+              "fic-orchid-fleet-memo@v1#s1"
+            ],
+            "retrieved": [
+              "fic-orchid-fleet-memo@v1#s2",
+              "fic-orchid-fleet-memo@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 0.5,
+            "ndcg": 0.6309
+          },
+          {
+            "case": "ld-013",
+            "query_id": "ld-013.q1",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          },
+          {
+            "case": "ld-014",
+            "query_id": "ld-014.q1",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 7,
+            "relevant": [
+              "fic-orchid-fleet-memo@v1#s2"
+            ],
+            "retrieved": [
+              "fic-orchid-fleet-memo@v1#s2",
+              "fic-orchid-fleet-memo@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-015",
+            "query_id": "ld-015.q1",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-safety-act@v2#s1"
+            ]
+          },
+          {
+            "case": "ld-016",
+            "query_id": "ld-016.q1",
+            "category": "outdated",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          },
+          {
+            "case": "ld-017",
+            "query_id": "ld-017.q1",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s2"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s2",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-017",
+            "query_id": "ld-017.q2",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s2"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-018",
+            "query_id": "ld-018.q1",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v1#s2"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v1#s2",
+              "fic-harbour-safety-act@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-019",
+            "query_id": "ld-019.q1",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s2"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-020",
+            "query_id": "ld-020.q1",
+            "category": "wrong-regime",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-020",
+            "query_id": "ld-020.q2",
+            "category": "wrong-regime",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-021",
+            "query_id": "ld-021.q1",
+            "category": "outdated",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-022",
+            "query_id": "ld-022.q1",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          },
+          {
+            "case": "ld-022",
+            "query_id": "ld-022.q2",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          }
+        ]
+      },
+      "graph": {
+        "queries": 15,
+        "scored": 7,
+        "recall": 1.0,
+        "rr": 0.9286,
+        "ndcg": 0.9473,
+        "recall_by_category": {
+          "answerable": 1.0,
+          "outdated": 1.0
+        },
+        "misses": [],
+        "no_evidence": 8,
+        "no_evidence_retrieved_something": 5,
+        "per_query": [
+          {
+            "case": "ld-012",
+            "query_id": "ld-012.q1",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 7,
+            "relevant": [
+              "fic-orchid-fleet-memo@v1#s1"
+            ],
+            "retrieved": [
+              "fic-orchid-fleet-memo@v1#s1",
+              "fic-orchid-fleet-memo@v1#s2"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-012",
+            "query_id": "ld-012.q2",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 7,
+            "relevant": [
+              "fic-orchid-fleet-memo@v1#s1"
+            ],
+            "retrieved": [
+              "fic-orchid-fleet-memo@v1#s2",
+              "fic-orchid-fleet-memo@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 0.5,
+            "ndcg": 0.6309
+          },
+          {
+            "case": "ld-013",
+            "query_id": "ld-013.q1",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-safety-act@v2#s1"
+            ]
+          },
+          {
+            "case": "ld-014",
+            "query_id": "ld-014.q1",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 7,
+            "relevant": [
+              "fic-orchid-fleet-memo@v1#s2"
+            ],
+            "retrieved": [
+              "fic-orchid-fleet-memo@v1#s2",
+              "fic-orchid-fleet-memo@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-015",
+            "query_id": "ld-015.q1",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          },
+          {
+            "case": "ld-016",
+            "query_id": "ld-016.q1",
+            "category": "outdated",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-safety-act@v2#s1"
+            ]
+          },
+          {
+            "case": "ld-017",
+            "query_id": "ld-017.q1",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s2"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-017",
+            "query_id": "ld-017.q2",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s2"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-018",
+            "query_id": "ld-018.q1",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v1#s2"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v1#s2",
+              "fic-harbour-safety-act@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-019",
+            "query_id": "ld-019.q1",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s2"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-020",
+            "query_id": "ld-020.q1",
+            "category": "wrong-regime",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-020",
+            "query_id": "ld-020.q2",
+            "category": "wrong-regime",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-021",
+            "query_id": "ld-021.q1",
+            "category": "outdated",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-022",
+            "query_id": "ld-022.q1",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          },
+          {
+            "case": "ld-022",
+            "query_id": "ld-022.q2",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          }
+        ]
+      }
+    },
+    "test": {
+      "bm25": {
+        "queries": 19,
+        "scored": 12,
+        "recall": 0.8472,
+        "rr": 0.9583,
+        "ndcg": 0.9048,
+        "recall_by_category": {
+          "answerable": 0.875,
+          "wrong-regime": 1.0,
+          "outdated": 1.0,
+          "conflicting-source": 0.5556
+        },
+        "misses": [
+          {
+            "query_id": "ld-004.q1",
+            "missing": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-inspection-guidance@v1#s2"
+            ]
+          },
+          {
+            "query_id": "ld-004.q2",
+            "missing": [
+              "fic-harbour-inspection-guidance@v1#s2"
+            ]
+          },
+          {
+            "query_id": "ld-005.q1",
+            "missing": [
+              "fic-harbour-safety-act@v2#s1"
+            ]
+          },
+          {
+            "query_id": "ld-006.q1",
+            "missing": [
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          }
+        ],
+        "no_evidence": 7,
+        "no_evidence_retrieved_something": 2,
+        "per_query": [
+          {
+            "case": "ld-001",
+            "query_id": "ld-001.q1",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-001",
+            "query_id": "ld-001.q2",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-safety-act@v2#s3"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-002",
+            "query_id": "ld-002.q1",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v1#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v1#s1",
+              "fic-harbour-safety-act@v1#s3"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-002",
+            "query_id": "ld-002.q2",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v1#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v1#s1",
+              "fic-harbour-safety-act@v1#s2"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-003",
+            "query_id": "ld-003.q1",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-safety-act@v2#s3"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-004",
+            "query_id": "ld-004.q1",
+            "category": "conflicting-source",
+            "outcome": "report-conflict",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-inspection-guidance@v1#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-safety-act@v2#s3"
+            ],
+            "recall": 0.3333,
+            "rr": 1.0,
+            "ndcg": 0.6131
+          },
+          {
+            "case": "ld-004",
+            "query_id": "ld-004.q2",
+            "category": "conflicting-source",
+            "outcome": "report-conflict",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-inspection-guidance@v1#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 0.6667,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-005",
+            "query_id": "ld-005.q1",
+            "category": "conflicting-source",
+            "outcome": "report-conflict",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-inspection-guidance@v1#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-inspection-guidance@v1#s2",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 0.6667,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-006",
+            "query_id": "ld-006.q1",
+            "category": "answerable",
+            "outcome": "clarify",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-safety-act@v2#s3"
+            ],
+            "recall": 0.5,
+            "rr": 1.0,
+            "ndcg": 0.6131
+          },
+          {
+            "case": "ld-006",
+            "query_id": "ld-006.q2",
+            "category": "answerable",
+            "outcome": "clarify",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-007",
+            "query_id": "ld-007.q1",
+            "category": "wrong-regime",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "recall": 1.0,
+            "rr": 0.5,
+            "ndcg": 0.6309
+          },
+          {
+            "case": "ld-007",
+            "query_id": "ld-007.q2",
+            "category": "wrong-regime",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-008",
+            "query_id": "ld-008.q1",
+            "category": "unknown-metadata",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-008",
+            "query_id": "ld-008.q2",
+            "category": "unknown-metadata",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-009",
+            "query_id": "ld-009.q1",
+            "category": "unknown-metadata",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-009",
+            "query_id": "ld-009.q2",
+            "category": "unknown-metadata",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-010",
+            "query_id": "ld-010.q1",
+            "category": "outdated",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-011",
+            "query_id": "ld-011.q1",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          },
+          {
+            "case": "ld-011",
+            "query_id": "ld-011.q2",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          }
+        ]
+      },
+      "tfidf": {
+        "queries": 19,
+        "scored": 12,
+        "recall": 0.8472,
+        "rr": 0.9583,
+        "ndcg": 0.9048,
+        "recall_by_category": {
+          "answerable": 0.875,
+          "wrong-regime": 1.0,
+          "outdated": 1.0,
+          "conflicting-source": 0.5556
+        },
+        "misses": [
+          {
+            "query_id": "ld-004.q1",
+            "missing": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-inspection-guidance@v1#s2"
+            ]
+          },
+          {
+            "query_id": "ld-004.q2",
+            "missing": [
+              "fic-harbour-inspection-guidance@v1#s2"
+            ]
+          },
+          {
+            "query_id": "ld-005.q1",
+            "missing": [
+              "fic-harbour-safety-act@v2#s1"
+            ]
+          },
+          {
+            "query_id": "ld-006.q1",
+            "missing": [
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          }
+        ],
+        "no_evidence": 7,
+        "no_evidence_retrieved_something": 2,
+        "per_query": [
+          {
+            "case": "ld-001",
+            "query_id": "ld-001.q1",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-001",
+            "query_id": "ld-001.q2",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-safety-act@v2#s3"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-002",
+            "query_id": "ld-002.q1",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v1#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v1#s1",
+              "fic-harbour-safety-act@v1#s3"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-002",
+            "query_id": "ld-002.q2",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v1#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v1#s1",
+              "fic-harbour-safety-act@v1#s2"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-003",
+            "query_id": "ld-003.q1",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-safety-act@v2#s3"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-004",
+            "query_id": "ld-004.q1",
+            "category": "conflicting-source",
+            "outcome": "report-conflict",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-inspection-guidance@v1#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-safety-act@v2#s3"
+            ],
+            "recall": 0.3333,
+            "rr": 1.0,
+            "ndcg": 0.6131
+          },
+          {
+            "case": "ld-004",
+            "query_id": "ld-004.q2",
+            "category": "conflicting-source",
+            "outcome": "report-conflict",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-inspection-guidance@v1#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 0.6667,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-005",
+            "query_id": "ld-005.q1",
+            "category": "conflicting-source",
+            "outcome": "report-conflict",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-inspection-guidance@v1#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-inspection-guidance@v1#s2",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 0.6667,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-006",
+            "query_id": "ld-006.q1",
+            "category": "answerable",
+            "outcome": "clarify",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-safety-act@v2#s3"
+            ],
+            "recall": 0.5,
+            "rr": 1.0,
+            "ndcg": 0.6131
+          },
+          {
+            "case": "ld-006",
+            "query_id": "ld-006.q2",
+            "category": "answerable",
+            "outcome": "clarify",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-007",
+            "query_id": "ld-007.q1",
+            "category": "wrong-regime",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "recall": 1.0,
+            "rr": 0.5,
+            "ndcg": 0.6309
+          },
+          {
+            "case": "ld-007",
+            "query_id": "ld-007.q2",
+            "category": "wrong-regime",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-008",
+            "query_id": "ld-008.q1",
+            "category": "unknown-metadata",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-008",
+            "query_id": "ld-008.q2",
+            "category": "unknown-metadata",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-009",
+            "query_id": "ld-009.q1",
+            "category": "unknown-metadata",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-009",
+            "query_id": "ld-009.q2",
+            "category": "unknown-metadata",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-010",
+            "query_id": "ld-010.q1",
+            "category": "outdated",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-011",
+            "query_id": "ld-011.q1",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          },
+          {
+            "case": "ld-011",
+            "query_id": "ld-011.q2",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          }
+        ]
+      },
+      "hybrid": {
+        "queries": 19,
+        "scored": 12,
+        "recall": 0.8472,
+        "rr": 0.9583,
+        "ndcg": 0.9048,
+        "recall_by_category": {
+          "answerable": 0.875,
+          "wrong-regime": 1.0,
+          "outdated": 1.0,
+          "conflicting-source": 0.5556
+        },
+        "misses": [
+          {
+            "query_id": "ld-004.q1",
+            "missing": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-inspection-guidance@v1#s2"
+            ]
+          },
+          {
+            "query_id": "ld-004.q2",
+            "missing": [
+              "fic-harbour-inspection-guidance@v1#s2"
+            ]
+          },
+          {
+            "query_id": "ld-005.q1",
+            "missing": [
+              "fic-harbour-safety-act@v2#s1"
+            ]
+          },
+          {
+            "query_id": "ld-006.q1",
+            "missing": [
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          }
+        ],
+        "no_evidence": 7,
+        "no_evidence_retrieved_something": 2,
+        "per_query": [
+          {
+            "case": "ld-001",
+            "query_id": "ld-001.q1",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-001",
+            "query_id": "ld-001.q2",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-safety-act@v2#s3"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-002",
+            "query_id": "ld-002.q1",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v1#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v1#s1",
+              "fic-harbour-safety-act@v1#s3"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-002",
+            "query_id": "ld-002.q2",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v1#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v1#s1",
+              "fic-harbour-safety-act@v1#s2"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-003",
+            "query_id": "ld-003.q1",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-safety-act@v2#s3"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-004",
+            "query_id": "ld-004.q1",
+            "category": "conflicting-source",
+            "outcome": "report-conflict",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-inspection-guidance@v1#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-safety-act@v2#s3"
+            ],
+            "recall": 0.3333,
+            "rr": 1.0,
+            "ndcg": 0.6131
+          },
+          {
+            "case": "ld-004",
+            "query_id": "ld-004.q2",
+            "category": "conflicting-source",
+            "outcome": "report-conflict",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-inspection-guidance@v1#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 0.6667,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-005",
+            "query_id": "ld-005.q1",
+            "category": "conflicting-source",
+            "outcome": "report-conflict",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-inspection-guidance@v1#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-inspection-guidance@v1#s2",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 0.6667,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-006",
+            "query_id": "ld-006.q1",
+            "category": "answerable",
+            "outcome": "clarify",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-safety-act@v2#s3"
+            ],
+            "recall": 0.5,
+            "rr": 1.0,
+            "ndcg": 0.6131
+          },
+          {
+            "case": "ld-006",
+            "query_id": "ld-006.q2",
+            "category": "answerable",
+            "outcome": "clarify",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-007",
+            "query_id": "ld-007.q1",
+            "category": "wrong-regime",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "recall": 1.0,
+            "rr": 0.5,
+            "ndcg": 0.6309
+          },
+          {
+            "case": "ld-007",
+            "query_id": "ld-007.q2",
+            "category": "wrong-regime",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-008",
+            "query_id": "ld-008.q1",
+            "category": "unknown-metadata",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-008",
+            "query_id": "ld-008.q2",
+            "category": "unknown-metadata",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-009",
+            "query_id": "ld-009.q1",
+            "category": "unknown-metadata",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-009",
+            "query_id": "ld-009.q2",
+            "category": "unknown-metadata",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-010",
+            "query_id": "ld-010.q1",
+            "category": "outdated",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-011",
+            "query_id": "ld-011.q1",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          },
+          {
+            "case": "ld-011",
+            "query_id": "ld-011.q2",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          }
+        ]
+      },
+      "rerank": {
+        "queries": 19,
+        "scored": 12,
+        "recall": 0.8472,
+        "rr": 0.9583,
+        "ndcg": 0.9048,
+        "recall_by_category": {
+          "answerable": 0.875,
+          "wrong-regime": 1.0,
+          "outdated": 1.0,
+          "conflicting-source": 0.5556
+        },
+        "misses": [
+          {
+            "query_id": "ld-004.q1",
+            "missing": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-inspection-guidance@v1#s2"
+            ]
+          },
+          {
+            "query_id": "ld-004.q2",
+            "missing": [
+              "fic-harbour-inspection-guidance@v1#s2"
+            ]
+          },
+          {
+            "query_id": "ld-005.q1",
+            "missing": [
+              "fic-harbour-safety-act@v2#s1"
+            ]
+          },
+          {
+            "query_id": "ld-006.q1",
+            "missing": [
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          }
+        ],
+        "no_evidence": 7,
+        "no_evidence_retrieved_something": 2,
+        "per_query": [
+          {
+            "case": "ld-001",
+            "query_id": "ld-001.q1",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-001",
+            "query_id": "ld-001.q2",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-safety-act@v2#s3"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-002",
+            "query_id": "ld-002.q1",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v1#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v1#s1",
+              "fic-harbour-safety-act@v1#s3"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-002",
+            "query_id": "ld-002.q2",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v1#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v1#s1",
+              "fic-harbour-safety-act@v1#s2"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-003",
+            "query_id": "ld-003.q1",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-safety-act@v2#s3"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-004",
+            "query_id": "ld-004.q1",
+            "category": "conflicting-source",
+            "outcome": "report-conflict",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-inspection-guidance@v1#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-safety-act@v2#s3"
+            ],
+            "recall": 0.3333,
+            "rr": 1.0,
+            "ndcg": 0.6131
+          },
+          {
+            "case": "ld-004",
+            "query_id": "ld-004.q2",
+            "category": "conflicting-source",
+            "outcome": "report-conflict",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-inspection-guidance@v1#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 0.6667,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-005",
+            "query_id": "ld-005.q1",
+            "category": "conflicting-source",
+            "outcome": "report-conflict",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-inspection-guidance@v1#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-inspection-guidance@v1#s2",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 0.6667,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-006",
+            "query_id": "ld-006.q1",
+            "category": "answerable",
+            "outcome": "clarify",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-safety-act@v2#s3"
+            ],
+            "recall": 0.5,
+            "rr": 1.0,
+            "ndcg": 0.6131
+          },
+          {
+            "case": "ld-006",
+            "query_id": "ld-006.q2",
+            "category": "answerable",
+            "outcome": "clarify",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-007",
+            "query_id": "ld-007.q1",
+            "category": "wrong-regime",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "recall": 1.0,
+            "rr": 0.5,
+            "ndcg": 0.6309
+          },
+          {
+            "case": "ld-007",
+            "query_id": "ld-007.q2",
+            "category": "wrong-regime",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-008",
+            "query_id": "ld-008.q1",
+            "category": "unknown-metadata",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-008",
+            "query_id": "ld-008.q2",
+            "category": "unknown-metadata",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-009",
+            "query_id": "ld-009.q1",
+            "category": "unknown-metadata",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-009",
+            "query_id": "ld-009.q2",
+            "category": "unknown-metadata",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-010",
+            "query_id": "ld-010.q1",
+            "category": "outdated",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-011",
+            "query_id": "ld-011.q1",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          },
+          {
+            "case": "ld-011",
+            "query_id": "ld-011.q2",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          }
+        ]
+      },
+      "parent": {
+        "queries": 19,
+        "scored": 12,
+        "recall": 0.8472,
+        "rr": 1.0,
+        "ndcg": 0.9355,
+        "recall_by_category": {
+          "answerable": 0.875,
+          "wrong-regime": 1.0,
+          "outdated": 1.0,
+          "conflicting-source": 0.5556
+        },
+        "misses": [
+          {
+            "query_id": "ld-004.q1",
+            "missing": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-inspection-guidance@v1#s2"
+            ]
+          },
+          {
+            "query_id": "ld-004.q2",
+            "missing": [
+              "fic-harbour-inspection-guidance@v1#s2"
+            ]
+          },
+          {
+            "query_id": "ld-005.q1",
+            "missing": [
+              "fic-harbour-safety-act@v2#s1"
+            ]
+          },
+          {
+            "query_id": "ld-006.q1",
+            "missing": [
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          }
+        ],
+        "no_evidence": 7,
+        "no_evidence_retrieved_something": 2,
+        "per_query": [
+          {
+            "case": "ld-001",
+            "query_id": "ld-001.q1",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-001",
+            "query_id": "ld-001.q2",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-safety-act@v2#s3"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-002",
+            "query_id": "ld-002.q1",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v1#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v1#s1",
+              "fic-harbour-safety-act@v1#s3"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-002",
+            "query_id": "ld-002.q2",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v1#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v1#s1",
+              "fic-harbour-safety-act@v1#s2"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-003",
+            "query_id": "ld-003.q1",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-safety-act@v2#s3"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-004",
+            "query_id": "ld-004.q1",
+            "category": "conflicting-source",
+            "outcome": "report-conflict",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-inspection-guidance@v1#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-safety-act@v2#s3"
+            ],
+            "recall": 0.3333,
+            "rr": 1.0,
+            "ndcg": 0.6131
+          },
+          {
+            "case": "ld-004",
+            "query_id": "ld-004.q2",
+            "category": "conflicting-source",
+            "outcome": "report-conflict",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-inspection-guidance@v1#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 0.6667,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-005",
+            "query_id": "ld-005.q1",
+            "category": "conflicting-source",
+            "outcome": "report-conflict",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-inspection-guidance@v1#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-inspection-guidance@v1#s2",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 0.6667,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-006",
+            "query_id": "ld-006.q1",
+            "category": "answerable",
+            "outcome": "clarify",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-safety-act@v2#s3"
+            ],
+            "recall": 0.5,
+            "rr": 1.0,
+            "ndcg": 0.6131
+          },
+          {
+            "case": "ld-006",
+            "query_id": "ld-006.q2",
+            "category": "answerable",
+            "outcome": "clarify",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-007",
+            "query_id": "ld-007.q1",
+            "category": "wrong-regime",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-007",
+            "query_id": "ld-007.q2",
+            "category": "wrong-regime",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-008",
+            "query_id": "ld-008.q1",
+            "category": "unknown-metadata",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-008",
+            "query_id": "ld-008.q2",
+            "category": "unknown-metadata",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-009",
+            "query_id": "ld-009.q1",
+            "category": "unknown-metadata",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-009",
+            "query_id": "ld-009.q2",
+            "category": "unknown-metadata",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-010",
+            "query_id": "ld-010.q1",
+            "category": "outdated",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-011",
+            "query_id": "ld-011.q1",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          },
+          {
+            "case": "ld-011",
+            "query_id": "ld-011.q2",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          }
+        ]
+      },
+      "graph": {
+        "queries": 19,
+        "scored": 12,
+        "recall": 0.8472,
+        "rr": 0.9583,
+        "ndcg": 0.9048,
+        "recall_by_category": {
+          "answerable": 0.875,
+          "wrong-regime": 1.0,
+          "outdated": 1.0,
+          "conflicting-source": 0.5556
+        },
+        "misses": [
+          {
+            "query_id": "ld-004.q1",
+            "missing": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-inspection-guidance@v1#s2"
+            ]
+          },
+          {
+            "query_id": "ld-004.q2",
+            "missing": [
+              "fic-harbour-inspection-guidance@v1#s2"
+            ]
+          },
+          {
+            "query_id": "ld-005.q1",
+            "missing": [
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          },
+          {
+            "query_id": "ld-006.q1",
+            "missing": [
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          }
+        ],
+        "no_evidence": 7,
+        "no_evidence_retrieved_something": 2,
+        "per_query": [
+          {
+            "case": "ld-001",
+            "query_id": "ld-001.q1",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-001",
+            "query_id": "ld-001.q2",
+            "category": "answerable",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-safety-act@v2#s3"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-002",
+            "query_id": "ld-002.q1",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v1#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v1#s1",
+              "fic-harbour-safety-act@v1#s3"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-002",
+            "query_id": "ld-002.q2",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v1#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v1#s1",
+              "fic-harbour-safety-act@v1#s2"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-003",
+            "query_id": "ld-003.q1",
+            "category": "outdated",
+            "outcome": "answer",
+            "eligible": 3,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-safety-act@v2#s3"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-004",
+            "query_id": "ld-004.q1",
+            "category": "conflicting-source",
+            "outcome": "report-conflict",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-inspection-guidance@v1#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-safety-act@v2#s3"
+            ],
+            "recall": 0.3333,
+            "rr": 1.0,
+            "ndcg": 0.6131
+          },
+          {
+            "case": "ld-004",
+            "query_id": "ld-004.q2",
+            "category": "conflicting-source",
+            "outcome": "report-conflict",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-inspection-guidance@v1#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 0.6667,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-005",
+            "query_id": "ld-005.q1",
+            "category": "conflicting-source",
+            "outcome": "report-conflict",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-inspection-guidance@v1#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-inspection-guidance@v1#s2",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "recall": 0.6667,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-006",
+            "query_id": "ld-006.q1",
+            "category": "answerable",
+            "outcome": "clarify",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-safety-act@v2#s3"
+            ],
+            "recall": 0.5,
+            "rr": 1.0,
+            "ndcg": 0.6131
+          },
+          {
+            "case": "ld-006",
+            "query_id": "ld-006.q2",
+            "category": "answerable",
+            "outcome": "clarify",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-007",
+            "query_id": "ld-007.q1",
+            "category": "wrong-regime",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-inspection-guidance@v1#s1",
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "recall": 1.0,
+            "rr": 0.5,
+            "ndcg": 0.6309
+          },
+          {
+            "case": "ld-007",
+            "query_id": "ld-007.q2",
+            "category": "wrong-regime",
+            "outcome": "answer",
+            "eligible": 5,
+            "relevant": [
+              "fic-harbour-safety-act@v2#s1"
+            ],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ],
+            "recall": 1.0,
+            "rr": 1.0,
+            "ndcg": 1.0
+          },
+          {
+            "case": "ld-008",
+            "query_id": "ld-008.q1",
+            "category": "unknown-metadata",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-008",
+            "query_id": "ld-008.q2",
+            "category": "unknown-metadata",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-009",
+            "query_id": "ld-009.q1",
+            "category": "unknown-metadata",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-009",
+            "query_id": "ld-009.q2",
+            "category": "unknown-metadata",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-010",
+            "query_id": "ld-010.q1",
+            "category": "outdated",
+            "outcome": "abstain",
+            "eligible": 0,
+            "relevant": [],
+            "retrieved": []
+          },
+          {
+            "case": "ld-011",
+            "query_id": "ld-011.q1",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          },
+          {
+            "case": "ld-011",
+            "query_id": "ld-011.q2",
+            "category": "unanswerable",
+            "outcome": "abstain",
+            "eligible": 5,
+            "relevant": [],
+            "retrieved": [
+              "fic-harbour-safety-act@v2#s1",
+              "fic-harbour-inspection-guidance@v1#s1"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "graph_reach": {
+    "dev": {
+      "queries_reaching_a_target": 0,
+      "queries_keeping_a_target": 0
+    },
+    "test": {
+      "queries_reaching_a_target": 1,
+      "queries_keeping_a_target": 1
+    }
+  },
+  "test_vs_bm25": {
+    "tfidf": {
+      "recall": {
+        "cases": 7,
+        "mean_diff": 0.0,
+        "helped": 0,
+        "hurt": 0,
+        "sign_flip_p": 1.0,
+        "bootstrap_ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "rr": {
+        "cases": 7,
+        "mean_diff": 0.0,
+        "helped": 0,
+        "hurt": 0,
+        "sign_flip_p": 1.0,
+        "bootstrap_ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "ndcg": {
+        "cases": 7,
+        "mean_diff": 0.0,
+        "helped": 0,
+        "hurt": 0,
+        "sign_flip_p": 1.0,
+        "bootstrap_ci95": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "hybrid": {
+      "recall": {
+        "cases": 7,
+        "mean_diff": 0.0,
+        "helped": 0,
+        "hurt": 0,
+        "sign_flip_p": 1.0,
+        "bootstrap_ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "rr": {
+        "cases": 7,
+        "mean_diff": 0.0,
+        "helped": 0,
+        "hurt": 0,
+        "sign_flip_p": 1.0,
+        "bootstrap_ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "ndcg": {
+        "cases": 7,
+        "mean_diff": 0.0,
+        "helped": 0,
+        "hurt": 0,
+        "sign_flip_p": 1.0,
+        "bootstrap_ci95": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "rerank": {
+      "recall": {
+        "cases": 7,
+        "mean_diff": 0.0,
+        "helped": 0,
+        "hurt": 0,
+        "sign_flip_p": 1.0,
+        "bootstrap_ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "rr": {
+        "cases": 7,
+        "mean_diff": 0.0,
+        "helped": 0,
+        "hurt": 0,
+        "sign_flip_p": 1.0,
+        "bootstrap_ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "ndcg": {
+        "cases": 7,
+        "mean_diff": 0.0,
+        "helped": 0,
+        "hurt": 0,
+        "sign_flip_p": 1.0,
+        "bootstrap_ci95": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "parent": {
+      "recall": {
+        "cases": 7,
+        "mean_diff": 0.0,
+        "helped": 0,
+        "hurt": 0,
+        "sign_flip_p": 1.0,
+        "bootstrap_ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "rr": {
+        "cases": 7,
+        "mean_diff": 0.0357,
+        "helped": 1,
+        "hurt": 0,
+        "sign_flip_p": 1.0,
+        "bootstrap_ci95": [
+          0.0,
+          0.1071
+        ]
+      },
+      "ndcg": {
+        "cases": 7,
+        "mean_diff": 0.0264,
+        "helped": 1,
+        "hurt": 0,
+        "sign_flip_p": 1.0,
+        "bootstrap_ci95": [
+          0.0,
+          0.0791
+        ]
+      }
+    },
+    "graph": {
+      "recall": {
+        "cases": 7,
+        "mean_diff": 0.0,
+        "helped": 0,
+        "hurt": 0,
+        "sign_flip_p": 1.0,
+        "bootstrap_ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "rr": {
+        "cases": 7,
+        "mean_diff": 0.0,
+        "helped": 0,
+        "hurt": 0,
+        "sign_flip_p": 1.0,
+        "bootstrap_ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "ndcg": {
+        "cases": 7,
+        "mean_diff": 0.0,
+        "helped": 0,
+        "hurt": 0,
+        "sign_flip_p": 1.0,
+        "bootstrap_ci95": [
+          0.0,
+          0.0
+        ]
+      }
+    }
+  }
+}

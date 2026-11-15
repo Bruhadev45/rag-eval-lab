@@ -16,6 +16,7 @@ in `data/runs*/`, and nothing here changes those results.
 | --- | --- |
 | `sources.json` | minirag's fictional fixture, a byte-identical copy of `examples/legal_rag/fixtures/sources.json` at minirag commit `7d45104` (see `manifest.json`). Its own [data card](https://github.com/Bruhadev45/minirag/blob/main/examples/legal_rag/DATA_CARD.md) covers the sources. |
 | `cases.json` | The cases, the declared provision groups, and the label authors and methods. |
+| `references.json` | minirag's explicit reference edges between those sources, a byte-identical copy of `examples/legal_rag/fixtures/references.json` at minirag commit `9c9d5d8`. Read only by the held-out graph variant (`rageval.legal_demo.heldout`), which pins its SHA-256; it is not part of the frozen cases or the manifest. |
 | `manifest.json` | The freeze: dataset version, a hash of each file, the per-split counts, and the usage policy. |
 
 Check the set and regenerate its report (`results/legal-demo/`):

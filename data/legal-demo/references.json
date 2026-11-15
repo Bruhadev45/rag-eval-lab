@@ -1,0 +1,22 @@
+{
+  "schema": "minirag-legal-references",
+  "schema_version": 1,
+  "fictional": true,
+  "notice": "Explicit references between the fictional sources in sources.json. Each edge records only that the quoted words name the target. It says nothing about precedence, agreement or authority. Not law and not legal advice.",
+  "references": [
+    {
+      "from": "fic-harbour-inspection-guidance@v1#s2",
+      "start": 327,
+      "end": 349,
+      "quote": "the Harbour Safety Act",
+      "to": "fic-harbour-safety-act"
+    },
+    {
+      "from": "fic-quillmouth-port-code@v1#s2",
+      "start": 261,
+      "end": 270,
+      "quote": "section 1",
+      "to": "fic-quillmouth-port-code#s1"
+    }
+  ]
+}

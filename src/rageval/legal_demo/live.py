@@ -36,7 +36,7 @@ from pathlib import Path
 from typing import Any, Final
 
 try:
-    from ragfuse import fuse, ndcg_at_k, recall_at_k, reciprocal_rank
+    from ragfuse import FusionTrace, fuse, ndcg_at_k, recall_at_k, reciprocal_rank
 except ImportError as exc:  # the owner's ragfuse, never the PyPI package of that name
     raise ImportError(
         "rageval.legal_demo.live needs the owner's ragfuse: pip install -e '.[live]'"
@@ -107,25 +107,33 @@ def _grid() -> tuple[RunConfig, ...]:
 GRID: Final = _grid()
 
 
-def retrieve(dataset: Dataset, case: Case, query: str, config: RunConfig) -> tuple[str, ...]:
-    """The ``context_k`` passage ids ``config`` keeps for ``query``, best first."""
+def hybrid_trace(dataset: Dataset, case: Case, query: str, config: RunConfig) -> FusionTrace:
+    """Weighted RRF of both retrievers over the eligible pool, ``context_k`` kept."""
+    weight = config.bm25_weight
+    if weight is None:
+        raise LiveRunError("hybrid_trace needs a hybrid configuration")
     pool = eligible_passages(dataset, case)
     lists: dict[str, Ranking] = {
         name: RANKERS[name](pool, query, config.depth) for name in RETRIEVERS
     }
-    weight = config.bm25_weight
-    if weight is not None:  # RunConfig sets a weight for hybrid and only for hybrid
-        trace = fuse(
-            lists,
-            method="rrf",
-            k=RRF_K,
-            weights={"bm25": weight, "tfidf": 1 - weight},
-            eligible=set(pool),
-            top_k=config.context_k,
-        )
-        kept = trace.keys
+    return fuse(
+        lists,
+        method="rrf",
+        k=RRF_K,
+        weights={"bm25": weight, "tfidf": 1 - weight},
+        eligible=set(pool),
+        top_k=config.context_k,
+    )
+
+
+def retrieve(dataset: Dataset, case: Case, query: str, config: RunConfig) -> tuple[str, ...]:
+    """The ``context_k`` passage ids ``config`` keeps for ``query``, best first."""
+    pool = eligible_passages(dataset, case)
+    if config.bm25_weight is not None:  # RunConfig sets a weight for hybrid and only for hybrid
+        kept = hybrid_trace(dataset, case, query, config).keys
     else:
-        kept = tuple(pid for pid, _ in lists[config.system][: config.context_k])
+        ranking = RANKERS[config.system](pool, query, config.depth)
+        kept = tuple(pid for pid, _ in ranking[: config.context_k])
     for pid in kept:
         # Section ids are s<N> (the loader checks), so the last "#" splits the label.
         source = dataset.sources.get(pid.rpartition("#")[0])

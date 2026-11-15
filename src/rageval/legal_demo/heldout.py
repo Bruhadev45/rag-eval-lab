@@ -1,11 +1,14 @@
-"""Held-out retrieval ablation: frozen variants, scored once on the test split.
+"""Held-out retrieval ablation: predeclared variants, scored on the test split.
 
 ``python -m rageval.legal_demo.heldout`` re-runs the dev tuning of
 :mod:`~rageval.legal_demo.live`, refuses to go on unless it still selects the
 frozen configuration :data:`FROZEN_SHA`, then scores every variant in
 :data:`VARIANTS` on dev and on test and writes ``results/legal-demo/live/``.
-Nothing is chosen from test numbers: the variants and their settings were fixed
-before test was run, and each output lists every test run made.
+Nothing is chosen from test numbers. Only ``bm25``'s depth and context were
+selected on dev; the other variants and their settings (the hybrid weight, the
+reranker, the child split, the edges) were declared before test was first run,
+not tuned. The command is deterministic, and each rerun (as the tests do)
+re-scores test with the same result; the outputs list what changed between runs.
 
 All variants keep ``context_k = 2`` passages from at most ``depth = 3``
 candidates, the frozen dev selection, so they differ only in how they rank:
@@ -15,8 +18,9 @@ candidates, the frozen dev selection, so they differ only in how they rank:
 - ``rerank``: the hybrid candidates reordered by ragfuse's ``rerank`` with a
   *lexical* score, the share of distinct query words a passage contains. No
   cross-encoder or other model was run.
-- ``parent``: BM25 over child passages (each line and sentence of a section),
-  each section scored by its best child.
+- ``parent``: BM25 over child passages (each line and sentence of a section;
+  a heading's number such as ``2.`` splits off as its own child), each section
+  scored by its best child.
 - ``graph``: BM25 seeds, each followed by the sections its explicit reference
   edges name (``data/legal-demo/references.json``, a byte-identical copy of
   minirag's file), one hop, inside the eligible pool only.
@@ -27,8 +31,12 @@ because no embedding model was run.
 
 Uncertainty is paired by **case**, since a case's paraphrases are not
 independent: per-case means, an exact two-sided sign-flip permutation test and
-a seeded case bootstrap 95% interval (``rageval.stats``) for each variant minus ``bm25``. Test has
-only seven cases with evidence, so these intervals are wide by construction.
+a seeded case bootstrap 95% interval (``rageval.stats``) for each variant minus
+``bm25``. Headline scores are means over queries, so they differ from the
+case-level mean differences. Test has only seven cases with evidence: an
+interval of ``[0, 0]`` means no case differed, not that the difference is known.
+A missed query is labelled ``at-ceiling`` when its recall equals the most that
+``context_k`` passages can reach, and ``ranking`` otherwise.
 """
 
 from __future__ import annotations
@@ -41,17 +49,15 @@ from collections.abc import Callable, Sequence
 from dataclasses import asdict
 from itertools import product
 from pathlib import Path
-from typing import Any, Final
-
-from ragfuse import fuse, rerank
+from typing import Any, Final, TypeAlias
 
 from ..stats import paired_comparison
 from .live import (
     METRIC_DECIMALS,
     OUT_DIR,
-    RRF_K,
     LiveRunError,
     RunConfig,
+    hybrid_trace,
     provenance,
     retrieve,
     score_record,
@@ -59,12 +65,20 @@ from .live import (
 )
 from .model import CATEGORIES, DATA_DIR, Case, Dataset, DatasetError, ineligibility
 from .report import ROOT
-from .retrievers import RANKERS, bm25, eligible_passages, tokens
+from .retrievers import bm25, eligible_passages, tokens
 from .validate import load_dataset
+
+try:
+    from ragfuse import rerank
+except ImportError as exc:  # the owner's ragfuse, never the PyPI package of that name
+    raise ImportError(
+        "rageval.legal_demo.heldout needs the owner's ragfuse: pip install -e '.[live]'"
+    ) from exc
 
 FROZEN_SHA: Final = "sha256:a38309eefe854f5046713659d44ea5b6d961e9dfb44e605dacae8ee53cc59ae1"
 FROZEN: Final = RunConfig("bm25", 3, 2)
 HYBRID: Final = RunConfig("hybrid", 3, 2, 0.5)
+HYBRID_CANDIDATES: Final = RunConfig("hybrid", 3, 3, 0.5)  # rerank reorders all depth-3 hits
 METRICS: Final = ("recall", "rr", "ndcg")
 BOOTSTRAP_RESAMPLES: Final = 10_000
 BOOTSTRAP_SEED: Final = 70
@@ -76,19 +90,20 @@ REFERENCES_UPSTREAM: Final = {
     "commit": "9c9d5d8c07d3d9f2ef11049d904cd83283474690",
     "file_sha256": "18348fc818da971d45edc8a428fca6427ce7ee5423eba60f6ce9cc8d0193d1fd",
 }
-# Every test run made. The command is deterministic, so a rerun repeats run 1's scores.
+# What changed between test runs. Kept by hand: the code cannot see its own history.
 TEST_RUN_LOG: Final = (
-    "2026-11-15 run 1: all six variants, fixed beforehand, each query once.",
+    "First test run: the six variants as declared, before any test number was seen.",
     (
-        "After run 1: a graph reach count, the shared rageval.stats bootstrap and wording;"
-        " no ranking code or setting changed."
+        "Later runs, all after review: diagnostics (graph reach, miss kinds), the shared"
+        " rageval.stats bootstrap, refactors and wording. Every variant keeps the same"
+        " passages for every query as in the first run."
     ),
 )
 MAX_REFERENCE_BYTES: Final = 65_536
 _CHILD_SPLIT: Final = re.compile(r"(?<=[.;:])\s+|\n+")
 
-Edge = tuple[str, str, str | None]  # citing label, target family, target section or None
-Retrieve = Callable[[Dataset, Case, str, tuple[Edge, ...]], tuple[str, ...]]
+Edge: TypeAlias = "tuple[str, str, str | None]"  # citing label, family, section or None
+Retrieve: TypeAlias = Callable[[Dataset, Case, str, tuple[Edge, ...]], tuple[str, ...]]
 
 
 def load_references(root: Path, dataset: Dataset) -> tuple[Edge, ...]:
@@ -101,12 +116,23 @@ def load_references(root: Path, dataset: Dataset) -> tuple[Edge, ...]:
     """
     path = root / REFERENCES
     try:
-        raw = path.read_bytes()[: MAX_REFERENCE_BYTES + 1]
+        with path.open("rb") as handle:
+            raw = handle.read(MAX_REFERENCE_BYTES + 1)
     except OSError as exc:
         raise DatasetError(f"cannot read {REFERENCES} ({type(exc).__name__})") from exc
+    if len(raw) > MAX_REFERENCE_BYTES:
+        raise DatasetError(f"{REFERENCES} is larger than {MAX_REFERENCE_BYTES} bytes")
     if hashlib.sha256(raw).hexdigest() != REFERENCES_UPSTREAM["file_sha256"]:
         raise DatasetError(f"{REFERENCES} is not the frozen copy of minirag's file")
-    entries = json.loads(raw)["references"]
+    try:
+        return _parse_references(json.loads(raw)["references"], dataset)
+    except (ValueError, KeyError, TypeError, AttributeError) as exc:
+        if isinstance(exc, DatasetError):
+            raise
+        raise DatasetError(f"{REFERENCES} is malformed ({type(exc).__name__})") from None
+
+
+def _parse_references(entries: list[dict[str, str]], dataset: Dataset) -> tuple[Edge, ...]:
     sections = {
         (source.family_id, sid) for source in dataset.sources.values() for sid in source.sections
     }
@@ -140,16 +166,7 @@ def _config(config: RunConfig) -> Retrieve:
 
 def _rerank(dataset: Dataset, case: Case, query: str, _edges: tuple[Edge, ...]) -> tuple[str, ...]:
     pool = eligible_passages(dataset, case)
-    lists = {name: RANKERS[name](pool, query, HYBRID.depth) for name in RANKERS}
-    weight = HYBRID.bm25_weight or 0.5
-    trace = fuse(
-        lists,
-        method="rrf",
-        k=RRF_K,
-        weights={"bm25": weight, "tfidf": 1 - weight},
-        eligible=set(pool),
-        top_k=HYBRID.depth,
-    )
+    trace = hybrid_trace(dataset, case, query, HYBRID_CANDIDATES)
     asked = set(tokens(query))
     coverage = {
         key: len(asked & set(tokens(pool[key]))) / len(asked) if asked else 0.0
@@ -171,7 +188,7 @@ def _parent(dataset: Dataset, case: Case, query: str, _edges: tuple[Edge, ...]) 
         parent = child_id.rpartition("/")[0]
         if parent not in parents:
             parents.append(parent)
-    return _checked(dataset, case, parents[: FROZEN.depth][: FROZEN.context_k])
+    return _checked(dataset, case, parents[: FROZEN.context_k])
 
 
 def graph_walk(
@@ -194,8 +211,12 @@ def graph_walk(
             if dataset.sources[pid.rpartition("#")[0]].family_id == family
             and (section is None or pid.rpartition("#")[2] == section)
         ]
-        reached += [pid for pid in targets if pid not in reached]
-        walk += [pid for pid in (seed, *targets) if pid not in walk]
+        for pid in targets:
+            if pid not in reached:
+                reached.append(pid)
+        for pid in (seed, *targets):
+            if pid not in walk:
+                walk.append(pid)
     return walk, reached
 
 
@@ -204,14 +225,20 @@ def _graph(dataset: Dataset, case: Case, query: str, edges: tuple[Edge, ...]) ->
 
 
 def graph_reach(dataset: Dataset, split: str, edges: tuple[Edge, ...]) -> dict[str, int]:
-    """How often an edge fired on ``split``: queries reaching a target, and keeping one."""
-    reached = kept = 0
+    """How often an edge fired on ``split``.
+
+    Counts queries whose seeds reach a target, and queries whose kept context
+    differs from plain BM25's because of one. A target that is also a seed adds
+    nothing, so it does not count as added.
+    """
+    reached = added = 0
     for case in (c for c in dataset.cases if c.split == split):
         for query in case.queries:
             walk, targets = graph_walk(dataset, case, query, edges)
             reached += bool(targets)
-            kept += any(pid in targets for pid in walk[: FROZEN.context_k])
-    return {"queries_reaching_a_target": reached, "queries_keeping_a_target": kept}
+            plain = retrieve(dataset, case, query, FROZEN)
+            added += tuple(walk[: FROZEN.context_k]) != plain
+    return {"queries_reaching_a_target": reached, "queries_where_a_target_changed_context": added}
 
 
 VARIANTS: Final[dict[str, tuple[str, Retrieve]]] = {
@@ -235,7 +262,7 @@ def score(
     _, fetch = VARIANTS[name]
     records = []
     for case in (c for c in dataset.cases if c.split == split):
-        for qid, query in zip(case.query_ids, case.queries):
+        for qid, query in zip(case.query_ids, case.queries, strict=True):
             kept = fetch(dataset, case, query, edges)
             record = score_record(dataset, case, qid, kept, FROZEN.context_k)
             records.append({"case": case.id, **record})
@@ -252,7 +279,13 @@ def _summary(records: list[dict[str, Any]]) -> dict[str, Any]:
         if any(r["category"] == cat for r in scored)
     }
     misses = [
-        {"query_id": r["query_id"], "missing": sorted(set(r["relevant"]) - set(r["retrieved"]))}
+        {
+            "query_id": r["query_id"],
+            "recall": r["recall"],
+            "ceiling": ceiling(r),
+            "kind": "at-ceiling" if r["recall"] >= ceiling(r) else "ranking",
+            "missing": sorted(set(r["relevant"]) - set(r["retrieved"])),
+        }
         for r in scored
         if set(r["relevant"]) - set(r["retrieved"])
     ]
@@ -266,6 +299,11 @@ def _summary(records: list[dict[str, Any]]) -> dict[str, Any]:
         "no_evidence_retrieved_something": sum(1 for r in unscored if r["retrieved"]),
         "per_query": records,
     }
+
+
+def ceiling(record: dict[str, Any]) -> float:
+    """The most recall ``context_k`` passages can reach for this query, as rounded for output."""
+    return round(min(1.0, FROZEN.context_k / len(record["relevant"])), METRIC_DECIMALS)
 
 
 def _mean(values: Sequence[float]) -> float | None:
@@ -294,9 +332,11 @@ def paired(base: dict[str, float], other: dict[str, float]) -> dict[str, Any]:
         raise LiveRunError(f"exact sign-flip enumeration is capped at {MAX_EXACT_CASES} cases")
     diffs = [other[c] - base[c] for c in base]
     observed = abs(sum(diffs))
-    flips = list(product((1, -1), repeat=len(diffs)))
+    patterns = 2 ** len(diffs)
     extreme = sum(
-        1 for signs in flips if abs(sum(s * d for s, d in zip(signs, diffs))) >= observed - 1e-12
+        1
+        for signs in product((1, -1), repeat=len(diffs))
+        if abs(sum(s * d for s, d in zip(signs, diffs))) >= observed - 1e-12
     )
     boot = paired_comparison(
         list(base.values()),
@@ -310,7 +350,7 @@ def paired(base: dict[str, float], other: dict[str, float]) -> dict[str, Any]:
         "mean_diff": round(boot.delta, r),
         "helped": sum(1 for d in diffs if d > 1e-12),
         "hurt": sum(1 for d in diffs if d < -1e-12),
-        "sign_flip_p": round(extreme / len(flips), r),
+        "sign_flip_p": round(extreme / patterns, r),
         "bootstrap_ci95": [round(boot.ci_low, r), round(boot.ci_high, r)],
     }
 
@@ -368,9 +408,11 @@ def render_markdown(result: dict[str, Any]) -> str:
         "Fictional data, not law and not legal advice. Generated by",
         "`python -m rageval.legal_demo.heldout`; edits here are overwritten.",
         f"Each variant ran on the {first['queries']} test queries ({first['scored']} with evidence,",
-        f"from {len(case_means(first, 'recall'))} cases). The settings were fixed on dev before"
-        + " test was run:",
-        f"depth {FROZEN.depth}, context {FROZEN.context_k}, the frozen dev selection `{FROZEN_SHA}`.",
+        f"from {len(case_means(first, 'recall'))} cases), at depth {FROZEN.depth} and context"
+        + f" {FROZEN.context_k}.",
+        f"Only `bm25`'s depth and context were selected on dev (`{FROZEN_SHA}`);",
+        "the other variants' settings were declared before test was first run, not tuned.",
+        "The command is deterministic: every rerun re-scores test with the same result.",
         "",
         "Lexical only: no embedding, cross-encoder or language model was run, so there is",
         "no learned-dense row. Seven test cases cannot separate small differences; these",
@@ -380,7 +422,7 @@ def render_markdown(result: dict[str, Any]) -> str:
         + f"`{REFERENCES_UPSTREAM['commit'][:7]}`)",
         f"- Uncertainty: by {result['uncertainty']['unit']}; {result['uncertainty']['bootstrap']}",
         "",
-        "## Test scores",
+        "## Test scores (means over queries)",
         "",
         "| Variant | Recall | MRR | nDCG | Dev recall | Dev MRR | No-evidence queries with hits |",
         "|---|---|---|---|---|---|---|",
@@ -394,7 +436,13 @@ def render_markdown(result: dict[str, Any]) -> str:
         )
     lines += [
         "",
+        "A no-evidence query with hits only shows that a lexical retriever found shared",
+        "words; abstention is not scored here (Day 73).",
+        "",
         "## Paired against `bm25` on test, by case",
+        "",
+        "Means over cases, so they differ from the query means above. `[0.0, 0.0]` means",
+        "no case differed, not that the difference is known to be zero.",
         "",
         "| Variant | Metric | Mean diff | Helped / hurt cases | Sign-flip p | Bootstrap 95% CI |",
         "|---|---|---|---|---|---|",
@@ -406,30 +454,33 @@ def render_markdown(result: dict[str, Any]) -> str:
                 f"| `{name}` | {metric} | {stats['mean_diff']} | {stats['helped']} / "
                 f"{stats['hurt']} | {stats['sign_flip_p']} | [{low}, {high}] |"
             )
-    lines += ["", "## Every test run", ""] + [f"- {entry}" for entry in result["test_runs"]]
-    reach = result["graph_reach"]["test"]
     categories = sorted({c for run in test.values() for c in run["recall_by_category"]})
     lines += [
         "",
         "## Test recall by category, and misses",
         "",
-        "| Variant | " + " | ".join(categories) + " | Queries missing evidence |",
+        "A miss is `at-ceiling` when its recall is the most two passages can reach (a",
+        "conflicting-source case cites three sections), and `ranking` otherwise.",
+        "",
+        "| Variant | " + " | ".join(categories) + " | Missed queries (kind) |",
         "|---|" + "---|" * len(categories) + "---|",
     ]
     for name, run in test.items():
         cells = [str(run["recall_by_category"].get(c, "-")) for c in categories]
-        missed = ", ".join(m["query_id"] for m in run["misses"]) or "none"
+        missed = ", ".join(f"{m['query_id']} ({m['kind']})" for m in run["misses"]) or "none"
         lines.append(f"| `{name}` | " + " | ".join(cells) + f" | {missed} |")
+    reach = result["graph_reach"]["test"]
     lines += [
         "",
         f"Graph edges reached a target on {reach['queries_reaching_a_target']} of "
-        + f"{first['queries']} test queries and put one in the context on "
-        + f"{reach['queries_keeping_a_target']}.",
+        + f"{first['queries']} test queries and changed the kept context on "
+        + f"{reach['queries_where_a_target_changed_context']}. A family-wide edge reaches every",
+        "eligible section of that family, kept in pool order, not by relevance.",
         "",
-        "A conflicting-source case cites three sections, so recall at context 2 cannot",
-        "exceed 0.6667 there for any variant: that ceiling is the context limit, not a",
-        "ranking failure. Abstention is not scored here (Day 73).",
+        "## Changes between test runs",
+        "",
     ]
+    lines += [f"- {entry}" for entry in result["test_runs"]]
     return "\n".join(lines) + "\n"
 
 

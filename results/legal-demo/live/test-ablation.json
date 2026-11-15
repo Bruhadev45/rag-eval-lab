@@ -4,8 +4,8 @@
       "files": {
         "__init__.py": "sha256:8a12f8bcddb794727ae3aee8e8f4067884f0ffc255f8ef9f5730a69badb2169e",
         "__main__.py": "sha256:809f0db5ec719e7ac02b0d8e1c7ff369bc96137e8b7b8430052960a8c6e94a0e",
-        "heldout.py": "sha256:128c035b2abb5d0561c5f3589ab668a8cb0488bdc0be84b155739e1b6eb44e53",
-        "live.py": "sha256:48b1763920a52d14326210eaa04dd0ba58c535f3bd0d590613d63cb85a2684f2",
+        "heldout.py": "sha256:b7532bf5bcb8acd00daa60324f16804b3bdc4fe3f33098a7833a65a0eadd103c",
+        "live.py": "sha256:28969c6afc5193d1d42fa1e21bca92e0b7ae3eea9569b62b658845d3029de961",
         "model.py": "sha256:a2366833a2433275f2cf6d52775660820602bb89345de5932e32d2fa569c3b91",
         "report.py": "sha256:1482c173bf6413c593c1c4cc72162951f03303ffa5556f4cb4a8dae2465fb1fb",
         "retrievers.py": "sha256:24f30f148b1fcd2f645996bbd4b90f3fb3952b0d88de2437764b342b5ff286f5",
@@ -53,8 +53,8 @@
     "graph": "BM25 seeds plus their explicit reference targets, one hop"
   },
   "test_runs": [
-    "2026-11-15 run 1: all six variants, fixed beforehand, each query once.",
-    "After run 1: a graph reach count, the shared rageval.stats bootstrap and wording; no ranking code or setting changed."
+    "First test run: the six variants as declared, before any test number was seen.",
+    "Later runs, all after review: diagnostics (graph reach, miss kinds), the shared rageval.stats bootstrap, refactors and wording. Every variant keeps the same passages for every query as in the first run."
   ],
   "uncertainty": {
     "unit": "case (paraphrases of one case are averaged first)",
@@ -1412,6 +1412,9 @@
         "misses": [
           {
             "query_id": "ld-004.q1",
+            "recall": 0.3333,
+            "ceiling": 0.6667,
+            "kind": "ranking",
             "missing": [
               "fic-harbour-inspection-guidance@v1#s1",
               "fic-harbour-inspection-guidance@v1#s2"
@@ -1419,18 +1422,27 @@
           },
           {
             "query_id": "ld-004.q2",
+            "recall": 0.6667,
+            "ceiling": 0.6667,
+            "kind": "at-ceiling",
             "missing": [
               "fic-harbour-inspection-guidance@v1#s2"
             ]
           },
           {
             "query_id": "ld-005.q1",
+            "recall": 0.6667,
+            "ceiling": 0.6667,
+            "kind": "at-ceiling",
             "missing": [
               "fic-harbour-safety-act@v2#s1"
             ]
           },
           {
             "query_id": "ld-006.q1",
+            "recall": 0.5,
+            "ceiling": 1.0,
+            "kind": "ranking",
             "missing": [
               "fic-harbour-inspection-guidance@v1#s1"
             ]
@@ -1737,6 +1749,9 @@
         "misses": [
           {
             "query_id": "ld-004.q1",
+            "recall": 0.3333,
+            "ceiling": 0.6667,
+            "kind": "ranking",
             "missing": [
               "fic-harbour-inspection-guidance@v1#s1",
               "fic-harbour-inspection-guidance@v1#s2"
@@ -1744,18 +1759,27 @@
           },
           {
             "query_id": "ld-004.q2",
+            "recall": 0.6667,
+            "ceiling": 0.6667,
+            "kind": "at-ceiling",
             "missing": [
               "fic-harbour-inspection-guidance@v1#s2"
             ]
           },
           {
             "query_id": "ld-005.q1",
+            "recall": 0.6667,
+            "ceiling": 0.6667,
+            "kind": "at-ceiling",
             "missing": [
               "fic-harbour-safety-act@v2#s1"
             ]
           },
           {
             "query_id": "ld-006.q1",
+            "recall": 0.5,
+            "ceiling": 1.0,
+            "kind": "ranking",
             "missing": [
               "fic-harbour-inspection-guidance@v1#s1"
             ]
@@ -2062,6 +2086,9 @@
         "misses": [
           {
             "query_id": "ld-004.q1",
+            "recall": 0.3333,
+            "ceiling": 0.6667,
+            "kind": "ranking",
             "missing": [
               "fic-harbour-inspection-guidance@v1#s1",
               "fic-harbour-inspection-guidance@v1#s2"
@@ -2069,18 +2096,27 @@
           },
           {
             "query_id": "ld-004.q2",
+            "recall": 0.6667,
+            "ceiling": 0.6667,
+            "kind": "at-ceiling",
             "missing": [
               "fic-harbour-inspection-guidance@v1#s2"
             ]
           },
           {
             "query_id": "ld-005.q1",
+            "recall": 0.6667,
+            "ceiling": 0.6667,
+            "kind": "at-ceiling",
             "missing": [
               "fic-harbour-safety-act@v2#s1"
             ]
           },
           {
             "query_id": "ld-006.q1",
+            "recall": 0.5,
+            "ceiling": 1.0,
+            "kind": "ranking",
             "missing": [
               "fic-harbour-inspection-guidance@v1#s1"
             ]
@@ -2387,6 +2423,9 @@
         "misses": [
           {
             "query_id": "ld-004.q1",
+            "recall": 0.3333,
+            "ceiling": 0.6667,
+            "kind": "ranking",
             "missing": [
               "fic-harbour-inspection-guidance@v1#s1",
               "fic-harbour-inspection-guidance@v1#s2"
@@ -2394,18 +2433,27 @@
           },
           {
             "query_id": "ld-004.q2",
+            "recall": 0.6667,
+            "ceiling": 0.6667,
+            "kind": "at-ceiling",
             "missing": [
               "fic-harbour-inspection-guidance@v1#s2"
             ]
           },
           {
             "query_id": "ld-005.q1",
+            "recall": 0.6667,
+            "ceiling": 0.6667,
+            "kind": "at-ceiling",
             "missing": [
               "fic-harbour-safety-act@v2#s1"
             ]
           },
           {
             "query_id": "ld-006.q1",
+            "recall": 0.5,
+            "ceiling": 1.0,
+            "kind": "ranking",
             "missing": [
               "fic-harbour-inspection-guidance@v1#s1"
             ]
@@ -2712,6 +2760,9 @@
         "misses": [
           {
             "query_id": "ld-004.q1",
+            "recall": 0.3333,
+            "ceiling": 0.6667,
+            "kind": "ranking",
             "missing": [
               "fic-harbour-inspection-guidance@v1#s1",
               "fic-harbour-inspection-guidance@v1#s2"
@@ -2719,18 +2770,27 @@
           },
           {
             "query_id": "ld-004.q2",
+            "recall": 0.6667,
+            "ceiling": 0.6667,
+            "kind": "at-ceiling",
             "missing": [
               "fic-harbour-inspection-guidance@v1#s2"
             ]
           },
           {
             "query_id": "ld-005.q1",
+            "recall": 0.6667,
+            "ceiling": 0.6667,
+            "kind": "at-ceiling",
             "missing": [
               "fic-harbour-safety-act@v2#s1"
             ]
           },
           {
             "query_id": "ld-006.q1",
+            "recall": 0.5,
+            "ceiling": 1.0,
+            "kind": "ranking",
             "missing": [
               "fic-harbour-inspection-guidance@v1#s1"
             ]
@@ -3037,6 +3097,9 @@
         "misses": [
           {
             "query_id": "ld-004.q1",
+            "recall": 0.3333,
+            "ceiling": 0.6667,
+            "kind": "ranking",
             "missing": [
               "fic-harbour-inspection-guidance@v1#s1",
               "fic-harbour-inspection-guidance@v1#s2"
@@ -3044,18 +3107,27 @@
           },
           {
             "query_id": "ld-004.q2",
+            "recall": 0.6667,
+            "ceiling": 0.6667,
+            "kind": "at-ceiling",
             "missing": [
               "fic-harbour-inspection-guidance@v1#s2"
             ]
           },
           {
             "query_id": "ld-005.q1",
+            "recall": 0.6667,
+            "ceiling": 0.6667,
+            "kind": "at-ceiling",
             "missing": [
               "fic-harbour-inspection-guidance@v1#s1"
             ]
           },
           {
             "query_id": "ld-006.q1",
+            "recall": 0.5,
+            "ceiling": 1.0,
+            "kind": "ranking",
             "missing": [
               "fic-harbour-inspection-guidance@v1#s1"
             ]
@@ -3352,11 +3424,11 @@
   "graph_reach": {
     "dev": {
       "queries_reaching_a_target": 0,
-      "queries_keeping_a_target": 0
+      "queries_where_a_target_changed_context": 0
     },
     "test": {
       "queries_reaching_a_target": 1,
-      "queries_keeping_a_target": 1
+      "queries_where_a_target_changed_context": 1
     }
   },
   "test_vs_bm25": {

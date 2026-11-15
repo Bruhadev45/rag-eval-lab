@@ -9,7 +9,7 @@ Lexical retrievers only (BM25, TF-IDF cosine and their weighted RRF via ragfuse)
 no embedding or language model was run, so there is no learned-dense row.
 With a few eligible sections per case these numbers check the code, not quality.
 
-- Code: `sha256:ebb2f08b109699633bf84ba42d4e61e240f976c4df98d01f13ec9eee0f983f5d` (hash of the per-file hashes in dev-tuning.json)
+- Code: `sha256:fb1c61f890a3b4bfc1743d34d29e1d4b8f2626dc3a82c851b917d990799a1d7e` (hash of the per-file hashes in dev-tuning.json)
 - ragfuse: 0.2.0 at commit `b447cc365f5a4d9f5cbcbb647592ca95582a0bff`
 - Fixture: `sha256:5707b3f1e672b98c2b82ea59f5f640ba5b1c528a28299748421e9ff13ec252fb`
 - Cases: `sha256:21e7524ec12ee2a71c4bd06912109dd6b10b6396f08958867162ae9ff63499a8`

@@ -9,6 +9,7 @@ rerun of both ``live`` and ``heldout`` before it passes again.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import shutil
 from pathlib import Path
@@ -103,11 +104,22 @@ def test_a_poisoned_retriever_is_caught(dataset, edges, monkeypatch) -> None:
 
 
 def test_rerank_only_reorders_hybrid_candidates(dataset, edges) -> None:
+    reordered = 0
     for case in dataset.cases:
         for query in case.queries:
             fused = retrieve(dataset, case, query, RunConfig("hybrid", 3, 3, 0.5))
             kept = heldout._rerank(dataset, case, query, edges)
             assert set(kept) <= set(fused)
+            reordered += kept != fused[: len(kept)]
+    assert reordered  # the coverage score does change some orders
+
+
+def test_rerank_orders_by_query_word_coverage(dataset, edges) -> None:
+    case = next(c for c in dataset.cases if c.id == "ld-001")
+    query = "penalties fine berthing inspection"
+    kept = heldout._rerank(dataset, case, query, edges)
+    # s3 holds all four words; nothing else does.
+    assert kept[0] == "fic-harbour-safety-act@v2#s3"
 
 
 def test_parent_scores_a_section_by_its_best_child(dataset, edges) -> None:
@@ -115,6 +127,13 @@ def test_parent_scores_a_section_by_its_best_child(dataset, edges) -> None:
     # Only the heading line of the Records section matches this query.
     kept = heldout._parent(dataset, case, "records", edges)
     assert kept[0] == "fic-harbour-safety-act@v2#s2"
+    # As declared before the first test run: a heading's number is its own child.
+    assert heldout._CHILD_SPLIT.split("2. Status\nThis is one. It is two.") == [
+        "2.",
+        "Status",
+        "This is one.",
+        "It is two.",
+    ]
 
 
 def test_graph_follows_explicit_edges_inside_the_pool_only(dataset) -> None:
@@ -124,6 +143,10 @@ def test_graph_follows_explicit_edges_inside_the_pool_only(dataset) -> None:
     walk, reached = graph_walk(dataset, case, case.queries[0], (edge,))
     assert reached == ["fic-harbour-safety-act@v2#s3"]  # v1 is out of force on the as-of date
     assert walk[:2] == [seeds[0], "fic-harbour-safety-act@v2#s3"]
+    overlapping = (edge, (seeds[0], "fic-harbour-safety-act", None), (seeds[0], *edge[1:]))
+    walk, reached = graph_walk(dataset, case, case.queries[0], overlapping)
+    assert len(walk) == len(set(walk)) and len(reached) == len(set(reached))
+    assert heldout._checked(dataset, case, walk) == tuple(walk)
     barred = (seeds[0], "fic-quillmouth-port-code", None)  # another jurisdiction
     assert graph_walk(dataset, case, case.queries[0], (barred,))[1] == []
 
@@ -131,10 +154,10 @@ def test_graph_follows_explicit_edges_inside_the_pool_only(dataset) -> None:
 def test_graph_reach_is_counted(dataset, edges) -> None:
     assert graph_reach(dataset, "dev", edges) == {
         "queries_reaching_a_target": 0,
-        "queries_keeping_a_target": 0,
+        "queries_where_a_target_changed_context": 0,
     }
     test = graph_reach(dataset, "test", edges)
-    assert test["queries_keeping_a_target"] <= test["queries_reaching_a_target"]
+    assert test["queries_where_a_target_changed_context"] <= test["queries_reaching_a_target"]
 
 
 def test_references_are_the_frozen_copy(dataset, edges) -> None:
@@ -155,8 +178,6 @@ def test_references_are_the_frozen_copy(dataset, edges) -> None:
 def test_references_are_checked_against_the_fixture(
     dataset, tmp_path, monkeypatch, change, message
 ) -> None:
-    import hashlib
-
     root = _copy_repo(tmp_path)
     path = root / heldout.REFERENCES
     data = json.loads(path.read_text())
@@ -174,6 +195,46 @@ def test_references_are_checked_against_the_fixture(
         load_references(root, dataset)
 
 
+def test_references_too_large_or_malformed(dataset, tmp_path, monkeypatch) -> None:
+    root = _copy_repo(tmp_path)
+    path = root / heldout.REFERENCES
+    path.write_bytes(b" " * (heldout.MAX_REFERENCE_BYTES + 1))
+    with pytest.raises(DatasetError, match="larger than"):
+        load_references(root, dataset)
+    for raw in (b"{not json", b'{"other": []}', b'{"references": [1]}', b"[]"):
+        path.write_bytes(raw)
+        digest = hashlib.sha256(raw).hexdigest()
+        monkeypatch.setattr(
+            heldout, "REFERENCES_UPSTREAM", {**heldout.REFERENCES_UPSTREAM, "file_sha256": digest}
+        )
+        with pytest.raises(DatasetError, match="malformed"):
+            load_references(root, dataset)
+
+
+def test_misses_are_labelled_by_kind() -> None:
+    base = {"category": "answerable", "outcome": "answer", "rr": 1.0, "ndcg": 1.0}
+    records = [
+        {
+            **base,
+            "query_id": "a",
+            "relevant": ["x", "y", "z"],
+            "retrieved": ["x", "y"],
+            "recall": 0.6667,
+        },
+        {**base, "query_id": "b", "relevant": ["x", "y"], "retrieved": ["x", "w"], "recall": 0.5},
+        {**base, "query_id": "c", "relevant": ["x"], "retrieved": ["x"], "recall": 1.0},
+        {**base, "query_id": "d", "relevant": [], "retrieved": ["x"]},
+    ]
+    del records[3]["rr"], records[3]["ndcg"]
+    summary = heldout._summary(records)
+    assert [(m["query_id"], m["kind"], m["ceiling"]) for m in summary["misses"]] == [
+        ("a", "at-ceiling", 0.6667),
+        ("b", "ranking", 1.0),
+    ]
+    assert summary["recall_by_category"] == {"answerable": 0.7222}
+    assert (summary["no_evidence"], summary["no_evidence_retrieved_something"]) == (1, 1)
+
+
 def test_paired_statistics_by_hand() -> None:
     base = {"a": 0.5, "b": 1.0, "c": 0.0}
     other = {"a": 1.0, "b": 1.0, "c": 0.5}
@@ -185,6 +246,8 @@ def test_paired_statistics_by_hand() -> None:
     assert stats["sign_flip_p"] == 0.5
     low, high = stats["bootstrap_ci95"]
     assert 0.0 <= low <= stats["mean_diff"] <= high <= 0.5
+    reference = heldout.paired_comparison([0.5, 1.0, 0.0], [1.0, 1.0, 0.5], seed=70)
+    assert [low, high] == [round(reference.ci_low, 4), round(reference.ci_high, 4)]
     assert paired(base, other) == stats  # seeded
     assert paired(base, base)["sign_flip_p"] == 1.0
     with pytest.raises(LiveRunError, match="same, non-empty"):
@@ -263,3 +326,13 @@ def test_readme_reports_the_committed_test_numbers() -> None:
     assert sum(a != b for a, b in zip(kept("graph"), kept("bm25"))) == 1
     assert scores("graph") == scores("bm25")
     assert "graph changes the passages of one query without changing any score" in readme
+    kinds = [m["kind"] for m in runs["bm25"]["misses"]]
+    assert kinds.count("at-ceiling") == 2 and kinds.count("ranking") == 2
+
+    def missed(name):
+        return [(m["query_id"], m["kind"]) for m in runs[name]["misses"]]
+
+    assert all(missed(name) == missed("bm25") for name in runs)
+    assert "two (one conflicting-source, one answerable) are ranking misses" in readme
+    dev = result["runs"]["dev"]
+    assert [n for n in dev if dev[n]["rr"] > dev["bm25"]["rr"]] == ["rerank"]

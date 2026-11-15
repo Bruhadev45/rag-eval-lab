@@ -233,32 +233,37 @@ learned-dense row. See
 ### Held-out ablation on test
 
 ```bash
-python -m rageval.legal_demo.heldout   # scores the frozen variants once on test
+python -m rageval.legal_demo.heldout   # scores the predeclared variants on test
 ```
 
-Six variants, all fixed before test was run and all at the dev selection's
-depth 3 and context 2: BM25 (the dev selection), TF-IDF, hybrid RRF, the hybrid
-candidates reranked by ragfuse's `rerank` with a lexical query-word coverage
-score, a parent variant (BM25 over the lines and sentences of each section,
-sections ranked by their best child) and a graph variant (BM25 seeds plus the
-sections their explicit reference edges name, one hop, eligible sections only;
-the edges are a byte-identical copy of minirag's `references.json`). The command
+Six variants, all at depth 3 and context 2: BM25 (the dev selection), TF-IDF,
+hybrid RRF, the hybrid candidates reranked by ragfuse's `rerank` with a lexical
+query-word coverage score, a parent variant (BM25 over the lines and sentences
+of each section, sections ranked by their best child) and a graph variant (BM25
+seeds plus the sections their explicit reference edges name, one hop, eligible
+sections only; the edges are a byte-identical copy of minirag's
+`references.json`). Only BM25's depth and context were selected on dev; the
+other settings were declared before test was first run, not tuned. The command
 first re-runs dev tuning and refuses to score test unless it still selects the
-frozen configuration. Comparisons are paired by case, since paraphrases of one
-case are not independent: an exact sign-flip test and the repo's paired
-bootstrap over the 7 test cases with evidence.
+frozen configuration. It is deterministic, so each rerun re-scores test with the
+same result. Comparisons are paired by case, since paraphrases of one case are
+not independent: an exact sign-flip test and the repo's paired bootstrap over
+the 7 test cases with evidence.
 
 The result is mostly null. BM25 scores recall 0.8472, MRR 0.9583 on the 12
 test queries with evidence. TF-IDF, hybrid and rerank keep exactly the same
 passages as BM25 on all 19 test queries, and graph changes the passages of one
 query without changing any score. The parent variant raises MRR on one case
 (+0.0357 mean over cases, sign-flip p = 1.0), which seven cases cannot
-separate from chance. Every variant misses the same four queries, three of
-them conflicting-source queries whose three cited sections cannot all fit in a
-context of two. No embedding, cross-encoder or language model was run, so there
-is no learned-dense row. See
+separate from chance. On dev, rerank was the only variant above BM25 (MRR 1.0
+against 0.9286); that did not carry over to test. Every variant misses the
+same four queries: two conflicting-source queries sit at the ceiling of what two
+passages can recall when three sections are cited, and two (one
+conflicting-source, one answerable) are ranking misses that no lexical variant
+here fixes. No embedding, cross-encoder or language model was run, so there is
+no learned-dense row. See
 [`results/legal-demo/live/TEST_ABLATION.md`](results/legal-demo/live/TEST_ABLATION.md),
-which also lists every test run made.
+which also records what changed between test runs.
 
 ## License
 
